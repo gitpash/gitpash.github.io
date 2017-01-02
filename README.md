@@ -1,2 +1,2 @@
-# gitpush.github.io
+# gitpash.github.io
 Enterprise-level-webpage
