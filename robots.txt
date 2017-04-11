@@ -1,1 +1,1 @@
-Sitemap: https://gitpash.github.io/sitemap.xml
+Sitemap: https://gitpash.github.io/pages/gitpash/sitemap.xml
