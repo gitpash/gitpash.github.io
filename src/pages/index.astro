@@ -25,14 +25,13 @@ try {
 		<Header />
 		<main>
 			<!-- Hero Section -->
-			<section class="hero">
+			<section class="hero animate-fade-in-up">
 				<div class="hero-content">
 					<h1>Pavel Luzanov</h1>
-					<p class="tagline">Tech Lead · Staff-level Software Engineer</p>
+					<p class="tagline">Front-end Developer</p>
 					<p class="description">
-						I turn ambiguous product problems into practical technical plans and shipped
-						systems. My focus is frontend and product architecture, frontend platforms, engineering practices,
-						and AI-augmented delivery. Based in Tokyo, open to relocation.
+						Passionate about building beautiful, functional web experiences.
+						Currently based in Tokyo, Japan.
 					</p>
 					<div class="cta-buttons">
 						<a href="/blog" class="btn btn-primary">Read Blog</a>
@@ -48,7 +47,7 @@ try {
 
 			<!-- GitHub Stats -->
 			{stats && (
-				<section class="section stats-section">
+				<section class="section stats-section animate-fade-in-up" style="animation-delay: 0.1s">
 					<div class="stats-grid">
 						<div class="stat-card">
 							<div class="stat-number">{stats.public_repos}</div>
@@ -67,7 +66,7 @@ try {
 			)}
 
 			<!-- Projects Section -->
-			<section class="section" id="projects">
+			<section class="section animate-fade-in-up" style="animation-delay: 0.2s" id="projects">
 				<h2>Featured Projects</h2>
 				<div class="projects-grid">
 					{repos.map((repo) => (
@@ -89,110 +88,90 @@ try {
 			</section>
 
 			<!-- About Section -->
-			<section class="section" id="about">
+			<section class="section animate-fade-in-up" style="animation-delay: 0.3s" id="about">
 				<h2>About Me</h2>
 				<div class="about-content">
 					<p>
-						I'm a Tech Lead and staff-level product engineer at AnyMind Group. I started
-						in frontend engineering and still bring deep expertise in React, TypeScript,
-						and UI architecture, but my current scope is broader: I take an ambiguous
-						business goal, map its domain and blast radius, shape a technical approach,
-						and coordinate the work needed to deliver it.
+						I'm a front-end developer with a passion for creating intuitive and
+						performant web applications. My journey started with a curiosity about
+						how things work on the web, and it has evolved into a professional career
+						building modern web experiences.
 					</p>
 					<p>
-						A large part of my work is modernizing architecture, standardizing UI and
-						engineering practices, and improving developer experience. I also build
-						AI-agent workflows that help teams decompose, implement, and review complex
-						work, bringing in domain specialists when a task needs deeper backend, data,
-						or performance expertise.
-					</p>
-					<p>
-						I'm based in Tokyo and open to senior, staff, and tech-lead product
-						engineering roles with relocation in Europe or North America.
+						I enjoy working with modern JavaScript frameworks, exploring new technologies,
+						and contributing to open-source projects. When I'm not coding, you can find
+						me exploring Tokyo, reading about technology, or working on side projects.
 					</p>
 				</div>
 			</section>
 
 			<!-- Skills Section -->
-			<section class="section" id="skills">
+			<section class="section animate-fade-in-up" style="animation-delay: 0.4s" id="skills">
 				<h2>Skills</h2>
 				<div class="skills-grid">
 					<div class="skill-category">
-						<h3>Frontend & Product</h3>
+						<h3>Frontend</h3>
 						<div class="skills-list">
+							<span class="skill-tag">JavaScript</span>
 							<span class="skill-tag">TypeScript</span>
 							<span class="skill-tag">React</span>
-							<span class="skill-tag">UI Architecture</span>
-							<span class="skill-tag">Frontend Platforms</span>
-							<span class="skill-tag">Design Systems</span>
-							<span class="skill-tag">GraphQL</span>
+							<span class="skill-tag">Astro</span>
+							<span class="skill-tag">HTML/CSS</span>
 						</div>
 					</div>
 					<div class="skill-category">
-						<h3>Systems & Delivery</h3>
+						<h3>Tools</h3>
 						<div class="skills-list">
-							<span class="skill-tag">Technical Strategy</span>
-							<span class="skill-tag">Kotlin</span>
+							<span class="skill-tag">Git</span>
+							<span class="skill-tag">Webpack</span>
+							<span class="skill-tag">Vite</span>
+							<span class="skill-tag">npm</span>
+						</div>
+					</div>
+					<div class="skill-category">
+						<h3>Other</h3>
+						<div class="skills-list">
 							<span class="skill-tag">Node.js</span>
-							<span class="skill-tag">Search & Batch Systems</span>
-						</div>
-					</div>
-					<div class="skill-category">
-						<h3>Engineering Practice</h3>
-						<div class="skills-list">
-							<span class="skill-tag">Architecture Modernization</span>
-							<span class="skill-tag">Developer Experience</span>
-							<span class="skill-tag">Cross-functional Leadership</span>
-							<span class="skill-tag">Agentic Workflows</span>
+							<span class="skill-tag">Python</span>
+							<span class="skill-tag">REST APIs</span>
+							<span class="skill-tag">GraphQL</span>
 						</div>
 					</div>
 				</div>
 			</section>
 
 			<!-- Experience Section -->
-			<section class="section" id="experience">
+			<section class="section animate-fade-in-up" style="animation-delay: 0.5s" id="experience">
 				<h2>Experience</h2>
 				<div class="timeline">
 					<div class="timeline-item">
-						<div class="timeline-date">Jan 2020 — Present</div>
+						<div class="timeline-date">2020 - Present</div>
 						<div class="timeline-content">
-							<h3>Tech Lead / Head of Frontend · AnyMind Group</h3>
-							<ul>
-								<li>Lead architecture modernization, UI standardization, and engineering-practice improvements across teams.</li>
-								<li>Turn business goals into scoped technical plans by mapping domains, blast radius, dependencies, and delivery strategy.</li>
-								<li>Build complex cross-domain systems, including a Kotlin-based BFS search service for account similarity and batched processing.</li>
-								<li>Provide functional people leadership through performance reviews and compensation discussions, with a primary focus on engineering culture and practices.</li>
-							</ul>
+							<h3>Front-end Developer</h3>
+							<p>Working on modern web applications with React and TypeScript</p>
 						</div>
 					</div>
 					<div class="timeline-item">
-						<div class="timeline-date">Apr 2019 — Dec 2019</div>
+						<div class="timeline-date">2017 - 2020</div>
 						<div class="timeline-content">
-							<h3>Senior Frontend Engineer · AnyMind Group</h3>
-							<p>Built and evolved production web applications in a fast-growing engineering organization.</p>
+							<h3>Web Developer</h3>
+							<p>Built various web applications and explored different frameworks</p>
 						</div>
 					</div>
 					<div class="timeline-item">
-						<div class="timeline-date">Sep 2017 — Apr 2019</div>
+						<div class="timeline-date">2016 - 2017</div>
 						<div class="timeline-content">
-							<h3>Frontend Engineer · 4xxi</h3>
-							<p>Delivered web products and grew from frontend implementation into broader product engineering.</p>
-						</div>
-					</div>
-					<div class="timeline-item">
-						<div class="timeline-date">Mar 2017 — Sep 2017</div>
-						<div class="timeline-content">
-							<h3>Frontend Engineer · supp-energy</h3>
-							<p>Built customer-facing web experiences and established a foundation in professional frontend development.</p>
+							<h3>Learning & Growth</h3>
+							<p>Completed multiple courses and built projects with React</p>
 						</div>
 					</div>
 				</div>
 			</section>
 
 			<!-- Contact Section -->
-			<section class="section" id="contact">
+			<section class="section animate-fade-in-up" style="animation-delay: 0.6s" id="contact">
 				<h2>Get In Touch</h2>
-				<p>I'm open to senior, staff, and tech-lead product engineering opportunities, especially those involving relocation to Europe or North America.</p>
+				<p>Feel free to reach out if you'd like to collaborate or just chat about web development!</p>
 				<div class="contact-links">
 					<a href={`mailto:${EMAIL}`} class="btn btn-primary">Email Me</a>
 					<a href={GITHUB_URL} class="btn btn-secondary" target="_blank" rel="noopener">GitHub</a>
@@ -207,9 +186,9 @@ try {
 <style>
 	.hero {
 		text-align: center;
-		padding: 4rem 1rem;
-		background: linear-gradient(135deg, rgba(var(--gray-light), 30%), transparent);
-		border-radius: 16px;
+		padding: 5rem 1rem;
+		background: linear-gradient(180deg, rgb(var(--gray-light)) 0%, rgb(var(--background)) 100%);
+		border-radius: var(--radius-xl);
 		margin-bottom: 3rem;
 	}
 
@@ -224,15 +203,17 @@ try {
 
 	.tagline {
 		font-size: 1.5rem;
-		color: rgb(var(--gray));
+		color: rgb(var(--text-secondary));
 		margin-bottom: 1rem;
+		font-weight: 400;
 	}
 
 	.description {
 		font-size: 1.1rem;
 		max-width: 600px;
 		margin: 0 auto 2rem;
-		color: rgb(var(--gray-dark));
+		color: rgb(var(--text-secondary));
+		line-height: 1.6;
 	}
 
 	.cta-buttons {
@@ -240,38 +221,6 @@ try {
 		gap: 1rem;
 		justify-content: center;
 		flex-wrap: wrap;
-	}
-
-	.btn {
-		display: inline-block;
-		padding: 0.75rem 1.5rem;
-		border-radius: 8px;
-		text-decoration: none;
-		font-weight: 600;
-		transition: all 0.2s ease;
-		border: 2px solid transparent;
-	}
-
-	.btn-primary {
-		background: var(--accent);
-		color: white;
-	}
-
-	.btn-primary:hover {
-		background: var(--accent-dark);
-		transform: translateY(-2px);
-	}
-
-	.btn-secondary {
-		background: transparent;
-		color: var(--accent);
-		border-color: var(--accent);
-	}
-
-	.btn-secondary:hover {
-		background: var(--accent);
-		color: white;
-		transform: translateY(-2px);
 	}
 
 	.section {
@@ -299,9 +248,10 @@ try {
 	.stat-card {
 		text-align: center;
 		padding: 1.5rem;
-		background: white;
-		border: 1px solid rgb(var(--gray-light));
-		border-radius: 12px;
+		background: rgb(var(--surface));
+		border: 1px solid rgb(var(--border));
+		border-radius: var(--radius-lg);
+		box-shadow: var(--shadow-sm);
 	}
 
 	.stat-number {
@@ -312,7 +262,7 @@ try {
 
 	.stat-label {
 		font-size: 0.9rem;
-		color: rgb(var(--gray));
+		color: rgb(var(--text-secondary));
 	}
 
 	.projects-grid {
@@ -347,9 +297,10 @@ try {
 	}
 
 	.skill-category h3 {
-		font-size: 1.2rem;
+		font-size: 1.1rem;
 		margin-bottom: 1rem;
 		color: var(--accent);
+		font-weight: 600;
 	}
 
 	.skills-list {
@@ -360,11 +311,11 @@ try {
 	}
 
 	.skill-tag {
-		padding: 0.4rem 0.8rem;
+		padding: 0.5rem 1rem;
 		background: rgb(var(--gray-light));
-		border-radius: 20px;
+		border-radius: 980px;
 		font-size: 0.9rem;
-		color: rgb(var(--gray-dark));
+		color: rgb(var(--text-primary));
 	}
 
 	.timeline {
@@ -414,19 +365,8 @@ try {
 	}
 
 	.timeline-content p {
-		color: rgb(var(--gray));
+		color: rgb(var(--text-secondary));
 		font-size: 0.95rem;
-	}
-
-	.timeline-content ul {
-		margin: 0.75rem 0 0;
-		padding-left: 1.25rem;
-		color: rgb(var(--gray));
-		font-size: 0.95rem;
-	}
-
-	.timeline-content li + li {
-		margin-top: 0.5rem;
 	}
 
 	.contact-links {

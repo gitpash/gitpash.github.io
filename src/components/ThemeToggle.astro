@@ -43,36 +43,28 @@
 		top: 1rem;
 		right: 1rem;
 		z-index: 1000;
-		background: white;
-		border: 2px solid rgb(var(--gray-light));
+		background: rgb(var(--surface));
+		border: 1px solid rgb(var(--border));
 		border-radius: 50%;
-		width: 48px;
-		height: 48px;
+		width: 44px;
+		height: 44px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		cursor: pointer;
-		transition: all 0.2s ease;
-		box-shadow: var(--box-shadow);
-	}
-
-	[data-theme='dark'] .theme-toggle {
-		background: #1a1f2e;
-		border-color: rgb(var(--gray));
+		transition: all var(--transition-fast);
+		box-shadow: var(--shadow-sm);
 	}
 
 	.theme-toggle:hover {
-		transform: scale(1.1);
+		transform: scale(1.05);
+		box-shadow: var(--shadow-md);
 	}
 
 	.theme-toggle svg {
-		width: 24px;
-		height: 24px;
-		fill: rgb(var(--gray-dark));
-	}
-
-	[data-theme='dark'] .theme-toggle svg {
-		fill: rgb(var(--gray-light));
+		width: 20px;
+		height: 20px;
+		fill: rgb(var(--text-primary));
 	}
 
 	.sun-icon {
