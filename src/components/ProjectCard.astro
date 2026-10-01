@@ -1,0 +1,107 @@
+---
+interface Props {
+	name: string;
+	description: string;
+	url: string;
+	language: string;
+	stars: number;
+	topics: string[];
+}
+
+const { name, description, url, language, stars, topics } = Astro.props;
+---
+
+<div class="project-card">
+	<div class="project-header">
+		<h3>
+			<a href={url} target="_blank" rel="noopener">{name}</a>
+		</h3>
+		<div class="project-meta">
+			{language && <span class="language">{language}</span>}
+			<span class="stars">★ {stars}</span>
+		</div>
+	</div>
+	<p class="project-description">{description || 'No description available'}</p>
+	{topics.length > 0 && (
+		<div class="project-topics">
+			{topics.slice(0, 3).map((topic) => (
+				<span class="topic-tag">{topic}</span>
+			))}
+		</div>
+	)}
+</div>
+
+<style>
+	.project-card {
+		background: white;
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 12px;
+		padding: 1.5rem;
+		transition: all 0.2s ease;
+	}
+
+	.project-card:hover {
+		transform: translateY(-4px);
+		box-shadow: var(--box-shadow);
+		border-color: var(--accent);
+	}
+
+	.project-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		margin-bottom: 0.75rem;
+	}
+
+	.project-header h3 {
+		margin: 0;
+		font-size: 1.1rem;
+	}
+
+	.project-header h3 a {
+		color: var(--accent);
+		text-decoration: none;
+	}
+
+	.project-header h3 a:hover {
+		text-decoration: underline;
+	}
+
+	.project-meta {
+		display: flex;
+		gap: 0.75rem;
+		font-size: 0.85rem;
+		color: rgb(var(--gray));
+	}
+
+	.language {
+		padding: 0.2rem 0.5rem;
+		background: rgb(var(--gray-light));
+		border-radius: 4px;
+	}
+
+	.stars {
+		color: #f1e05a;
+	}
+
+	.project-description {
+		color: rgb(var(--gray-dark));
+		font-size: 0.95rem;
+		line-height: 1.6;
+		margin-bottom: 1rem;
+	}
+
+	.project-topics {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+	}
+
+	.topic-tag {
+		padding: 0.25rem 0.6rem;
+		background: rgba(var(--accent), 10%);
+		color: var(--accent);
+		border-radius: 12px;
+		font-size: 0.8rem;
+	}
+</style>

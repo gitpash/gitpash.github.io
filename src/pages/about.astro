@@ -1,0 +1,109 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE, GITHUB_URL, LINKEDIN_URL, EMAIL } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`About - ${SITE_TITLE}`} description="Learn more about Pavel Luzanov" />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="about-page">
+				<h1>About Me</h1>
+				<div class="about-content">
+					<p>
+						Hi! I'm Pavel Luzanov, a front-end developer based in Tokyo, Japan.
+						I'm passionate about building beautiful, functional web experiences
+						and exploring new technologies.
+					</p>
+					<p>
+						My journey into programming started with a curiosity about how the web works,
+						and it has evolved into a professional career building modern web applications.
+						I enjoy working with JavaScript, TypeScript, React, and other modern frameworks.
+					</p>
+					<p>
+						When I'm not coding, you can find me exploring Tokyo, reading about technology,
+						working on side projects, or enjoying a good cup of coffee.
+					</p>
+					<p>
+						Feel free to reach out if you'd like to collaborate or just chat about web development!
+					</p>
+					<div class="contact-links">
+						<a href={`mailto:${EMAIL}`} class="btn btn-primary">Email Me</a>
+						<a href={GITHUB_URL} class="btn btn-secondary" target="_blank" rel="noopener">GitHub</a>
+						<a href={LINKEDIN_URL} class="btn btn-secondary" target="_blank" rel="noopener">LinkedIn</a>
+					</div>
+				</div>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.about-page {
+		max-width: 700px;
+		margin: 0 auto;
+		padding: 2rem 1rem;
+	}
+
+	h1 {
+		font-size: 2.5rem;
+		margin-bottom: 1.5rem;
+		text-align: center;
+	}
+
+	.about-content {
+		font-size: 1.1rem;
+		line-height: 1.8;
+	}
+
+	.about-content p {
+		margin-bottom: 1.5rem;
+	}
+
+	.contact-links {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		flex-wrap: wrap;
+		margin-top: 2rem;
+	}
+
+	.btn {
+		display: inline-block;
+		padding: 0.75rem 1.5rem;
+		border-radius: 8px;
+		text-decoration: none;
+		font-weight: 600;
+		transition: all 0.2s ease;
+		border: 2px solid transparent;
+	}
+
+	.btn-primary {
+		background: var(--accent);
+		color: white;
+	}
+
+	.btn-primary:hover {
+		background: var(--accent-dark);
+		transform: translateY(-2px);
+	}
+
+	.btn-secondary {
+		background: transparent;
+		color: var(--accent);
+		border-color: var(--accent);
+	}
+
+	.btn-secondary:hover {
+		background: var(--accent);
+		color: white;
+		transform: translateY(-2px);
+	}
+</style>

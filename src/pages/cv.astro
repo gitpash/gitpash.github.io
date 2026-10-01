@@ -1,0 +1,304 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE, GITHUB_URL, LINKEDIN_URL, EMAIL } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`CV - ${SITE_TITLE}`} description="Pavel Luzanov's CV" />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="cv-page">
+				<h1>Curriculum Vitae</h1>
+
+				<section class="cv-section">
+					<h2>Personal Information</h2>
+					<div class="cv-grid">
+						<div class="cv-item">
+							<strong>Name:</strong> Pavel Luzanov
+						</div>
+						<div class="cv-item">
+							<strong>Email:</strong> <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+						</div>
+						<div class="cv-item">
+							<strong>Location:</strong> Tokyo, Japan
+						</div>
+						<div class="cv-item">
+							<strong>GitHub:</strong> <a href={GITHUB_URL} target="_blank" rel="noopener">gitpash</a>
+						</div>
+						<div class="cv-item">
+							<strong>LinkedIn:</strong> <a href={LINKEDIN_URL} target="_blank" rel="noopener">pavelluz</a>
+						</div>
+					</div>
+				</section>
+
+				<section class="cv-section">
+					<h2>Summary</h2>
+					<p>
+						Front-end developer with a passion for building beautiful, functional web experiences.
+						Experienced in JavaScript, TypeScript, React, and modern web technologies.
+						Currently based in Tokyo, Japan.
+					</p>
+				</section>
+
+				<section class="cv-section">
+					<h2>Work Experience</h2>
+					<div class="cv-timeline">
+						<div class="cv-timeline-item">
+							<div class="cv-date">2020 - Present</div>
+							<div class="cv-content">
+								<h3>Front-end Developer</h3>
+								<p>Working on modern web applications with React and TypeScript</p>
+							</div>
+						</div>
+						<div class="cv-timeline-item">
+							<div class="cv-date">2017 - 2020</div>
+							<div class="cv-content">
+								<h3>Web Developer</h3>
+								<p>Built various web applications and explored different frameworks</p>
+							</div>
+						</div>
+						<div class="cv-timeline-item">
+							<div class="cv-date">2016 - 2017</div>
+							<div class="cv-content">
+								<h3>Learning & Growth</h3>
+								<p>Completed multiple courses and built projects with React</p>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="cv-section">
+					<h2>Skills</h2>
+					<div class="cv-skills">
+						<div class="cv-skill-category">
+							<h3>Frontend</h3>
+							<ul>
+								<li>JavaScript</li>
+								<li>TypeScript</li>
+								<li>React</li>
+								<li>Astro</li>
+								<li>HTML/CSS</li>
+							</ul>
+						</div>
+						<div class="cv-skill-category">
+							<h3>Tools</h3>
+							<ul>
+								<li>Git</li>
+								<li>Webpack</li>
+								<li>Vite</li>
+								<li>npm</li>
+							</ul>
+						</div>
+						<div class="cv-skill-category">
+							<h3>Other</h3>
+							<ul>
+								<li>Node.js</li>
+								<li>Python</li>
+								<li>REST APIs</li>
+								<li>GraphQL</li>
+							</ul>
+						</div>
+					</div>
+				</section>
+
+				<section class="cv-section">
+					<h2>Education</h2>
+					<div class="cv-item">
+						<strong>Petrozavodsk State University</strong>
+						<br/>
+						<span>Bachelor + specialization in Engineering</span>
+						<br/>
+						<span>2003 - 2008</span>
+					</div>
+				</section>
+
+				<section class="cv-section">
+					<h2>Languages</h2>
+					<div class="cv-grid">
+						<div class="cv-item">
+							<strong>Russian:</strong> Native speaker
+						</div>
+						<div class="cv-item">
+							<strong>English:</strong> Intermediate
+						</div>
+					</div>
+				</section>
+
+				<div class="cv-actions">
+					<a href={`mailto:${EMAIL}`} class="btn btn-primary">Contact Me</a>
+					<a href={GITHUB_URL} class="btn btn-secondary" target="_blank" rel="noopener">GitHub</a>
+					<a href={LINKEDIN_URL} class="btn btn-secondary" target="_blank" rel="noopener">LinkedIn</a>
+				</div>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.cv-page {
+		max-width: 800px;
+		margin: 0 auto;
+		padding: 2rem 1rem;
+	}
+
+	h1 {
+		font-size: 2.5rem;
+		margin-bottom: 2rem;
+		text-align: center;
+	}
+
+	.cv-section {
+		margin-bottom: 2.5rem;
+	}
+
+	.cv-section h2 {
+		font-size: 1.5rem;
+		margin-bottom: 1rem;
+		color: var(--accent);
+		border-bottom: 2px solid rgb(var(--gray-light));
+		padding-bottom: 0.5rem;
+	}
+
+	.cv-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 1rem;
+	}
+
+	.cv-item {
+		padding: 0.75rem;
+		background: rgb(var(--gray-light));
+		border-radius: 8px;
+	}
+
+	.cv-timeline {
+		position: relative;
+		padding-left: 2rem;
+	}
+
+	.cv-timeline::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		width: 2px;
+		background: var(--accent);
+	}
+
+	.cv-timeline-item {
+		position: relative;
+		margin-bottom: 1.5rem;
+	}
+
+	.cv-timeline-item::before {
+		content: '';
+		position: absolute;
+		left: -2rem;
+		top: 0.5rem;
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		background: var(--accent);
+		margin-left: -5px;
+	}
+
+	.cv-date {
+		font-size: 0.9rem;
+		color: var(--accent);
+		font-weight: 600;
+		margin-bottom: 0.25rem;
+	}
+
+	.cv-content h3 {
+		font-size: 1.1rem;
+		margin-bottom: 0.25rem;
+	}
+
+	.cv-content p {
+		color: rgb(var(--gray));
+		font-size: 0.95rem;
+	}
+
+	.cv-skills {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 1.5rem;
+	}
+
+	.cv-skill-category h3 {
+		font-size: 1.1rem;
+		margin-bottom: 0.75rem;
+		color: var(--accent);
+	}
+
+	.cv-skill-category ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.cv-skill-category li {
+		padding: 0.4rem 0.8rem;
+		background: rgb(var(--gray-light));
+		border-radius: 4px;
+		margin-bottom: 0.4rem;
+	}
+
+	.cv-actions {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		flex-wrap: wrap;
+		margin-top: 2rem;
+	}
+
+	.btn {
+		display: inline-block;
+		padding: 0.75rem 1.5rem;
+		border-radius: 8px;
+		text-decoration: none;
+		font-weight: 600;
+		transition: all 0.2s ease;
+		border: 2px solid transparent;
+	}
+
+	.btn-primary {
+		background: var(--accent);
+		color: white;
+	}
+
+	.btn-primary:hover {
+		background: var(--accent-dark);
+		transform: translateY(-2px);
+	}
+
+	.btn-secondary {
+		background: transparent;
+		color: var(--accent);
+		border-color: var(--accent);
+	}
+
+	.btn-secondary:hover {
+		background: var(--accent);
+		color: white;
+		transform: translateY(-2px);
+	}
+
+	@media (max-width: 720px) {
+		.cv-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.cv-skills {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
