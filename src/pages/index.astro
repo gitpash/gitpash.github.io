@@ -187,9 +187,16 @@ try {
 	.hero {
 		text-align: center;
 		padding: 5rem 1rem;
-		background: linear-gradient(180deg, rgb(var(--gray-light)) 0%, rgb(var(--background)) 100%);
+		background:
+			radial-gradient(
+				ellipse 60% 50% at 50% -10%,
+				var(--accent-soft) 0%,
+				transparent 70%
+			),
+			linear-gradient(180deg, var(--gray-light) 0%, var(--background) 100%);
 		border-radius: var(--radius-xl);
 		margin-bottom: 3rem;
+		border: 1px solid var(--border);
 	}
 
 	.hero h1 {
@@ -203,7 +210,7 @@ try {
 
 	.tagline {
 		font-size: 1.5rem;
-		color: rgb(var(--text-secondary));
+		color: var(--text-secondary);
 		margin-bottom: 1rem;
 		font-weight: 400;
 	}
@@ -212,7 +219,7 @@ try {
 		font-size: 1.1rem;
 		max-width: 600px;
 		margin: 0 auto 2rem;
-		color: rgb(var(--text-secondary));
+		color: var(--text-secondary);
 		line-height: 1.6;
 	}
 
@@ -248,8 +255,8 @@ try {
 	.stat-card {
 		text-align: center;
 		padding: 1.5rem;
-		background: rgb(var(--surface));
-		border: 1px solid rgb(var(--border));
+		background: var(--surface);
+		border: 1px solid var(--border);
 		border-radius: var(--radius-lg);
 		box-shadow: var(--shadow-sm);
 	}
@@ -262,7 +269,7 @@ try {
 
 	.stat-label {
 		font-size: 0.9rem;
-		color: rgb(var(--text-secondary));
+		color: var(--text-secondary);
 	}
 
 	.projects-grid {
@@ -312,10 +319,10 @@ try {
 
 	.skill-tag {
 		padding: 0.5rem 1rem;
-		background: rgb(var(--gray-light));
+		background: var(--gray-light);
 		border-radius: 980px;
 		font-size: 0.9rem;
-		color: rgb(var(--text-primary));
+		color: var(--text-primary);
 	}
 
 	.timeline {
@@ -365,7 +372,7 @@ try {
 	}
 
 	.timeline-content p {
-		color: rgb(var(--text-secondary));
+		color: var(--text-secondary);
 		font-size: 0.95rem;
 	}
 
