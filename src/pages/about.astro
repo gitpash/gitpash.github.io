@@ -2,13 +2,13 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_TITLE, GITHUB_URL, LINKEDIN_URL, EMAIL } from '../consts';
+import { SITE_TITLE, SITE_DESCRIPTION, GITHUB_URL, LINKEDIN_URL, EMAIL } from '../consts';
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`About - ${SITE_TITLE}`} description="Learn more about Pavel Luzanov" />
+		<BaseHead title={`About - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
 		<Header />
@@ -17,21 +17,26 @@ import { SITE_TITLE, GITHUB_URL, LINKEDIN_URL, EMAIL } from '../consts';
 				<h1>About Me</h1>
 				<div class="about-content">
 					<p>
-						Hi! I'm Pavel Luzanov, a front-end developer based in Tokyo, Japan.
-						I'm passionate about building beautiful, functional web experiences
-						and exploring new technologies.
+						I'm Pavel Luzanov, a Tech Lead and staff-level product engineer based in
+						Tokyo, Japan. I started in frontend engineering and developed deep expertise
+						in React, TypeScript, and UI architecture. Today my work spans product
+						architecture, technical strategy, and delivery across domains.
 					</p>
 					<p>
-						My journey into programming started with a curiosity about how the web works,
-						and it has evolved into a professional career building modern web applications.
-						I enjoy working with JavaScript, TypeScript, React, and other modern frameworks.
+						I work from the problem backwards: clarify the business goal, assess the
+						domain and blast radius, choose a practical design, and coordinate the work
+						needed to ship it. Much of my impact comes from architecture modernization,
+						UI and engineering standardization, and better developer experience.
 					</p>
 					<p>
-						When I'm not coding, you can find me exploring Tokyo, reading about technology,
-						working on side projects, or enjoying a good cup of coffee.
+						I also design AI-agent workflows for implementation and review. They let me
+						move quickly on broad tasks while keeping technical boundaries clear and
+						bringing in specialists for backend, data, or performance-heavy work.
 					</p>
 					<p>
-						Feel free to reach out if you'd like to collaborate or just chat about web development!
+						I'm open to senior, staff, and tech-lead product engineering roles with
+						relocation in Europe or North America. Feel free to reach out if you'd like
+						to collaborate or talk about engineering.
 					</p>
 					<div class="contact-links">
 						<a href={`mailto:${EMAIL}`} class="btn btn-primary">Email Me</a>

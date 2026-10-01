@@ -2,13 +2,13 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_TITLE, GITHUB_URL, LINKEDIN_URL, EMAIL } from '../consts';
+import { SITE_TITLE, SITE_DESCRIPTION, GITHUB_URL, LINKEDIN_URL, EMAIL } from '../consts';
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`CV - ${SITE_TITLE}`} description="Pavel Luzanov's CV" />
+		<BaseHead title={`CV - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
 		<Header />
@@ -29,6 +29,9 @@ import { SITE_TITLE, GITHUB_URL, LINKEDIN_URL, EMAIL } from '../consts';
 							<strong>Location:</strong> Tokyo, Japan
 						</div>
 						<div class="cv-item">
+							<strong>Target:</strong> Senior, staff, or tech-lead product engineering roles
+						</div>
+						<div class="cv-item">
 							<strong>GitHub:</strong> <a href={GITHUB_URL} target="_blank" rel="noopener">gitpash</a>
 						</div>
 						<div class="cv-item">
@@ -40,9 +43,12 @@ import { SITE_TITLE, GITHUB_URL, LINKEDIN_URL, EMAIL } from '../consts';
 				<section class="cv-section">
 					<h2>Summary</h2>
 					<p>
-						Front-end developer with a passion for building beautiful, functional web experiences.
-						Experienced in JavaScript, TypeScript, React, and modern web technologies.
-						Currently based in Tokyo, Japan.
+						Tech Lead and staff-level product engineer with a frontend foundation and
+						cross-domain scope. I turn ambiguous business problems into technical plans,
+						lead architecture modernization and engineering standardization, and build
+						AI-augmented workflows for reliable delivery. Deep experience with React,
+						TypeScript, UI architecture, and modern product engineering; hands-on work
+						also includes Kotlin-based search and batch systems.
 					</p>
 				</section>
 
@@ -50,24 +56,36 @@ import { SITE_TITLE, GITHUB_URL, LINKEDIN_URL, EMAIL } from '../consts';
 					<h2>Work Experience</h2>
 					<div class="cv-timeline">
 						<div class="cv-timeline-item">
-							<div class="cv-date">2020 - Present</div>
+							<div class="cv-date">Jan 2020 — Present</div>
 							<div class="cv-content">
-								<h3>Front-end Developer</h3>
-								<p>Working on modern web applications with React and TypeScript</p>
+								<h3>Tech Lead / Head of Frontend · AnyMind Group</h3>
+								<ul>
+									<li>Lead architecture modernization, UI standardization, and engineering-practice improvements.</li>
+									<li>Scope cross-domain work by mapping business goals, blast radius, dependencies, and delivery strategy.</li>
+									<li>Build complex systems, including a Kotlin-based BFS search service for account similarity and batched processing.</li>
+									<li>Support performance reviews and compensation discussions while focusing primarily on engineering culture and practices.</li>
+								</ul>
 							</div>
 						</div>
 						<div class="cv-timeline-item">
-							<div class="cv-date">2017 - 2020</div>
+							<div class="cv-date">Apr 2019 — Dec 2019</div>
 							<div class="cv-content">
-								<h3>Web Developer</h3>
-								<p>Built various web applications and explored different frameworks</p>
+								<h3>Senior Frontend Engineer · AnyMind Group</h3>
+								<p>Built and evolved production web applications in a fast-growing engineering organization.</p>
 							</div>
 						</div>
 						<div class="cv-timeline-item">
-							<div class="cv-date">2016 - 2017</div>
+							<div class="cv-date">Sep 2017 — Apr 2019</div>
 							<div class="cv-content">
-								<h3>Learning & Growth</h3>
-								<p>Completed multiple courses and built projects with React</p>
+								<h3>Frontend Engineer · 4xxi</h3>
+								<p>Delivered web products and grew into broader product engineering.</p>
+							</div>
+						</div>
+						<div class="cv-timeline-item">
+							<div class="cv-date">Mar 2017 — Sep 2017</div>
+							<div class="cv-content">
+								<h3>Frontend Engineer · supp-energy</h3>
+								<p>Built customer-facing web experiences and established a foundation in professional frontend development.</p>
 							</div>
 						</div>
 					</div>
@@ -77,31 +95,32 @@ import { SITE_TITLE, GITHUB_URL, LINKEDIN_URL, EMAIL } from '../consts';
 					<h2>Skills</h2>
 					<div class="cv-skills">
 						<div class="cv-skill-category">
-							<h3>Frontend</h3>
+							<h3>Frontend & Product</h3>
 							<ul>
-								<li>JavaScript</li>
 								<li>TypeScript</li>
 								<li>React</li>
-								<li>Astro</li>
-								<li>HTML/CSS</li>
-							</ul>
-						</div>
-						<div class="cv-skill-category">
-							<h3>Tools</h3>
-							<ul>
-								<li>Git</li>
-								<li>Webpack</li>
-								<li>Vite</li>
-								<li>npm</li>
-							</ul>
-						</div>
-						<div class="cv-skill-category">
-							<h3>Other</h3>
-							<ul>
-								<li>Node.js</li>
-								<li>Python</li>
-								<li>REST APIs</li>
+								<li>UI Architecture</li>
+								<li>Frontend Platforms</li>
+								<li>Design Systems</li>
 								<li>GraphQL</li>
+							</ul>
+						</div>
+						<div class="cv-skill-category">
+							<h3>Systems & Delivery</h3>
+							<ul>
+								<li>Technical Strategy</li>
+								<li>Kotlin</li>
+								<li>Node.js</li>
+								<li>Search & Batch Systems</li>
+							</ul>
+						</div>
+						<div class="cv-skill-category">
+							<h3>Engineering Practice</h3>
+							<ul>
+								<li>Architecture Modernization</li>
+								<li>Developer Experience</li>
+								<li>Cross-functional Leadership</li>
+								<li>Agentic Workflows</li>
 							</ul>
 						</div>
 					</div>
@@ -225,6 +244,17 @@ import { SITE_TITLE, GITHUB_URL, LINKEDIN_URL, EMAIL } from '../consts';
 	.cv-content p {
 		color: rgb(var(--gray));
 		font-size: 0.95rem;
+	}
+
+	.cv-content ul {
+		margin: 0.75rem 0 0;
+		padding-left: 1.25rem;
+		color: rgb(var(--gray));
+		font-size: 0.95rem;
+	}
+
+	.cv-content li + li {
+		margin-top: 0.5rem;
 	}
 
 	.cv-skills {
