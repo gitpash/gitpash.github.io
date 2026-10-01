@@ -24,50 +24,58 @@ try {
 	<body>
 		<Header />
 		<main>
-			<!-- Hero Section -->
+			<!-- Hero: compact, two columns on wide screens -->
 			<section class="hero animate-fade-in-up">
-				<div class="hero-content">
+				<div class="hero-text">
+					<p class="eyebrow">Front-end Developer · Tokyo, Japan</p>
 					<h1>Pavel Luzanov</h1>
-					<p class="tagline">Front-end Developer</p>
 					<p class="description">
-						Passionate about building beautiful, functional web experiences.
-						Currently based in Tokyo, Japan.
+						I build beautiful, functional web experiences. Currently focused on
+						modern React, TypeScript and AI-assisted workflows.
 					</p>
 					<div class="cta-buttons">
 						<a href="/blog" class="btn btn-primary">Read Blog</a>
-						<a href={GITHUB_URL} class="btn btn-secondary" target="_blank" rel="noopener">
-							GitHub
-						</a>
+						<a href="/cv" class="btn btn-secondary">View CV</a>
 						<a href={LINKEDIN_URL} class="btn btn-secondary" target="_blank" rel="noopener">
 							LinkedIn
 						</a>
 					</div>
 				</div>
+				<div class="hero-side">
+					<img
+						class="avatar"
+						src="https://github.com/gitpash.png?size=160"
+						width="96"
+						height="96"
+						alt="Pavel Luzanov"
+					/>
+					{stats && (
+						<div class="stats">
+							<div class="stat">
+								<span class="stat-num">{stats.public_repos}</span>
+								<span class="stat-label">repos</span>
+							</div>
+							<div class="stat">
+								<span class="stat-num">{stats.followers}</span>
+								<span class="stat-label">followers</span>
+							</div>
+							<div class="stat">
+								<span class="stat-num">{stats.following}</span>
+								<span class="stat-label">following</span>
+							</div>
+						</div>
+					)}
+				</div>
 			</section>
 
-			<!-- GitHub Stats -->
-			{stats && (
-				<section class="section stats-section animate-fade-in-up" style="animation-delay: 0.1s">
-					<div class="stats-grid">
-						<div class="stat-card">
-							<div class="stat-number">{stats.public_repos}</div>
-							<div class="stat-label">Repositories</div>
-						</div>
-						<div class="stat-card">
-							<div class="stat-number">{stats.followers}</div>
-							<div class="stat-label">Followers</div>
-						</div>
-						<div class="stat-card">
-							<div class="stat-number">{stats.following}</div>
-							<div class="stat-label">Following</div>
-						</div>
-					</div>
-				</section>
-			)}
-
-			<!-- Projects Section -->
-			<section class="section animate-fade-in-up" style="animation-delay: 0.2s" id="projects">
-				<h2>Featured Projects</h2>
+			<!-- Projects -->
+			<section class="section animate-fade-in-up" style="animation-delay: 0.1s" id="projects">
+				<div class="section-head">
+					<h2>Featured Projects</h2>
+					<a href={GITHUB_URL} class="section-link" target="_blank" rel="noopener">
+						All on GitHub →
+					</a>
+				</div>
 				<div class="projects-grid">
 					{repos.map((repo) => (
 						<ProjectCard
@@ -80,17 +88,12 @@ try {
 						/>
 					))}
 				</div>
-				<div class="more-projects">
-					<a href={GITHUB_URL} class="btn btn-secondary" target="_blank" rel="noopener">
-						View All Projects on GitHub
-					</a>
-				</div>
 			</section>
 
-			<!-- About Section -->
-			<section class="section animate-fade-in-up" style="animation-delay: 0.3s" id="about">
-				<h2>About Me</h2>
-				<div class="about-content">
+			<!-- About + Skills side by side -->
+			<div class="two-col">
+				<section class="section animate-fade-in-up" style="animation-delay: 0.2s" id="about">
+					<h2>About Me</h2>
 					<p>
 						I'm a front-end developer with a passion for creating intuitive and
 						performant web applications. My journey started with a curiosity about
@@ -98,305 +101,345 @@ try {
 						building modern web experiences.
 					</p>
 					<p>
-						I enjoy working with modern JavaScript frameworks, exploring new technologies,
-						and contributing to open-source projects. When I'm not coding, you can find
-						me exploring Tokyo, reading about technology, or working on side projects.
+						I enjoy working with modern JavaScript frameworks, exploring new
+						technologies, and contributing to open-source projects.
 					</p>
-				</div>
-			</section>
+				</section>
 
-			<!-- Skills Section -->
-			<section class="section animate-fade-in-up" style="animation-delay: 0.4s" id="skills">
-				<h2>Skills</h2>
-				<div class="skills-grid">
-					<div class="skill-category">
-						<h3>Frontend</h3>
-						<div class="skills-list">
-							<span class="skill-tag">JavaScript</span>
-							<span class="skill-tag">TypeScript</span>
-							<span class="skill-tag">React</span>
-							<span class="skill-tag">Astro</span>
-							<span class="skill-tag">HTML/CSS</span>
+				<section class="section animate-fade-in-up" style="animation-delay: 0.3s" id="skills">
+					<h2>Skills</h2>
+					<div class="skills-list">
+						<div class="skill-group">
+							<h3>Frontend</h3>
+							<div class="tags">
+								<span class="skill-tag">JavaScript</span>
+								<span class="skill-tag">TypeScript</span>
+								<span class="skill-tag">React</span>
+								<span class="skill-tag">Astro</span>
+								<span class="skill-tag">HTML/CSS</span>
+							</div>
+						</div>
+						<div class="skill-group">
+							<h3>Tools</h3>
+							<div class="tags">
+								<span class="skill-tag">Git</span>
+								<span class="skill-tag">Webpack</span>
+								<span class="skill-tag">Vite</span>
+								<span class="skill-tag">npm</span>
+							</div>
+						</div>
+						<div class="skill-group">
+							<h3>Other</h3>
+							<div class="tags">
+								<span class="skill-tag">Node.js</span>
+								<span class="skill-tag">Python</span>
+								<span class="skill-tag">REST APIs</span>
+								<span class="skill-tag">GraphQL</span>
+							</div>
 						</div>
 					</div>
-					<div class="skill-category">
-						<h3>Tools</h3>
-						<div class="skills-list">
-							<span class="skill-tag">Git</span>
-							<span class="skill-tag">Webpack</span>
-							<span class="skill-tag">Vite</span>
-							<span class="skill-tag">npm</span>
-						</div>
-					</div>
-					<div class="skill-category">
-						<h3>Other</h3>
-						<div class="skills-list">
-							<span class="skill-tag">Node.js</span>
-							<span class="skill-tag">Python</span>
-							<span class="skill-tag">REST APIs</span>
-							<span class="skill-tag">GraphQL</span>
-						</div>
-					</div>
-				</div>
-			</section>
+				</section>
+			</div>
 
-			<!-- Experience Section -->
-			<section class="section animate-fade-in-up" style="animation-delay: 0.5s" id="experience">
-				<h2>Experience</h2>
-				<div class="timeline">
-					<div class="timeline-item">
-						<div class="timeline-date">2020 - Present</div>
-						<div class="timeline-content">
-							<h3>Front-end Developer</h3>
-							<p>Working on modern web applications with React and TypeScript</p>
+			<!-- Experience + Contact side by side -->
+			<div class="two-col">
+				<section class="section animate-fade-in-up" style="animation-delay: 0.4s" id="experience">
+					<h2>Experience</h2>
+					<div class="timeline">
+						<div class="timeline-item">
+							<div class="timeline-date">2020 — Present</div>
+							<div class="timeline-content">
+								<h3>Front-end Developer</h3>
+								<p>Modern web applications with React and TypeScript</p>
+							</div>
+						</div>
+						<div class="timeline-item">
+							<div class="timeline-date">2017 — 2020</div>
+							<div class="timeline-content">
+								<h3>Web Developer</h3>
+								<p>Various web applications, explored different frameworks</p>
+							</div>
+						</div>
+						<div class="timeline-item">
+							<div class="timeline-date">2016 — 2017</div>
+							<div class="timeline-content">
+								<h3>Learning & Growth</h3>
+								<p>Multiple courses and React projects</p>
+							</div>
 						</div>
 					</div>
-					<div class="timeline-item">
-						<div class="timeline-date">2017 - 2020</div>
-						<div class="timeline-content">
-							<h3>Web Developer</h3>
-							<p>Built various web applications and explored different frameworks</p>
-						</div>
-					</div>
-					<div class="timeline-item">
-						<div class="timeline-date">2016 - 2017</div>
-						<div class="timeline-content">
-							<h3>Learning & Growth</h3>
-							<p>Completed multiple courses and built projects with React</p>
-						</div>
-					</div>
-				</div>
-			</section>
+				</section>
 
-			<!-- Contact Section -->
-			<section class="section animate-fade-in-up" style="animation-delay: 0.6s" id="contact">
-				<h2>Get In Touch</h2>
-				<p>Feel free to reach out if you'd like to collaborate or just chat about web development!</p>
-				<div class="contact-links">
-					<a href={`mailto:${EMAIL}`} class="btn btn-primary">Email Me</a>
-					<a href={GITHUB_URL} class="btn btn-secondary" target="_blank" rel="noopener">GitHub</a>
-					<a href={LINKEDIN_URL} class="btn btn-secondary" target="_blank" rel="noopener">LinkedIn</a>
-				</div>
-			</section>
+				<section class="section animate-fade-in-up" style="animation-delay: 0.5s" id="contact">
+					<h2>Get In Touch</h2>
+					<p>Feel free to reach out if you'd like to collaborate or just chat about web development.</p>
+					<div class="contact-links">
+						<a href={`mailto:${EMAIL}`} class="btn btn-primary">Email Me</a>
+						<a href={GITHUB_URL} class="btn btn-secondary" target="_blank" rel="noopener">GitHub</a>
+						<a href={LINKEDIN_URL} class="btn btn-secondary" target="_blank" rel="noopener">LinkedIn</a>
+					</div>
+				</section>
+			</div>
 		</main>
 		<Footer />
 	</body>
 </html>
 
 <style>
+	/* Hero */
 	.hero {
-		text-align: center;
-		padding: 5rem 1rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 3rem;
+		padding: 2.5rem 2.5rem;
 		background:
-			radial-gradient(
-				ellipse 60% 50% at 50% -10%,
-				var(--accent-soft) 0%,
-				transparent 70%
-			),
-			linear-gradient(180deg, var(--gray-light) 0%, var(--background) 100%);
-		border-radius: var(--radius-xl);
-		margin-bottom: 3rem;
+			radial-gradient(ellipse 60% 80% at 85% 0%, var(--accent-soft) 0%, transparent 70%),
+			var(--surface);
 		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		margin-bottom: 2.5rem;
+	}
+
+	.eyebrow {
+		font-size: 0.85rem;
+		font-weight: 500;
+		color: var(--accent);
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		margin-bottom: 0.5rem;
 	}
 
 	.hero h1 {
-		font-size: 3.5rem;
+		font-size: clamp(2rem, 4vw, 2.75rem);
 		margin-bottom: 0.5rem;
-		background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-
-	.tagline {
-		font-size: 1.5rem;
-		color: var(--text-secondary);
-		margin-bottom: 1rem;
-		font-weight: 400;
 	}
 
 	.description {
-		font-size: 1.1rem;
-		max-width: 600px;
-		margin: 0 auto 2rem;
+		font-size: 1.05rem;
+		max-width: 540px;
+		margin-bottom: 1.5rem;
 		color: var(--text-secondary);
 		line-height: 1.6;
 	}
 
 	.cta-buttons {
 		display: flex;
-		gap: 1rem;
-		justify-content: center;
+		gap: 0.6rem;
 		flex-wrap: wrap;
 	}
 
-	.section {
-		margin-bottom: 3rem;
-	}
-
-	.section h2 {
-		font-size: 2rem;
-		margin-bottom: 1.5rem;
-		text-align: center;
-	}
-
-	.stats-section {
-		margin-bottom: 2rem;
-	}
-
-	.stats-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	.hero-side {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 		gap: 1rem;
-		max-width: 600px;
-		margin: 0 auto;
+		flex-shrink: 0;
 	}
 
-	.stat-card {
-		text-align: center;
-		padding: 1.5rem;
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: var(--radius-lg);
-		box-shadow: var(--shadow-sm);
+	.avatar {
+		width: 96px;
+		height: 96px;
+		border-radius: 50%;
+		border: 3px solid var(--surface);
+		box-shadow: var(--shadow-md);
 	}
 
-	.stat-number {
-		font-size: 2rem;
+	.stats {
+		display: flex;
+		gap: 1.25rem;
+	}
+
+	.stat {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.stat-num {
+		font-size: 1.35rem;
 		font-weight: 700;
-		color: var(--accent);
+		color: var(--text-primary);
+		line-height: 1.2;
 	}
 
 	.stat-label {
-		font-size: 0.9rem;
+		font-size: 0.75rem;
 		color: var(--text-secondary);
 	}
 
+	/* Sections */
+	.section {
+		margin-bottom: 2.5rem;
+	}
+
+	.section h2 {
+		font-size: 1.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.section-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		margin-bottom: 1rem;
+	}
+
+	.section-head h2 {
+		margin-bottom: 0;
+	}
+
+	.section-link {
+		font-size: 0.9rem;
+		font-weight: 500;
+	}
+
+	.two-col {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 2.5rem;
+	}
+
+	/* Projects */
 	.projects-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-		gap: 1.5rem;
-		max-width: 1000px;
-		margin: 0 auto;
+		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+		gap: 1rem;
 	}
 
-	.more-projects {
-		text-align: center;
-		margin-top: 2rem;
-	}
-
-	.about-content {
-		max-width: 700px;
-		margin: 0 auto;
-		text-align: center;
-	}
-
-	.skills-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-		gap: 2rem;
-		max-width: 900px;
-		margin: 0 auto;
-	}
-
-	.skill-category {
-		text-align: center;
-	}
-
-	.skill-category h3 {
-		font-size: 1.1rem;
-		margin-bottom: 1rem;
-		color: var(--accent);
-		font-weight: 600;
-	}
-
+	/* Skills */
 	.skills-list {
 		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	.skill-group h3 {
+		font-size: 0.85rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--text-secondary);
+		margin-bottom: 0.5rem;
+	}
+
+	.tags {
+		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
-		justify-content: center;
+		gap: 0.4rem;
 	}
 
 	.skill-tag {
-		padding: 0.5rem 1rem;
+		padding: 0.3rem 0.7rem;
 		background: var(--gray-light);
-		border-radius: 980px;
-		font-size: 0.9rem;
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		font-size: 0.85rem;
 		color: var(--text-primary);
 	}
 
+	/* Timeline */
 	.timeline {
-		max-width: 700px;
-		margin: 0 auto;
 		position: relative;
-		padding-left: 2rem;
+		padding-left: 1.5rem;
 	}
 
 	.timeline::before {
 		content: '';
 		position: absolute;
 		left: 0;
-		top: 0;
-		bottom: 0;
+		top: 0.4rem;
+		bottom: 0.4rem;
 		width: 2px;
-		background: var(--accent);
+		background: var(--border);
 	}
 
 	.timeline-item {
 		position: relative;
-		margin-bottom: 2rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.timeline-item:last-child {
+		margin-bottom: 0;
 	}
 
 	.timeline-item::before {
 		content: '';
 		position: absolute;
-		left: -2rem;
-		top: 0.5rem;
-		width: 12px;
-		height: 12px;
+		left: -1.5rem;
+		top: 0.45rem;
+		width: 8px;
+		height: 8px;
 		border-radius: 50%;
 		background: var(--accent);
-		margin-left: -5px;
+		transform: translateX(-3px);
 	}
 
 	.timeline-date {
-		font-size: 0.9rem;
+		font-size: 0.82rem;
 		color: var(--accent);
 		font-weight: 600;
-		margin-bottom: 0.25rem;
+		margin-bottom: 0.15rem;
 	}
 
 	.timeline-content h3 {
-		font-size: 1.1rem;
-		margin-bottom: 0.25rem;
+		font-size: 1rem;
+		margin-bottom: 0.15rem;
 	}
 
 	.timeline-content p {
 		color: var(--text-secondary);
-		font-size: 0.95rem;
+		font-size: 0.9rem;
+		margin: 0;
+	}
+
+	/* Contact */
+	#contact p {
+		color: var(--text-secondary);
+		margin-bottom: 1.25rem;
 	}
 
 	.contact-links {
 		display: flex;
-		gap: 1rem;
-		justify-content: center;
+		gap: 0.6rem;
 		flex-wrap: wrap;
-		margin-top: 1.5rem;
+	}
+
+	/* Responsive */
+	@media (max-width: 900px) {
+		.two-col {
+			grid-template-columns: 1fr;
+			gap: 0;
+		}
+
+		.hero {
+			flex-direction: column;
+			text-align: center;
+			gap: 1.5rem;
+			padding: 2rem 1.5rem;
+		}
+
+		.description {
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.cta-buttons {
+			justify-content: center;
+		}
+
+		.hero-side {
+			flex-direction: row;
+			width: 100%;
+			justify-content: center;
+		}
+
+		.contact-links {
+			justify-content: flex-start;
+		}
 	}
 
 	@media (max-width: 720px) {
-		.hero h1 {
-			font-size: 2.5rem;
-		}
-
-		.tagline {
-			font-size: 1.2rem;
-		}
-
-		.skills-grid {
-			grid-template-columns: 1fr;
-		}
-
 		.projects-grid {
 			grid-template-columns: 1fr;
 		}

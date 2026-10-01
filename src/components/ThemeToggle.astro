@@ -39,31 +39,31 @@
 
 <style>
 	.theme-toggle {
-		position: fixed;
-		top: 1rem;
-		right: 1rem;
-		z-index: 1000;
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: 50%;
-		width: 44px;
-		height: 44px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		width: 32px;
+		height: 32px;
+		padding: 0;
+		background: transparent;
+		border: 1px solid transparent;
+		border-radius: 50%;
 		cursor: pointer;
 		transition: all var(--transition-fast);
-		box-shadow: var(--shadow-sm);
 	}
 
 	.theme-toggle:hover {
-		transform: scale(1.05);
-		box-shadow: var(--shadow-md);
+		background: var(--gray-light);
+		border-color: var(--border);
 	}
 
 	.theme-toggle svg {
-		width: 20px;
-		height: 20px;
+		width: 16px;
+		height: 16px;
+		fill: var(--text-secondary);
+	}
+
+	.theme-toggle:hover svg {
 		fill: var(--text-primary);
 	}
 
