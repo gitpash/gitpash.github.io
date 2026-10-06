@@ -1,0 +1,527 @@
+---
+/**
+ * HeroBanner — 1-bit гравюрный баннер (GlagStone-style): обрыв, странник в касе
+ * с ноутом, море, луна, маяк с вращающимся лучом (7.5 с). Луч оживляет сцену:
+ * пока он на человеке — тот печатает (экран вспыхивает), травинки шевелятся,
+ * луна и гребни волн вспыхивают. Bayer 4×4 дизеринг каждый кадр, ~30 fps.
+ * prefers-reduced-motion → статичный кадр с лучом на человеке.
+ * Проба для скриншотов/OG: ?bandT=<сек> (3.75 — луч на человеке, 0 — луч на море).
+ */
+---
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+	href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"
+	rel="stylesheet"
+/>
+
+<section class="hero-banner" aria-label="Ночной берег с маяком — анимированная 1-bit сцена">
+	<div class="hb-frame">
+		<canvas id="hb-c" width="550" height="150"></canvas>
+		<div class="hb-foot">
+			<div class="hb-typ"><span id="hb-typed"></span><span class="caret"></span></div>
+			<span class="hb-sig">Pavel Luzanov</span>
+		</div>
+	</div>
+</section>
+
+<script>
+const BAYER = [
+  [ 0, 8, 2,10],
+  [12, 4,14, 6],
+  [ 3,11, 1, 9],
+  [15, 7,13, 5],
+];
+const INK = [0, 0, 0], PAPER = [255, 255,255], BEAM_RGB = '200,148,74';
+
+function mulberry(seed) {
+  return function() {
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+/* ================= hero band: обрыв, чувак с ноутом, вращающийся луч ================= */
+const BAND_W = 550, BAND_H = 150, BAND_HZ = 100;
+const BAND_PERIOD = 7.5;                     // сек/оборот
+const BAND_CONE_HALF = 0.40;                 // полуугол конуса (рад)
+const BAND_COS_HALF = Math.cos(BAND_CONE_HALF);
+const BAND_LAMP = { x: 467, y: 45 };         // фонарь маяка
+const BAND_GUY = { x: 147, y: 95 };          // сюда бьёт луч → он начинает печатать
+const BAND_EDGE = { x: 110, y: 112 };        // плато с травинками → шевелятся в луче
+const BAND_GAIN = 460;
+
+const BAND_PAL_BASE = {
+  skyTop: '#141414', skyBot: '#6a6a6a',
+  cloud: '#d0d0d0', moon: '#e2e2e2', crater: '#a8a8a8',
+  seaTop: '#4a4a4a', seaBot: '#101010', wave: '#6e6e6e',
+  cliff: '#000000', grass: '#000000', guy: '#000000',
+  rock: '#0d0d0d', towerL: '#ececec', towerD: '#1c1c1c',
+  lantern: '#f2f2f2', roof: '#141414',
+};
+const g6 = (n) => `rgb(${n},${n},${n})`;
+const BAND_PAL_ALB = {
+  skyTop: g6(60), skyBot: g6(60),   // небо заметно отзывается на луч — конус читается на лету
+  cloud: g6(150), moon: g6(255), crater: g6(180),
+  seaTop: g6(90), seaBot: g6(60), wave: g6(170),
+  cliff: g6(6), grass: g6(6), guy: g6(6),   // чёрное остаётся чёрным
+  rock: g6(110), towerL: g6(235), towerD: g6(38),
+  lantern: g6(255), roof: g6(30),
+};
+
+/* статичная часть сцены: небо, луна, море, маяк, обрыв.
+   pal — либо BAND_PAL_BASE (кадр), либо BAND_PAL_ALB (карта чувствительности к лучу) */
+function paintBandStatic(g, pal) {
+  const w = BAND_W, h = BAND_H, hy = BAND_HZ;
+  // небо: темно у зенита, светлее к горизонту (силуэт читается на фоне)
+  let grad = g.createLinearGradient(0, 0, 0, hy);
+  grad.addColorStop(0, pal.skyTop); grad.addColorStop(1, pal.skyBot);
+  g.fillStyle = grad; g.fillRect(0, 0, w, hy);
+  // перья-облака
+  g.fillStyle = pal.cloud;
+  g.beginPath(); g.ellipse(60, 48, 24, 5, 0, 0, Math.PI * 2); g.fill();
+  g.beginPath(); g.ellipse(196, 36, 15, 4, 0, 0, Math.PI * 2); g.fill();
+  g.beginPath(); g.ellipse(312, 17, 27, 5, 0, 0, Math.PI * 2); g.fill();
+  // луна с кратерами
+  g.fillStyle = pal.moon;
+  g.beginPath(); g.arc(390, 30, 15, 0, Math.PI * 2); g.fill();
+  g.fillStyle = pal.crater;
+  g.beginPath(); g.arc(385, 26, 4, 0, Math.PI * 2); g.fill();
+  g.beginPath(); g.arc(396, 35, 3, 0, Math.PI * 2); g.fill();
+  g.beginPath(); g.arc(384, 36, 2.4, 0, Math.PI * 2); g.fill();
+  // море
+  grad = g.createLinearGradient(0, hy, 0, h);
+  grad.addColorStop(0, pal.seaTop); grad.addColorStop(1, pal.seaBot);
+  g.fillStyle = grad; g.fillRect(0, hy, w, h - hy);
+  // гравюрная штриховка волн
+  g.strokeStyle = pal.wave; g.lineWidth = 1.3;
+  for (let y = hy + 5; y < h; y += 6) {
+    g.beginPath();
+    for (let x = 0; x <= w; x += 5) {
+      const yy = y + Math.sin((x + y * 7) * 0.055) * 1.7;
+      x === 0 ? g.moveTo(x, yy) : g.lineTo(x, yy);
+    }
+    g.stroke();
+  }
+  // островок под маяком (пересекает горизонт)
+  g.fillStyle = pal.rock;
+  g.beginPath();
+  g.moveTo(426, hy + 10); g.lineTo(445, hy - 5); g.lineTo(491, hy - 5); g.lineTo(512, hy + 10);
+  g.closePath(); g.fill();
+  // башня: 5 полос-трапеций, сужаются к верху
+  const cx = BAND_LAMP.x, bTop = hy - 5, tTop = 52, bHW = 13, tHW = 8;
+  for (let k = 0; k < 5; k++) {
+    const y0 = bTop + (tTop - bTop) * (k / 5), y1 = bTop + (tTop - bTop) * ((k + 1) / 5);
+    const w0 = bHW + (tHW - bHW) * (k / 5), w1 = bHW + (tHW - bHW) * ((k + 1) / 5);
+    g.fillStyle = (k % 2 === 0) ? pal.towerD : pal.towerL;
+    g.beginPath();
+    g.moveTo(cx - w0, y0); g.lineTo(cx + w0, y0); g.lineTo(cx + w1, y1); g.lineTo(cx - w1, y1);
+    g.closePath(); g.fill();
+  }
+  // галерея, фонарь, крыша, шпиль
+  g.fillStyle = pal.towerD; g.fillRect(cx - 10, 50, 20, 4);
+  g.fillStyle = pal.lantern; g.fillRect(cx - 7, 40, 14, 10);
+  g.fillStyle = pal.towerD;
+  g.fillRect(cx - 0.5, 40, 1.5, 10); g.fillRect(cx - 7, 44.5, 14, 1.5);   // расстекловка
+  g.fillStyle = pal.roof;
+  g.beginPath(); g.moveTo(cx - 9, 40); g.lineTo(cx, 32); g.lineTo(cx + 9, 40); g.closePath(); g.fill();
+  g.fillRect(cx - 1, 27, 2, 5);                                           // шпиль
+  // обрыв: плато слева, обрывистый склон в море
+  g.fillStyle = pal.cliff;
+  g.beginPath();
+  g.moveTo(0, h); g.lineTo(0, 118); g.lineTo(44, 116); g.lineTo(96, 114);
+  g.lineTo(140, 113); g.lineTo(168, 112); g.lineTo(196, h);
+  g.closePath(); g.fill();
+}
+
+/* динамика: травинки на краю + чувак с ноутом.
+   s = { t, typing (0..1), sway (0..1) } — typing/sway считает drawBand по силе луча
+   Фигурка: заливка силуэтом + каса — странник с ноутом на краю. */
+function paintBandGuy(g, pal, s) {
+  g.lineCap = 'round';
+  // травинки на плато — шевелятся, когда на обрыв бьёт луч
+  g.strokeStyle = pal.grass; g.lineWidth = 1.6;
+  const tufts = [[96, 5], [102, 7], [108, 4], [115, 6], [122, 5], [164, 4]];
+  for (const [bx, len] of tufts) {
+    const by = bx <= 140 ? 114 - (bx - 96) / 44 : 113 - (bx - 140) / 28;
+    const sway = s.sway * Math.sin(s.t * 5 + bx * 0.7) * 2.4;
+    g.beginPath(); g.moveTo(bx, by);
+    g.quadraticCurveTo(bx + sway * 0.5, by - len * 0.6, bx + sway, by - len);
+    g.stroke();
+  }
+  // ——— чувак: профиль лицом вправо к морю, каса, ноут на бедрах ———
+  const jit  = s.typing * Math.sin(s.t * 13) * 1.4;        // печатает — кисть дрожит
+  g.strokeStyle = pal.guy; g.fillStyle = pal.guy;
+  // ноги: бедро к краю, голень вниз по склону, стопа вперёд
+  g.lineWidth = 6.5;
+  g.beginPath(); g.moveTo(139, 110); g.lineTo(154, 107.5); g.stroke();
+  g.lineWidth = 4.5;
+  g.beginPath(); g.moveTo(154, 107.5); g.lineTo(155.5, 113); g.stroke();
+  g.lineWidth = 3;
+  g.beginPath(); g.moveTo(155.5, 112.5); g.lineTo(161, 113); g.stroke();
+  // торс — заливка силуэтом: плечи шире пояса, лёгкий наклон вперёд к ноуту
+  g.beginPath();
+  g.moveTo(142, 89.5);      // плечо-спина
+  g.lineTo(135.5, 108);     // поясница
+  g.lineTo(134, 112.5);     // седалище — сидит на кромке холма
+  g.lineTo(141.5, 112.5);
+  g.lineTo(148.5, 98.5);    // грудь
+  g.lineTo(149, 90.5);      // плечо-перед
+  g.closePath(); g.fill();
+  // рука: плечо → локоть → кисть на клавиатуре (подрагивает при печати)
+  g.lineWidth = 3.5;
+  g.beginPath(); g.moveTo(146.5, 91); g.lineTo(151, 100); g.stroke();
+  g.beginPath(); g.moveTo(151, 100); g.lineTo(157, 104.5 + jit); g.stroke();
+  // голова в тени касы + шея
+  g.beginPath(); g.arc(146, 84, 4.5, 0, Math.PI * 2); g.fill();
+  g.lineWidth = 4;
+  g.beginPath(); g.moveTo(146, 86.5); g.lineTo(146, 92); g.stroke();
+  // каса: конус с широкими полями, передний край опущен к морю
+  g.beginPath();
+  g.moveTo(145, 72.5);
+  g.lineTo(159.5, 83);
+  g.quadraticCurveTo(146, 86.5, 133.5, 82.5);
+  g.closePath(); g.fill();
+  // ноут: база на бедрах, экран наклонён к лицу; клиновидная щель между грудью
+  // и экраном остаётся — по ней силуэт читается как «человек с ноутом»
+  g.lineWidth = 3;
+  g.beginPath(); g.moveTo(144, 105); g.lineTo(160, 104); g.stroke();   // база
+  g.beginPath(); g.moveTo(159, 104); g.lineTo(152, 91.5); g.stroke();  // экран
+  // пока луч на нём — экран вспыхивает: засветка, белая панель, блики,
+  // контровой по краю касы и скуле
+  if (s.typing > 0.02) {
+    const gr = g.createRadialGradient(157, 98, 2, 157, 98, 14);
+    gr.addColorStop(0, `rgba(255,255,255,${0.4 * s.typing})`);
+    gr.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = gr;
+    g.beginPath(); g.arc(157, 98, 14, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = `rgba(255,255,255,${0.95 * s.typing})`;
+    g.lineWidth = 3;
+    g.beginPath(); g.moveTo(159, 104); g.lineTo(152, 91.5); g.stroke();    // светящийся экран
+    g.lineWidth = 2;
+    g.beginPath(); g.moveTo(145.5, 104.5); g.lineTo(159, 103.5); g.stroke(); // подсветка клавиатуры
+    g.lineWidth = 1.6;
+    g.beginPath(); g.moveTo(161, 100.5); g.lineTo(166, 97.5); g.stroke();  // блики за спинкой
+    g.beginPath(); g.moveTo(160, 95.5); g.lineTo(164, 91); g.stroke();
+    g.beginPath(); g.moveTo(150, 78); g.lineTo(158.5, 82.5); g.stroke();   // край касы
+    g.beginPath(); g.arc(146, 84, 4.5, -0.9, 0.9); g.stroke();             // скула
+  }
+}
+
+/* альбедо-карта + заранее посчитанная геометрия луча (ndx = dx/dist, falloff, halo) */
+let bandAssets = null;
+function buildBandAssets() {
+  const ctx = document.getElementById('hb-c').getContext('2d');
+  const ac = document.createElement('canvas');
+  ac.width = BAND_W; ac.height = BAND_H;
+  const ag = ac.getContext('2d');
+  paintBandStatic(ag, BAND_PAL_ALB);
+  paintBandGuy(ag, BAND_PAL_ALB, { t: 0, typing: 0, sway: 0 });
+  const ad = ag.getImageData(0, 0, BAND_W, BAND_H).data;
+  const n = BAND_W * BAND_H;
+  const alb = new Float32Array(n), ndx = new Float32Array(n),
+        fall = new Float32Array(n), halo = new Float32Array(n);
+  const pt = (px, py) => {
+    const dx = px - BAND_LAMP.x, dy = py - BAND_LAMP.y;
+    const d = Math.sqrt(dx * dx + dy * dy) + 0.001;
+    return {
+      ndx: dx / d,
+      fall: Math.max(0, 1 - d / (BAND_W * 1.15)),
+      halo: Math.exp(-d / (BAND_W * 0.16)) * 1.2,
+    };
+  };
+  for (let y = 0, i = 0; y < BAND_H; y++) {
+    for (let x = 0; x < BAND_W; x++, i++) {
+      alb[i] = ad[i * 4] / 255;
+      const p = pt(x, y);
+      ndx[i] = p.ndx; fall[i] = p.fall; halo[i] = p.halo;
+    }
+  }
+  bandAssets = {
+    ctx, alb, ndx, fall, halo,
+    out: ctx.createImageData(BAND_W, BAND_H),
+    guy: pt(BAND_GUY.x, BAND_GUY.y),
+    edge: pt(BAND_EDGE.x, BAND_EDGE.y),
+  };
+}
+
+/* сила луча в точке */
+function bandBeamAt(p, coneW, haloW, side) {
+  let b = 0;
+  if (coneW > 0.08) {
+    const dot = p.ndx * side;
+    if (dot > BAND_COS_HALF) {
+      const edge = (dot - BAND_COS_HALF) / (1 - BAND_COS_HALF);
+      b = edge * edge * coneW * p.fall;
+    }
+  }
+  if (haloW > 0.05) b += haloW * p.halo;
+  return b;
+}
+
+function drawBand(t) {
+  if (!bandAssets) buildBandAssets();
+  const A = bandAssets, ctx = A.ctx;
+  const phi = (t / BAND_PERIOD) * Math.PI * 2;
+  const cw = Math.cos(phi), sw = Math.sin(phi);
+  const coneW = Math.abs(cw);
+  const haloW = Math.abs(sw) * (sw >= 0 ? 1 : 0.55);
+  const side = cw >= 0 ? 1 : -1;
+
+  // что делает сцена, пока луч её касается
+  const typing = Math.min(1, Math.max(0, (bandBeamAt(A.guy, coneW, haloW, side) - 0.04) / 0.08));
+  const sway   = Math.min(1, Math.max(0, (bandBeamAt(A.edge, coneW, haloW, side) - 0.04) / 0.08));
+
+  // кадр → дизер Bayer 4×4 с добавкой «албедо × сила луча»
+  paintBandStatic(ctx, BAND_PAL_BASE);
+  paintBandGuy(ctx, BAND_PAL_BASE, { t, typing, sway });
+  const src = ctx.getImageData(0, 0, BAND_W, BAND_H).data;
+  const out = A.out, od = out.data;
+  for (let y = 0, i = 0; y < BAND_H; y++) {
+    for (let x = 0; x < BAND_W; x++, i++) {
+      let beam = 0;
+      if (coneW > 0.08) {
+        const dot = A.ndx[i] * side;
+        if (dot > BAND_COS_HALF) {
+          const edge = (dot - BAND_COS_HALF) / (1 - BAND_COS_HALF);
+          beam = edge * edge * coneW * A.fall[i];
+        }
+      }
+      if (haloW > 0.05) beam += haloW * A.halo[i];
+      const lit = src[i << 2] + beam * A.alb[i] * BAND_GAIN;
+      const th = (BAYER[y & 3][x & 3] + 0.5) / 16 * 255;
+      const cl = lit > th ? PAPER : INK;
+      const p = i << 2;
+      od[p] = cl[0]; od[p + 1] = cl[1]; od[p + 2] = cl[2]; od[p + 3] = 255;
+    }
+  }
+  ctx.putImageData(out, 0, 0);
+
+  // цветная подсветка луча поверх (мягкая)
+  const R = Math.hypot(BAND_W, BAND_H);
+  ctx.save();
+  if (coneW > 0.08) {
+    const a0 = side > 0 ? -BAND_CONE_HALF : Math.PI - BAND_CONE_HALF;
+    const a1 = side > 0 ? BAND_CONE_HALF : Math.PI + BAND_CONE_HALF;
+    const g = ctx.createLinearGradient(BAND_LAMP.x, BAND_LAMP.y, BAND_LAMP.x + side * R, BAND_LAMP.y);
+    g.addColorStop(0, `rgba(${BEAM_RGB},${0.42 * coneW})`);
+    g.addColorStop(0.4, `rgba(${BEAM_RGB},${0.20 * coneW})`);
+    g.addColorStop(1, `rgba(${BEAM_RGB},0)`);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.moveTo(BAND_LAMP.x, BAND_LAMP.y);
+    ctx.arc(BAND_LAMP.x, BAND_LAMP.y, R, a0, a1);
+    ctx.closePath();
+    ctx.fill();
+  }
+  if (haloW > 0.05) {
+    const hr = BAND_W * 0.22;
+    const g2 = ctx.createRadialGradient(BAND_LAMP.x, BAND_LAMP.y, 2, BAND_LAMP.x, BAND_LAMP.y, hr);
+    g2.addColorStop(0, `rgba(${BEAM_RGB},${0.5 * haloW})`);
+    g2.addColorStop(1, `rgba(${BEAM_RGB},0)`);
+    ctx.fillStyle = g2;
+    ctx.beginPath();
+    ctx.arc(BAND_LAMP.x, BAND_LAMP.y, hr, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let bandT = 0, bandLast = -1e9;
+function startBand() {
+  // проба для скриншотов/OG: ?bandT=<сек> замораживает кадр
+  const q = new URLSearchParams(location.search).get('bandT');
+  if (q !== null && q !== '') {
+    const f = parseFloat(q);
+    if (!isNaN(f)) { bandT = f; drawBand(bandT); return; }
+  }
+  if (reduceMotion) {
+    bandT = BAND_PERIOD * 0.5;                    // статика: луч ровно на чуваке — печатает
+    drawBand(bandT);
+  } else {
+    (function loop(now) {
+      if (now - bandLast >= 33) {                 // ~30 fps
+        bandLast = now;
+        bandT = (now / 1000) % 3600;
+        drawBand(bandT);
+      }
+      requestAnimationFrame(loop);
+    })(performance.now());
+  }
+}
+
+/* ================= печатающийся чип на скале =================
+   Каретка печатает роль, вставляет «опечатку», держит её полсекунды,
+   стирает backspace-ом и дописывает слово до конца — потом всё исчезает
+   и начинается следующее слово цикла. */
+const TYP_WORDS = [
+  { text: 'TECH LEAD',         typo: 8,  wrong: 'K' },  // TECH LEAK → ⌫ → TECH LEAD
+  { text: 'PRODUCT ARCHITECT', typo: 15, wrong: 'X' },  // ARCHITEX → ⌫ → ARCHITECT
+  { text: 'AI-AUGMENTED',      typo: 10, wrong: 'S' },  // AUGMENTS → ⌫ → AUGMENTED
+  { text: 'REACT · TS',        typo: 9,  wrong: 'D' },  // REACT · TD → ⌫ → TS
+];
+
+function startBandTyping(elId) {
+  const el = document.getElementById(elId || 'hb-typed');
+  const frame = el && el.closest('.hb-typ');
+  if (!el || !frame) return;
+
+  /* Ширина рамки фиксируется по самому длинному слову и не дёргается
+     при печати/стирании. Меряем невидимой копией — текст анимации не трогаем. */
+  const fit = (words) => {
+    const cs = getComputedStyle(frame);
+    const m = document.createElement('span');
+    m.style.cssText = 'position:absolute;left:-9999px;top:0;white-space:nowrap;';
+    m.style.font = cs.font;
+    m.style.letterSpacing = cs.letterSpacing;
+    document.body.appendChild(m);
+    let max = 0;
+    for (const w of (words || TYP_WORDS)) {
+      m.textContent = typeof w === 'string' ? w : w.text;
+      max = Math.max(max, m.offsetWidth);
+    }
+    m.remove();
+    const caret = frame.querySelector('.caret');
+    frame.style.width = Math.ceil(
+      max + caret.offsetWidth
+      + (parseFloat(cs.gap) || 0)
+      + parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight)
+      + parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth)
+    ) + 'px';
+    frame.style.minWidth = '0';   // точная ширина важнее CSS-fallback
+  };
+
+  const begin = () => {
+    if (reduceMotion) {                        // статичный кадр: под первое слово
+      fit([TYP_WORDS[0].text]);
+      el.textContent = TYP_WORDS[0].text;
+      return;
+    }
+    fit();
+    let wi = -1;
+    const nextWord = () => {
+      wi = (wi + 1) % TYP_WORDS.length;
+      const w = TYP_WORDS[wi];
+      const ops = [];
+      for (let i = 0; i < w.typo; i++) ops.push({ c: w.text[i], d: 85 });
+      ops.push({ c: w.wrong, d: 450 });      // «ошибка» на виду
+      ops.push({ back: true, d: 180 });      // backspace
+      for (let i = w.typo; i < w.text.length; i++) ops.push({ c: w.text[i], d: 85 });
+
+      let buf = '';
+      const type = (k) => {
+        if (k === ops.length) { setTimeout(() => erase(buf), 2200); return; }
+        const op = ops[k];
+        buf = op.back ? buf.slice(0, -1) : buf + op.c;
+        el.textContent = buf;
+        setTimeout(() => type(k + 1), op.d);
+      };
+      type(0);
+    };
+    const erase = (buf) => {
+      if (!buf) { el.textContent = ''; setTimeout(nextWord, 450); return; }
+      buf = buf.slice(0, -1);
+      el.textContent = buf;
+      setTimeout(() => erase(buf), 45);
+    };
+    nextWord();
+  };
+
+  // шрифт грузится асинхронно — меряем после готовности (со страховкой по таймауту)
+  const ready = (document.fonts && document.fonts.ready)
+    ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1500))])
+    : Promise.resolve();
+  ready.then(begin);
+  window.addEventListener('resize', () => fit());   // clamp-шрифт зависит от ширины окна
+}
+
+startBand();
+startBandTyping('hb-typed');
+</script>
+
+<style>
+	.hero-banner {
+		margin-bottom: 2.5rem;
+	}
+
+	.hb-frame {
+		position: relative;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		background: #000;
+		overflow: hidden;
+		box-shadow: var(--shadow-md);
+	}
+
+	.hb-frame canvas {
+		display: block;
+		width: 100%;
+		height: auto;
+		image-rendering: pixelated;
+	}
+
+	/* подпись и печатающаяся вставка — внизу слева, на чёрной скале */
+	.hb-foot {
+		position: absolute;
+		left: 14px;
+		bottom: 10px;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 6px;
+		pointer-events: none;
+	}
+
+	.hb-sig {
+		font-family: 'Silkscreen', monospace;
+		font-size: clamp(11px, 1.3vw, 13px);
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: #fff;
+	}
+
+	.hb-typ {
+		display: flex;
+		align-items: center;
+		gap: 7px;
+		font-family: 'Silkscreen', monospace;
+		font-size: clamp(11px, 1.3vw, 13px);
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		background: #000;
+		color: #fff;
+		border: 2px solid #fff;
+		padding: 5px 9px;
+		white-space: nowrap;
+		box-sizing: content-box;
+		height: 1.05em; /* высота кадра фиксирована: пусто и с текстом — один размер */
+		min-width: 20ch; /* fallback до JS-замера */
+	}
+
+	#hb-typed {
+		line-height: 1.05em; /* текст той же высоты, что каретка — без прыжков */
+	}
+
+	.hb-typ .caret {
+		display: inline-block;
+		width: 0.55em;
+		height: 1.05em;
+		background: currentColor;
+		flex: none;
+		animation: hb-caret-blink 1s steps(1) infinite;
+	}
+
+	@keyframes hb-caret-blink {
+		50% { opacity: 0; }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hb-typ .caret {
+			animation: none;
+		}
+	}
+</style>
