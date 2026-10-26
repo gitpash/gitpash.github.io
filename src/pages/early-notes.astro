@@ -32,10 +32,34 @@ const posts = (await getCollection('blog'))
 					</p>
 					<p>
 						For who I am now, start with the <a href="/cv">CV</a> and
-						<a href="/about">About</a> pages. Selected later writing (2021–2022 Medium
-						notes on component libraries and Vite/Storybook) will be linked here once
-						canonical URLs are confirmed.
+						<a href="/about">About</a> pages.
 					</p>
+					<p>
+						<strong>Selected writing (2021–2022)</strong> — company engineering blog on Medium
+						(process/tooling notes from that period, not a current role claim):
+					</p>
+					<ul class="selected-writing">
+						<li>
+							<a
+								href="https://medium.com/anymind-group/tech-blog-building-shared-components-library-with-radix-ui-f1435fdc89c8"
+								target="_blank"
+								rel="noopener"
+							>
+								Building a shared components library with Radix UI
+							</a>
+							<span class="date"> · Dec 2021</span>
+						</li>
+						<li>
+							<a
+								href="https://medium.com/anymind-group/using-vite-as-a-full-chain-tool-of-developing-bundling-and-documenting-your-code-4e9a1d150a02"
+								target="_blank"
+								rel="noopener"
+							>
+								Using Vite as a full-chain tool (developing, bundling, documenting)
+							</a>
+							<span class="date"> · Mar 2022</span>
+						</li>
+					</ul>
 				</div>
 				<ul class="early-list">
 					{
@@ -81,6 +105,18 @@ const posts = (await getCollection('blog'))
 	}
 	.preamble p {
 		margin-bottom: 1rem;
+	}
+	.selected-writing {
+		margin: 0 0 1rem;
+		padding-left: 1.25rem;
+		line-height: 1.6;
+	}
+	.selected-writing a {
+		color: var(--accent);
+	}
+	.selected-writing .date {
+		color: var(--gray);
+		font-size: 0.9rem;
 	}
 	.early-list {
 		list-style: none;
