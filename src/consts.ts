@@ -3,7 +3,7 @@
 
 export const SITE_TITLE = 'Pavel Luzanov';
 export const SITE_DESCRIPTION =
-	'Staff frontend / product engineer: cross-surface delivery, UI architecture, and AI-augmented workflows.';
+	'Senior frontend / product engineer: cross-surface delivery, UI architecture, and AI-augmented workflows.';
 export const GITHUB_USERNAME = 'gitpash';
 export const GITHUB_URL = 'https://github.com/gitpash';
 export const EMAIL = 'arklogin@gmail.com';
