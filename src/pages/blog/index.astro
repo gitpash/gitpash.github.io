@@ -17,6 +17,9 @@ const posts = (await getCollection('blog')).sort(
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
+			.archive-note { margin: 0 0 1.5rem; color: var(--gray); }
+			.archive-note a { color: var(--accent); }
+
 			main {
 				width: 960px;
 			}
@@ -89,6 +92,11 @@ const posts = (await getCollection('blog')).sort(
 	<body>
 		<Header />
 		<main>
+			<p class="archive-note">
+				Looking for 2017 FreeCodeCamp-era write-ups? See the honest archive:
+				<a href="/early-notes">Early notes (2017)</a>.
+			</p>
+
 			<section>
 				<ul>
 					{
