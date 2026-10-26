@@ -27,10 +27,16 @@ export async function getGitHubRepos(): Promise<GitHubRepo[]> {
 
 	const repos: GitHubRepo[] = await response.json();
 
-	// Filter out forks and sort by stars
+	// Prefer orientation / protocol work, then stars; filter forks
+	const preferred = new Set(['agent-artifact-protocol', 'gitpash', 'distractor-lab']);
 	return repos
 		.filter((repo) => !repo.fork)
-		.sort((a, b) => b.stargazers_count - a.stargazers_count)
+		.sort((a, b) => {
+			const ap = preferred.has(a.name) ? 1 : 0;
+			const bp = preferred.has(b.name) ? 1 : 0;
+			if (ap !== bp) return bp - ap;
+			return b.stargazers_count - a.stargazers_count;
+		})
 		.slice(0, 6);
 }
 

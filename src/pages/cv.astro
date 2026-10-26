@@ -43,12 +43,13 @@ import { SITE_TITLE, SITE_DESCRIPTION, GITHUB_URL, LINKEDIN_URL, EMAIL } from '.
 				<section class="cv-section">
 					<h2>Summary</h2>
 					<p>
-						Tech Lead and staff-level product engineer with a frontend foundation and
-						cross-domain scope. I turn ambiguous business problems into technical plans,
-						lead architecture modernization and engineering standardization, and build
-						AI-augmented workflows for reliable delivery. Deep experience with React,
-						TypeScript, UI architecture, and modern product engineering; hands-on work
-						also includes Kotlin-based search and batch systems.
+						Staff frontend / product engineer with a frontend core and cross-surface
+						scope. I turn ambiguous product problems into technical plans, lead UI
+						architecture modernization and engineering-practice improvements, and design
+						AI-augmented delivery workflows with clear human review ownership. Deep
+						experience with React, TypeScript, and multi-app product engineering; when
+						needed I take time-boxed full-stack ownership (APIs, search/graph paths,
+						jobs) without making backend my primary identity.
 					</p>
 				</section>
 
@@ -58,12 +59,14 @@ import { SITE_TITLE, SITE_DESCRIPTION, GITHUB_URL, LINKEDIN_URL, EMAIL } from '.
 						<div class="cv-timeline-item">
 							<div class="cv-date">Jan 2020 — Present</div>
 							<div class="cv-content">
-								<h3>Tech Lead / Head of Frontend · AnyMind Group</h3>
+								<h3>Staff Frontend / Product Engineer · AnyMind Group</h3>
+								<p class="cv-role-note">Frontend-leaning staff scope; internal labels have varied (including tech-lead shaped work). Not a classical people-manager headcount.</p>
 								<ul>
-									<li>Lead architecture modernization, UI standardization, and engineering-practice improvements.</li>
-									<li>Scope cross-domain work by mapping business goals, blast radius, dependencies, and delivery strategy.</li>
-									<li>Build complex systems, including a Kotlin-based BFS search service for account similarity and batched processing.</li>
-									<li>Support performance reviews and compensation discussions while focusing primarily on engineering culture and practices.</li>
+									<li>Own staff admin web delivery (sole CODEOWNER on the main admin app) and ship marketplace/ops UX, design-system alignment, and CI deploy-ready gates.</li>
+									<li>Lead end-to-end product verticals across admin web, creator web, and creator mobile — including a shop-affiliate channel (setup, import/match, rewards, creator progress) with API and scheduled-job touchpoints when required.</li>
+									<li>Primary builder on live/stream and brand-portal creator webs: production launch, rebrand, marketing-vs-app host splits, consent gates, and client security/help hardening.</li>
+									<li>Introduce git-native agent orientation (public Agent Artifact Protocol) and dogfood repo maps/stream packs for multi-repo AI-assisted delivery; keep design, review, and merge ownership human.</li>
+									<li>Take time-boxed full-stack ownership when frontend is blocked (for example similarity/graph schema + admin graph UI, or affiliate import/reward guards) — supporting depth, not a standing backend title.</li>
 								</ul>
 							</div>
 						</div>
@@ -109,18 +112,18 @@ import { SITE_TITLE, SITE_DESCRIPTION, GITHUB_URL, LINKEDIN_URL, EMAIL } from '.
 							<h3>Systems & Delivery</h3>
 							<ul>
 								<li>Technical Strategy</li>
-								<li>Kotlin</li>
-								<li>Node.js</li>
-								<li>Search & Batch Systems</li>
+								<li>Cross-surface release trains</li>
+								<li>Node.js / GraphQL clients</li>
+								<li>Time-boxed full-stack (API, jobs)</li>
 							</ul>
 						</div>
 						<div class="cv-skill-category">
 							<h3>Engineering Practice</h3>
 							<ul>
-								<li>Architecture Modernization</li>
-								<li>Developer Experience</li>
-								<li>Cross-functional Leadership</li>
-								<li>Agentic Workflows</li>
+								<li>Architecture modernization</li>
+								<li>Developer experience</li>
+								<li>AI-augmented delivery (design/review owned)</li>
+								<li>Informal frontend practice advice</li>
 							</ul>
 						</div>
 					</div>
@@ -239,6 +242,13 @@ import { SITE_TITLE, SITE_DESCRIPTION, GITHUB_URL, LINKEDIN_URL, EMAIL } from '.
 	.cv-content h3 {
 		font-size: 1.1rem;
 		margin-bottom: 0.25rem;
+	}
+
+	.cv-role-note {
+		color: var(--gray);
+		font-size: 0.9rem;
+		margin: 0 0 0.75rem;
+		font-style: italic;
 	}
 
 	.cv-content p {
