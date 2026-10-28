@@ -12,8 +12,8 @@ const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3)
 	items.length > 1 && (
 		<nav class="minimap" aria-label="On this page">
 			<ol>
-				{items.map((h) => (
-					<li class={`depth-${h.depth}`}>
+				{items.map((h, n) => (
+					<li class={`depth-${h.depth}`} style={`--i:${n}`}>
 						<a href={`#${h.slug}`} data-target={h.slug}>
 							<span class="tick" aria-hidden="true" />
 							<span class="label">{h.text}</span>
@@ -32,7 +32,7 @@ const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3)
 		right: 1.5rem;
 		z-index: 5;
 		display: none;
-		max-width: 16rem;
+		width: 3rem;
 	}
 	@media (min-width: 1200px) {
 		.minimap {
@@ -40,6 +40,9 @@ const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3)
 		}
 	}
 	ol {
+		position: absolute;
+		top: 0;
+		right: 0;
 		margin: 0;
 		padding: 0.6rem 0.5rem;
 		list-style: none;
@@ -47,11 +50,17 @@ const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3)
 		border-radius: var(--radius-md);
 		transition: background var(--transition-base), border-color var(--transition-base);
 	}
-	.minimap:hover ol,
 	.minimap:focus-within ol {
 		background: var(--surface);
 		border-color: var(--border);
 		box-shadow: var(--shadow-md);
+	}
+	@media (hover: hover) {
+		.minimap:hover ol {
+			background: var(--surface);
+			border-color: var(--border);
+			box-shadow: var(--shadow-md);
+		}
 	}
 	li {
 		margin: 0;
@@ -79,18 +88,29 @@ const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3)
 		outline: 2px solid var(--accent);
 		outline-offset: 1px;
 	}
+	/* Labels are always laid out and only fade in, so nothing slides or resizes. */
 	.label {
-		max-width: 0;
-		overflow: hidden;
 		white-space: nowrap;
-		text-overflow: ellipsis;
 		opacity: 0;
-		transition: max-width var(--transition-base), opacity var(--transition-base);
+		pointer-events: none;
+		transition: opacity 180ms ease;
+		transition-delay: calc(var(--i) * 25ms);
 	}
-	.minimap:hover .label,
 	.minimap:focus-within .label {
-		max-width: 13rem;
 		opacity: 1;
+		pointer-events: auto;
+	}
+	@media (hover: hover) {
+		.minimap:hover .label {
+			opacity: 1;
+			pointer-events: auto;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.label {
+			transition: none;
+			transition-delay: 0s;
+		}
 	}
 	.tick {
 		flex: none;
