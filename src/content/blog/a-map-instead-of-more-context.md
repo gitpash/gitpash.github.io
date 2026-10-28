@@ -37,7 +37,7 @@ The principle I wanted was simple: there is a lot of information, sometimes usef
 
 ## A small portal
 
-What I ended up with is a small config file that lists the main concerns of the current workspace. It does not describe everything, it is not an index, and it forces nothing to be installed. To connect it to any harness and any model you add one line to your `CLAUDE.md` or its equivalent that says where to read, and from there the agent goes deeper only when the task needs it (the file is human-readable too, which helps in review).
+What I ended up with is a small config file that lists the main concerns of the current workspace. It does not describe everything, it is not an index, and it forces nothing to be installed. To connect it to any harness and any model you add one line to your `CLAUDE.md` or its equivalent that says where to read. From there the agent goes deeper only when the task needs it (the file is human-readable too, which helps in review).
 
 I think the missing piece is smaller than more context: the agent should be able to *address* what exists (a name and a path) without having to *load* it. In September I wrote this up as a proposal for the team, and it became [AAP](https://github.com/gitpash/agent-artifact-protocol/tree/v0.2.1-prototype), an open spec I maintain. There is no silver bullet here, of course, so below I show where it helps and where it doesn't.
 
