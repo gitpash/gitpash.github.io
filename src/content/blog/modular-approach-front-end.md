@@ -6,8 +6,7 @@ pubDate: '2021-06-16'
 canonicalUrl: 'https://anymindgroup.com/news/tech-blog/12055/'
 ---
 
-Hi, my name is Pavel and I’m front-end developer at AnyMind ([AnyTag](https://anytag.jp/) & [AnyCreator](https://anymindgroup.com/products/anycreator/) platforms), in this article I’d like to introduce our front-end architecture and main approaches we are using to build scalable apps.\
-~ [see our project history and backend architecture](https://anymindgroup.com/news/tech-blog/11513/)
+This article introduces our front-end architecture and the main approaches we use to build scalable apps.
 
 For our team React + TypeScript works best: it is very flexible, stable, has great community support and can offer almost all possible 3rd party integrations or fancy charts every product might need, but it comes with the cost – project can easily become complicated. People come and go, features created and got buried at some far corners – those issues are very common across web development teams. That’s why very important is to keep thing structured, especially if your project grow fast (feature-rich).
 
@@ -187,4 +186,4 @@ export const useAuthData = () => {
 All local state we are trying to keep closer to the view to avoid prop drilling problem and not make unrelated parts re-render due to state changes. Of course there might be some really complex problems where simple composition can’t give us desired outcome – there we might use React.Context again or some small state management libs like [recoil](https://github.com/facebookexperimental/Recoil) or [jotai](https://github.com/pmndrs/jotai).
 
 ## ■ Conclusion
-Structuring your app might be quite complex task, many thing needs to be considered and tradeoffs mist be measured carefully, having some opinionated approach is essential to keep things moving forward. Just try to keep things simple as much as possible – most of our time we are reading code rather that writing it, that’s why it is very important to keep things organised to reduce cognitive load on developers and let them focus on solving business problems rather than arguing about libs to use or styles to apply. Thank you for reading, I hope you can get some useful ideas here. See you next time!
+Structuring your app might be quite complex task, many thing needs to be considered and tradeoffs mist be measured carefully, having some opinionated approach is essential to keep things moving forward. Just try to keep things simple as much as possible – most of our time we are reading code rather that writing it, that’s why it is very important to keep things organised to reduce cognitive load on developers and let them focus on solving business problems rather than arguing about libs to use or styles to apply.

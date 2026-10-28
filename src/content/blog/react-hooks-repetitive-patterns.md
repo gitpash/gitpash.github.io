@@ -6,7 +6,7 @@ pubDate: '2021-10-06'
 canonicalUrl: 'https://anymindgroup.com/news/tech-blog/15373/'
 ---
 
-Hi, my name is Pavel and I’m front-end developer at AnyMind ([AnyTag](https://anymindgroup.com/products/anytag/) & [AnyCreator](https://anymindgroup.com/products/anycreator/) platforms) and today I’d like to talk about how we are using [react hooks](https://reactjs.org/docs/hooks-intro.html) to simplify our codebase, eliminate repetitive patterns and how you can recognize them.
+This article is about how we use [react hooks](https://reactjs.org/docs/hooks-intro.html) to simplify our codebase and eliminate repetitive patterns, and how you can recognize them.
 
 *"Can we reuse it?"* or *"You can refactor this as util function and reuse later"* – I believe everyone is well familiar with such code review comments, the reason for that is very simple – code reusability is one of the most important topics among software developers. The way we are implementing our components and how we are structuring our business logic is always the top of all priorities for every application development process. When we are thinking about the scalability of our codebases, reusability should be considered in the first place, with it implemented successfully we will get a better application: with less code and often more readable one.
 
@@ -198,4 +198,4 @@ return (
 
 ## Conclusion:
 
-By implementing your application logic this way, you will not only help your team save some development time, but will also help you maintain consistency across similar features. If you want to reuse the same hook, you’ll have to consider keeping your data flow the same and compose components in a similar way. It will also help you shape your APIs and even predict some possible flaws due to previously implemented functions sharing similar approaches. Eventually your app will have distinctive recognisable patterns of data usage and UI composition which is just perfect for maintainability, possible architectural changes and overall nice to work with and reason about. I hope these simple practical examples and general ideas will help you make your own product better, thank you for reading.
+By implementing your application logic this way, you will not only help your team save some development time, but will also help you maintain consistency across similar features. If you want to reuse the same hook, you’ll have to consider keeping your data flow the same and compose components in a similar way. It will also help you shape your APIs and even predict some possible flaws due to previously implemented functions sharing similar approaches. Eventually your app will have distinctive recognisable patterns of data usage and UI composition which is just perfect for maintainability, possible architectural changes and overall nice to work with and reason about.
