@@ -1,6 +1,7 @@
 ---
 title: 'How to recognize repetitive patterns and optimize them with React Hooks'
 description: 'Finding repeated logic in list and detail UIs and moving it into reusable hooks.'
+scene: 'stairs'
 pubDate: '2021-10-06'
 canonicalUrl: 'https://anymindgroup.com/news/tech-blog/15373/'
 ---
