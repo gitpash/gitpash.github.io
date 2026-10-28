@@ -112,9 +112,13 @@ Cross-domain contracts are still an open question for us. Who owns a contract be
 
 ## Rolling it out
 
-Rollout was where the earlier question got its answer. A map is small, so there is nothing to rewrite up front: old documents are migrated only when somebody touches them. I made a small demo and showed it to the team. Some did not get it. Some said "cool". Some said they wanted to try it too.
+A map is small, so there is nothing to rewrite up front: old documents are migrated only when somebody touches them. I posted the proposal and the thread stayed quiet, so I made a small demo and showed it to the team. Some did not get it. Some said "cool". Some said they wanted to try it too.
 
-It is easy to deploy through an `llms.txt` style instruction that explains to the agent what the map is. Validation is optional: a JSON schema, for the case when you do not want the agent to invent parameters and you want strict following of a pattern. Take the published schema as a base, but a schema of your own for your case is better. The agent then gets a verifiable base for building a complex orientation graph, loads it into context and works. There are two parts: a minimal compact core, and whatever you decide to extend it with.
+My plan for the people in the third group was simple. Everybody already has their own LLM and their own harness, so I would hand them the link to the AAP repository. Look at it, I would say, and discuss it with your LLM and your domain. Decide whether it fits and how much of it you need. I thought that was enough.
+
+It was not. The public repository is hard to understand on a first read, and the questions started. Some looked excessive to me, so I asked Claude to write an `llms.txt`. It is a page that explains to an agent what the map is, what to open first and what the rules are. People could ask the agent instead of me. Later I added a small skill that drafts a map, validates it, and leaves the nodes for a human to review before the map is promoted. Both live on our side, in the team repository. The public tag of AAP ships neither.
+
+Validation is optional: a JSON schema, for the case when you do not want the agent to invent parameters and you want strict following of a pattern. Take the published schema as a base, but a schema of your own for your case is better. The agent then gets a verifiable base for building a complex orientation graph. It loads that into context and works. There are two parts: a minimal compact core, and whatever you decide to extend it with.
 
 How it went in practice is a story for later posts.
 
