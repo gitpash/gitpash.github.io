@@ -5,7 +5,7 @@ pubDate: '2026-10-28'
 tags: ['ai', 'agents', 'aap']
 ---
 
-When an agent misbehaves in a repository, the usual fix is to give it more: a longer instruction file, more pasted documents, a bigger context. I think the missing piece is often smaller. The agent should be able to *address* what exists (a name and a path) without having to *load* it. [AAP](https://github.com/gitpash/agent-artifact-protocol/tree/v0.2.1-prototype), an open spec I maintain, is built around that idea, and a team of four uses it on production code.
+When an agent misbehaves in a repository, the usual fix is to give it more: a longer instruction file, more pasted documents, a bigger context. I think the missing piece is often smaller. The agent should be able to *address* what exists (a name and a path) without having to *load* it. [AAP](https://github.com/gitpash/agent-artifact-protocol/tree/v0.2.1-prototype), an open spec I maintain, is built around that idea, and my team of four has used it on production code since September 2026. The maps now exist in about thirty repositories, and all of us have committed to them.
 
 There is no silver bullet here. This is one solution that works for me, and below I show where it helps and where it doesn't.
 
@@ -74,7 +74,7 @@ The agent starts at L0, one small file, and goes deeper only when the task needs
 
 This one is the map of my personal project, a private repository. In layout terms it says this:
 
-- `artifacts` has **one** writable home, `docs/features/`, where the feature pages live (see my earlier post on surface docs)
+- `artifacts` has **one** writable home, `docs/features/`, where the feature pages live
 - `adr` points to `docs/adr/` and is `read-only`: 22 accepted decisions that are now history, typo fixes only
 - `plans` is read-write, described as execution records that close only after the feature page is updated
 
@@ -92,8 +92,8 @@ Benefits:
 
 Downsides:
 
-- **For one repository a map adds little.** An agent that can run `ls` finds `docs/` by itself. In my personal project the page template, the single entry file and the coverage check (see the first post) did more than the map.
-- **`access` is a fence for coordination, not security.** An agent that ignores the map can still write anywhere. More on this in the next post.
+- **For one repository a map adds little.** An agent that can run `ls` finds `docs/` by itself. In my personal project the page template, the single entry file and the coverage check did more than the map.
+- **`access` is a fence for coordination, not security.** An agent that ignores the map can still write anywhere.
 - **The map can drift.** It is text a human maintains; if I move a directory and forget the map, it becomes a confident lie. My first version also collected changelog comments, which I removed, because a map should say where things live, not narrate history.
 - **I cannot tell you it makes agents better.** I have not run a controlled comparison, and the team has not surveyed how much it helps. What I have is a narrower set of places an agent could plausibly write, and an impression that sessions start with fewer wrong guesses. That is an impression, not a measurement.
 - **It is a young spec.** The version I link is `0.2.1-prototype`, and the SPEC calls the core experimental. Beyond my team of four, I have not seen it used by anyone.
