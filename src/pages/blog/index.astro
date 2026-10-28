@@ -82,7 +82,7 @@ const posts = (await getCollection('blog')).sort(
 					posts.map((post) => (
 						<li>
 							<a href={`/blog/${post.id}/`}>
-								<Cover slug={post.id} scene={post.data.scene} />
+								<Cover slug={post.id} family={post.data.cover} />
 								<div>
 								<h2 class="title">{post.data.title}</h2>
 								<p class="date">

@@ -10,7 +10,7 @@ import Minimap from '../components/Minimap.astro';
 
 type Props = CollectionEntry<'blog'>['data'] & { headings?: MarkdownHeading[]; slug: string };
 
-const { title, description, pubDate, updatedDate, heroImage, canonicalUrl, headings = [], scene, slug } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, canonicalUrl, headings = [], cover, slug } = Astro.props;
 ---
 
 <html lang="en">
@@ -108,7 +108,7 @@ const { title, description, pubDate, updatedDate, heroImage, canonicalUrl, headi
 		<Minimap headings={headings} />
 		<main>
 			<article>
-				<div class="cover-wrap"><Cover slug={slug} scene={scene} /></div>
+				<div class="cover-wrap"><Cover slug={slug} family={cover} /></div>
 				<div class="prose">
 					<div class="title">
 						<div class="date">

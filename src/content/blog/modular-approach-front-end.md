@@ -1,7 +1,7 @@
 ---
 title: 'Modular approach on structuring front-end application'
 description: 'How a React and TypeScript team structures a feature-rich front-end: atomic design, API consuming and state management.'
-scene: 'island'
+cover: 'stack'
 pubDate: '2021-06-16'
 canonicalUrl: 'https://anymindgroup.com/news/tech-blog/12055/'
 ---

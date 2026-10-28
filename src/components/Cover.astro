@@ -1,20 +1,20 @@
 ---
-import { coverSvg, pickScene, type Scene } from '../lib/cover';
+import { coverSvg, pickFamily, type Family } from '../lib/cover';
 
 interface Props {
 	slug: string;
-	scene?: Scene;
+	family?: Family;
 }
 
-const { slug, scene = pickScene(slug) } = Astro.props;
-const svg = coverSvg(slug, scene);
+const { slug, family = pickFamily(slug) } = Astro.props;
+const svg = coverSvg(slug, family);
 ---
 
-<div class="cover" role="img" aria-label={`Isometric pixel-art cover: ${scene}`} set:html={svg} />
+<div class="cover" role="img" aria-label={`Abstract pixel-art cover (${family})`} set:html={svg} />
 
 <style>
 	.cover {
-		border: 3px solid var(--frame);
+		border: 2px solid var(--frame);
 		background: #fff;
 		line-height: 0;
 		aspect-ratio: 240 / 126;
