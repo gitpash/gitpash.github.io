@@ -1,0 +1,151 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+	headings: MarkdownHeading[];
+}
+
+const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+	items.length > 1 && (
+		<nav class="minimap" aria-label="On this page">
+			<ol>
+				{items.map((h) => (
+					<li class={`depth-${h.depth}`}>
+						<a href={`#${h.slug}`} data-target={h.slug}>
+							<span class="tick" aria-hidden="true" />
+							<span class="label">{h.text}</span>
+						</a>
+					</li>
+				))}
+			</ol>
+		</nav>
+	)
+}
+
+<style>
+	.minimap {
+		position: fixed;
+		top: 7rem;
+		right: 1.5rem;
+		z-index: 5;
+		display: none;
+		max-width: 16rem;
+	}
+	@media (min-width: 1200px) {
+		.minimap {
+			display: block;
+		}
+	}
+	ol {
+		margin: 0;
+		padding: 0.6rem 0.5rem;
+		list-style: none;
+		border: 1px solid transparent;
+		border-radius: var(--radius-md);
+		transition: background var(--transition-base), border-color var(--transition-base);
+	}
+	.minimap:hover ol,
+	.minimap:focus-within ol {
+		background: var(--surface);
+		border-color: var(--border);
+		box-shadow: var(--shadow-md);
+	}
+	li {
+		margin: 0;
+	}
+	li.depth-3 {
+		padding-right: 0.9rem;
+	}
+	a {
+		display: flex;
+		align-items: center;
+		flex-direction: row-reverse;
+		justify-content: flex-start;
+		gap: 0.75rem;
+		padding: 0.28rem 0.25rem;
+		font-size: 0.8rem;
+		line-height: 1.3;
+		color: var(--text-secondary);
+		border-radius: 6px;
+	}
+	a:hover {
+		text-decoration: none;
+		color: var(--text-primary);
+	}
+	a:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 1px;
+	}
+	.label {
+		max-width: 0;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		opacity: 0;
+		transition: max-width var(--transition-base), opacity var(--transition-base);
+	}
+	.minimap:hover .label,
+	.minimap:focus-within .label {
+		max-width: 13rem;
+		opacity: 1;
+	}
+	.tick {
+		flex: none;
+		height: 2px;
+		width: 1.5rem;
+		border-radius: 1px;
+		background: var(--border);
+		transition: background var(--transition-fast), width var(--transition-fast);
+	}
+	.depth-3 .tick {
+		width: 0.9rem;
+	}
+	a:hover .tick {
+		background: var(--gray);
+	}
+	a.active {
+		color: var(--text-primary);
+		font-weight: 500;
+	}
+	a.active .tick {
+		background: var(--accent);
+		width: 2rem;
+	}
+	.depth-3 a.active .tick {
+		width: 1.3rem;
+	}
+</style>
+
+<script>
+	const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.minimap a'));
+	const byId = new Map(links.map((a) => [a.dataset.target!, a]));
+	const headings = links
+		.map((a) => document.getElementById(a.dataset.target!))
+		.filter((h): h is HTMLElement => !!h);
+
+	let current: HTMLAnchorElement | undefined;
+	function activate(id: string) {
+		const next = byId.get(id);
+		if (!next || next === current) return;
+		current?.classList.remove('active');
+		current?.removeAttribute('aria-current');
+		next.classList.add('active');
+		next.setAttribute('aria-current', 'location');
+		current = next;
+	}
+
+	if (headings.length) {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) activate(entry.target.id);
+				}
+			},
+			{ rootMargin: '0px 0px -70% 0px' },
+		);
+		headings.forEach((h) => observer.observe(h));
+	}
+</script>
