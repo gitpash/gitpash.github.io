@@ -1,12 +1,10 @@
 ---
 title: 'How to recognize repetitive patterns and optimize them with React Hooks'
 description: 'Finding repeated logic in list and detail UIs and moving it into reusable hooks.'
-cover: 'rings'
+cover: 'hooks'
 pubDate: '2021-10-06'
 canonicalUrl: 'https://anymindgroup.com/news/tech-blog/15373/'
 ---
-
-Photo by [Efe Kurnaz](https://unsplash.com/@efekurnaz?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
 
 Hi, my name is Pavel and I’m front-end developer at AnyMind ([AnyTag](https://anymindgroup.com/products/anytag/) & [AnyCreator](https://anymindgroup.com/products/anycreator/) platforms) and today I’d like to talk about how we are using [react hooks](https://reactjs.org/docs/hooks-intro.html) to simplify our codebase, eliminate repetitive patterns and how you can recognize them.
 

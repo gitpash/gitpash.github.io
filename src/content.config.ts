@@ -15,7 +15,7 @@ const blog = defineCollection({
 			updatedDate: z.coerce.date().optional(),
 			heroImage: z.optional(image()),
 			// Generative cover family; picked from the slug when omitted.
-			cover: z.enum(['terrain', 'stack', 'rings', 'blocks', 'beams']).optional(),
+			cover: z.enum(['terrain', 'stack', 'rings', 'blocks', 'beams', 'hooks']).optional(),
 			// Set for articles first published elsewhere; also used as the canonical URL.
 			canonicalUrl: z.string().url().optional(),
 		}),

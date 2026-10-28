@@ -4,8 +4,10 @@
 // image is scaled up with nearest-neighbour. Everything is seeded from the slug, so
 // a cover never changes and nothing is generated at runtime.
 
+// Families picked from the slug when a post does not name one.
 export const FAMILIES = ['terrain', 'stack', 'rings', 'blocks', 'beams'] as const;
-export type Family = (typeof FAMILIES)[number];
+// 'hooks' is the one hand-designed scene and only used when a post asks for it.
+export type Family = (typeof FAMILIES)[number] | 'hooks';
 
 export const W = 200;
 export const H = 105;
@@ -167,7 +169,67 @@ const beams: Shader = (x, y, seed) => {
 	return { v: level * 0.8 + 0.15 * Math.sin(w / 14 + cell) };
 };
 
-const SHADERS: Record<Family, Shader> = { terrain, stack, rings, blocks, beams };
+/** Hand-designed scene: two carabiner hooks clipped to a ring on a wooden post, rope loops
+ *  on both sides, calm water behind. Everything is built from a few shapes. */
+const hooks: Shader = (x, y) => {
+	const ring = (px: number, py: number, cx: number, cy: number, r: number) => Math.abs(Math.hypot(px - cx, py - cy) - r);
+	const STEEL = 0.97;
+	const DARK = 0.03;
+	const stroke = (d: number, w: number): Shade | null => (d < w / 2 ? { v: STEEL } : d < w / 2 + 1.1 ? { v: DARK } : null);
+
+	// carabiners: tilted capsules hanging from the ring, brass nut on the gate
+	for (const side of [-1, 1]) {
+		const c = { x: 98 + side * 15, y: 51 };
+		const a = side * 0.42;
+		const dx = x - c.x;
+		const dy = y - c.y;
+		const lx = dx * Math.cos(a) + dy * Math.sin(a);
+		const ly = -dx * Math.sin(a) + dy * Math.cos(a);
+		const d = Math.abs(Math.hypot(lx, Math.max(Math.abs(ly) - 8, 0)) - 5.5);
+		if (Math.abs(lx - side * 5.5) < 1 && ly > -2 && ly < 9) return { v: 0.55 };
+		if (Math.abs(lx - side * 5.5) < 2.3 && Math.abs(ly - 9) < 1.8) return { v: 0.5, accent: true };
+		const hit = stroke(d, 3);
+		if (hit) return hit;
+	}
+	// ring on the post
+	const rg = stroke(ring(x, y, 99, 33, 9), 3.5);
+	if (rg) return rg;
+	// rope with a loop at each side
+	for (const m of [false, true]) {
+		const X = m ? 196 - x : x;
+		const e = ring(X, y, 38, 84, 9.5);
+		if (e < 2) return { v: Math.floor((Math.atan2(y - 84, X - 38) * 9) / 1) % 2 === 0 ? 0.58 : 0.34 };
+		if (e < 3.1) return { v: DARK };
+		let best = 99;
+		let along = 0;
+		for (let n = 0; n <= 30; n++) {
+			const t = n / 30;
+			const bx = (1 - t) * (1 - t) * 80 + 2 * (1 - t) * t * 62 + t * t * 47;
+			const by = (1 - t) * (1 - t) * 68 + 2 * (1 - t) * t * 94 + t * t * 89;
+			const dd = Math.hypot(X - bx, y - by);
+			if (dd < best) {
+				best = dd;
+				along = n;
+			}
+		}
+		if (best < 2) return { v: Math.floor(along / 2) % 2 === 0 ? 0.58 : 0.34 };
+		if (best < 3.1) return { v: DARK };
+	}
+	// wooden post: lit front, shaded side, light top, dark outline
+	const t = (16 - y) / 6;
+	if (y >= 10 && y < 16 && x >= 84 + 10 * t && x < 114 + 10 * t) return { v: x < 85 + 10 * t || y < 11 ? DARK : 0.82 };
+	if (x >= 114 && x < 124 && y >= 16 - (x - 114) * 0.6) return { v: x > 122 ? DARK : 0.2 };
+	if (x >= 84 && x < 114 && y >= 16) {
+		if (x === 84 || x === 113 || y === 16) return { v: DARK };
+		return { v: 0.5 + ((x - 84) % 8 === 3 ? -0.14 : 0) + 0.05 * Math.sin(y * 0.4 + x * 2) };
+	}
+	// calm water behind: pale haze above the horizon, ripples below
+	if (y < 58) return { v: 0.86 + 0.1 * (y / 58) };
+	const ripple = (y - 58) % 5 === 2 && Math.sin(x * 0.25 + y * 1.3) > 0.3;
+	return { v: ripple ? 0.92 : 0.58 - 0.12 * ((y - 58) / 47) };
+};
+
+const SHADERS: Record<Family, Shader> = { terrain, stack, rings, blocks, beams, hooks };
 
 // --- rendering ---------------------------------------------------------------
 
@@ -176,8 +238,9 @@ export type Cover = { pixels: Uint8Array; colors: string[] };
 /** Palette indices 0..3 are the tones, 4 is the accent. */
 export function renderCover(slug: string, family: Family = pickFamily(slug)): Cover {
 	const seed = hash(slug);
-	const palette = PALETTES[seed % PALETTES.length];
-	const invert = ((seed >>> 8) & 1) === 1;
+	const handmade = family === 'hooks';
+	const palette = PALETTES[handmade ? 2 : seed % PALETTES.length];
+	const invert = !handmade && ((seed >>> 8) & 1) === 1;
 	const shader = SHADERS[family];
 	const pixels = new Uint8Array(W * H);
 	for (let y = 0; y < H; y++) {
@@ -188,7 +251,9 @@ export function renderCover(slug: string, family: Family = pickFamily(slug)): Co
 				continue;
 			}
 			const base = invert ? 1 - v : v;
-			const jitter = (BAYER[y & 3][x & 3] / 16 - 0.5) * 0.34 + (rand2(x, y, seed) - 0.5) * 0.12;
+			const jitter = handmade
+				? (BAYER[y & 3][x & 3] / 16 - 0.5) * 0.2
+				: (BAYER[y & 3][x & 3] / 16 - 0.5) * 0.34 + (rand2(x, y, seed) - 0.5) * 0.12;
 			const level = Math.min(0.999, Math.max(0, base + jitter));
 			pixels[y * W + x] = Math.floor(level * 4);
 		}
