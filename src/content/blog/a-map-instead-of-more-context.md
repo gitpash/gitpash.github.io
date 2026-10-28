@@ -5,7 +5,7 @@ pubDate: '2026-10-28'
 tags: ['ai', 'agents', 'aap']
 ---
 
-When an agent misbehaves in a repository, the usual fix is to give it more: a longer instruction file, more pasted documents, a bigger context. I think the missing piece is often smaller. The agent should be able to *address* what exists (a name and a path) without having to *load* it. [AAP](https://github.com/gitpash/agent-artifact-protocol/tree/v0.2.1-prototype), an open spec I maintain, is built around that idea, and I have tried it on real production code.
+When an agent misbehaves in a repository, the usual fix is to give it more: a longer instruction file, more pasted documents, a bigger context. I think the missing piece is often smaller. The agent should be able to *address* what exists (a name and a path) without having to *load* it. [AAP](https://github.com/gitpash/agent-artifact-protocol/tree/v0.2.1-prototype), an open spec I maintain, is built around that idea, and a team of four uses it on production code.
 
 There is no silver bullet here. This is one solution that works for me, and below I show where it helps and where it doesn't.
 
@@ -55,7 +55,7 @@ nodes: []
 
 Every layout value can be a plain path or an object with `access`. A plain string means `read-write`. A key can list several roots, and the durable write home is the first one that is not `read-only`. If there is no writable root, the agent must fail closed: ask before writing anything durable, and never invent a parallel root.
 
-I rely on that last rule the most. When the right folder is not obvious, agents like to create a new one, and a clear write home takes that option away.
+When the right folder is not obvious, an agent tends to create a new one, and a clear write home takes that option away.
 
 ## Progressive disclosure
 
@@ -70,9 +70,9 @@ The SPEC defines four levels. What matters is the order:
 
 The agent starts at L0, one small file, and goes deeper only when the task needs it. Essays, whole corpora and embeddings stay out of that first read. A linked map is an explicit hop as well and must not be preloaded recursively, so if a task needs the related repository, the agent opens it on purpose.
 
-## An example from my repository
+## An example from my own project
 
-In layout terms my map says this:
+This one is the map of my personal project, a private repository. In layout terms it says this:
 
 - `artifacts` has **one** writable home, `docs/features/`, where the feature pages live (see my earlier post on surface docs)
 - `adr` points to `docs/adr/` and is `read-only`: 22 accepted decisions that are now history, typo fixes only
@@ -92,11 +92,11 @@ Benefits:
 
 Downsides:
 
-- **For one repository a map adds little.** An agent that can run `ls` finds `docs/` by itself. In my case the page template, the single entry file and the coverage check (see the first post) did more than the map.
+- **For one repository a map adds little.** An agent that can run `ls` finds `docs/` by itself. In my personal project the page template, the single entry file and the coverage check (see the first post) did more than the map.
 - **`access` is a fence for coordination, not security.** An agent that ignores the map can still write anywhere. More on this in the next post.
 - **The map can drift.** It is text a human maintains; if I move a directory and forget the map, it becomes a confident lie. My first version also collected changelog comments, which I removed, because a map should say where things live, not narrate history.
-- **I cannot tell you it makes agents better.** I have not run a controlled comparison. What I have is a narrower set of places an agent could plausibly write, and an impression that sessions start with fewer wrong guesses. That is an impression, not a measurement.
-- **It is a young spec.** The version I link is `0.2.1-prototype`, and the SPEC calls the core experimental. I have not seen it used by anyone but me.
+- **I cannot tell you it makes agents better.** I have not run a controlled comparison, and the team has not surveyed how much it helps. What I have is a narrower set of places an agent could plausibly write, and an impression that sessions start with fewer wrong guesses. That is an impression, not a measurement.
+- **It is a young spec.** The version I link is `0.2.1-prototype`, and the SPEC calls the core experimental. Beyond my team of four, I have not seen it used by anyone.
 
 ## Where to start
 
