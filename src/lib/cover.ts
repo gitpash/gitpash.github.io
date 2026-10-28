@@ -14,9 +14,9 @@ export const H = 105;
 
 // Four tones from dark to light, plus one accent.
 const PALETTES = [
-	{ name: 'slate', tones: ['#101316', '#3a464d', '#8b979d', '#f7f8f8'], accent: '#c8944a' },
-	{ name: 'sepia', tones: ['#1a1006', '#5a4527', '#b79a68', '#efe3c6'], accent: '#8a3b2a' },
-	{ name: 'sea', tones: ['#0f1e24', '#2f5360', '#7fa8b5', '#e4eef1'], accent: '#c8944a' },
+	{ name: 'teal', tones: ['#0e1a1f', '#2b4c59', '#95bccc', '#f3f8fa'], accent: '#fcdcdc' },
+	{ name: 'rose', tones: ['#241b1d', '#5f4f50', '#988080', '#fcefef'], accent: '#95bccc' },
+	{ name: 'mist', tones: ['#1a2a32', '#586f7d', '#beceda', '#f4f7f9'], accent: '#fcdcdc' },
 ] as const;
 
 // Each family has its own palette and light direction, so two families never look alike
