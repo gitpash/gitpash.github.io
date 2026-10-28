@@ -5,7 +5,7 @@
 // a cover never changes and nothing is generated at runtime.
 
 // Families picked from the slug when a post does not name one.
-export const FAMILIES = ['terrain', 'stack', 'rings', 'blocks', 'beams'] as const;
+export const FAMILIES = ['terrain', 'stack', 'rings', 'blocks', 'beams', 'grid'] as const;
 // 'hooks' is the one hand-designed scene and only used when a post asks for it.
 export type Family = (typeof FAMILIES)[number] | 'hooks';
 
@@ -18,6 +18,18 @@ const PALETTES = [
 	{ name: 'sepia', tones: ['#1a1006', '#5a4527', '#b79a68', '#efe3c6'], accent: '#8a3b2a' },
 	{ name: 'sea', tones: ['#0f1e24', '#2f5360', '#7fa8b5', '#e4eef1'], accent: '#c8944a' },
 ] as const;
+
+// Each family has its own palette and light direction, so two families never look alike
+// even when the seed is similar. `invert` flips dark and light.
+const STYLE: Record<Family, { palette: number; invert: boolean }> = {
+	grid: { palette: 0, invert: false }, // slate, dark board
+	blocks: { palette: 1, invert: false }, // sepia, lit from the left
+	stack: { palette: 0, invert: true }, // slate, pale sheet
+	beams: { palette: 2, invert: false }, // sea, dark with bright beams
+	rings: { palette: 1, invert: true }, // sepia, pale
+	terrain: { palette: 2, invert: true }, // sea, pale
+	hooks: { palette: 2, invert: false },
+};
 
 const BAYER = [
 	[0, 8, 2, 10],
@@ -169,6 +181,37 @@ const beams: Shader = (x, y, seed) => {
 	return { v: level * 0.8 + 0.15 * Math.sin(w / 14 + cell) };
 };
 
+/** A map as a board: faint graph paper, a few rooms, orthogonal links between nodes, lit nodes. */
+const grid: Shader = (x, y, seed) => {
+	const cell = 15;
+	const ox = 7;
+	const oy = 6;
+	const i = Math.round((x - ox) / cell);
+	const j = Math.round((y - oy) / cell);
+	const dx = x - (ox + i * cell);
+	const dy = y - (oy + j * cell);
+	const node = (a: number, b: number) => rand2(a, b, seed) > 0.42;
+	const lit = (a: number, b: number) => node(a, b) && rand2(a, b, seed + 9) > 0.7;
+	if (node(i, j)) {
+		if (lit(i, j) && Math.abs(dx) + Math.abs(dy) < 4) return { v: 0.5, accent: true };
+		if (lit(i, j) && Math.abs(dx) + Math.abs(dy) < 6) return { v: 0.05 };
+		if (Math.abs(dx) < 3 && Math.abs(dy) < 3) return { v: 0.95 };
+		if (Math.abs(dx) < 4 && Math.abs(dy) < 4) return { v: 0.05 };
+	}
+	// links: a node connects right and/or down when both ends are nodes
+	const right = node(i, j) && node(i + 1, j) && rand2(i, j, seed + 3) > 0.35;
+	const down = node(i, j) && node(i, j + 1) && rand2(i, j, seed + 5) > 0.35;
+	if (right && dx > 3 && Math.abs(dy) < 1) return { v: 0.9 };
+	if (down && dy > 3 && Math.abs(dx) < 1) return { v: 0.9 };
+	// rooms: a few filled cells
+	const ci = Math.floor((x - ox + cell / 2) / cell);
+	const cj = Math.floor((y - oy + cell / 2) / cell);
+	const room = rand2(ci, cj, seed + 11) > 0.8 && x % cell !== (ox + 7) % cell;
+	// graph paper
+	const line = (x - ox) % 5 === 0 || (y - oy) % 5 === 0;
+	return { v: room ? 0.3 : line ? 0.2 : 0.1 };
+};
+
 /** Hand-designed scene: two carabiner hooks clipped to a ring on a wooden post, rope loops
  *  on both sides, calm water behind. Everything is built from a few shapes. */
 const hooks: Shader = (x, y) => {
@@ -229,7 +272,7 @@ const hooks: Shader = (x, y) => {
 	return { v: ripple ? 0.92 : 0.58 - 0.12 * ((y - 58) / 47) };
 };
 
-const SHADERS: Record<Family, Shader> = { terrain, stack, rings, blocks, beams, hooks };
+const SHADERS: Record<Family, Shader> = { terrain, stack, rings, blocks, beams, grid, hooks };
 
 // --- rendering ---------------------------------------------------------------
 
@@ -239,8 +282,8 @@ export type Cover = { pixels: Uint8Array; colors: string[] };
 export function renderCover(slug: string, family: Family = pickFamily(slug)): Cover {
 	const seed = hash(slug);
 	const handmade = family === 'hooks';
-	const palette = PALETTES[handmade ? 2 : seed % PALETTES.length];
-	const invert = !handmade && ((seed >>> 8) & 1) === 1;
+	const { palette: paletteIndex, invert } = STYLE[family];
+	const palette = PALETTES[paletteIndex];
 	const shader = SHADERS[family];
 	const pixels = new Uint8Array(W * H);
 	for (let y = 0; y < H; y++) {

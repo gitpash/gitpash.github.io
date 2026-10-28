@@ -1,6 +1,7 @@
 ---
 title: 'Using Vite as a full-chain tool of developing, bundling and documenting your code'
 description: 'Why a native-ESM dev server beats a webpack setup, how to swap the Storybook builder for Vite, and how to share and document components.'
+cover: 'beams'
 pubDate: '2022-03-31'
 canonicalUrl: 'https://medium.com/anymind-group/using-vite-as-a-full-chain-tool-of-developing-bundling-and-documenting-your-code-4e9a1d150a02'
 tags: ['vite', 'storybook', 'tooling']
