@@ -1,0 +1,13 @@
+extends: script
+message: "One-sentence paragraph. Fold it into the surrounding text."
+level: warning
+scope: paragraph
+script: |
+  text := import("text")
+  matches := []
+  if !text.has_prefix(scope, "This post was drafted") {
+    sents := text.re_split("[.!?]\\s+", text.trim_space(scope))
+    n := 0
+    for s in sents { if len(text.fields(s)) > 0 { n = n + 1 } }
+    if n == 1 && len(text.fields(scope)) > 0 { matches = append(matches, {begin: 0, end: len(scope)}) }
+  }

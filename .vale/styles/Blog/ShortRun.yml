@@ -1,0 +1,13 @@
+extends: script
+message: "Three short sentences in a row (under 8 words each); combine them into a longer, calmer sentence."
+level: warning
+scope: paragraph
+script: |
+  text := import("text")
+  matches := []
+  sents := text.re_split("[.!?]\\s+", scope)
+  run := 0
+  for s in sents {
+    if len(text.fields(s)) < 8 { run = run + 1 } else { run = 0 }
+    if run >= 3 { matches = append(matches, {begin: 0, end: len(scope)}); break }
+  }
