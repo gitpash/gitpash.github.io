@@ -34,6 +34,51 @@ import { SITE_TITLE, SITE_DESCRIPTION, GITHUB_URL, LINKEDIN_URL, EMAIL } from '.
 						When the blast radius requires it, I go full-stack for a time-boxed slice;
 						backend is a tool, not my standing identity.
 					</p>
+					<h2>Writing</h2>
+					<p>
+						Earlier engineering articles, linked at their original locations (I have not
+						copied them here). The first two were published on my employer's tech blog
+						at the time, so the text may have been edited by its editors.
+					</p>
+					<ul class="writing-list">
+						<li>
+							<a
+								href="https://anymindgroup.com/news/tech-blog/12055/"
+								target="_blank"
+								rel="noopener">Modular approach on structuring front-end application</a
+							>
+							<span class="meta"> · Jun 2021</span>
+						</li>
+						<li>
+							<a
+								href="https://anymindgroup.com/news/tech-blog/15373/"
+								target="_blank"
+								rel="noopener"
+								>How to recognize repetitive patterns and optimize them with React Hooks</a
+							>
+							<span class="meta"> · Oct 2021</span>
+						</li>
+						<li>
+							<a
+								href="https://medium.com/anymind-group/tech-blog-building-shared-components-library-with-radix-ui-f1435fdc89c8"
+								target="_blank"
+								rel="noopener">Building a shared components library with Radix UI</a
+							>
+							<span class="meta"> · Dec 2021</span>
+						</li>
+						<li>
+							<a
+								href="https://medium.com/anymind-group/using-vite-as-a-full-chain-tool-of-developing-bundling-and-documenting-your-code-4e9a1d150a02"
+								target="_blank"
+								rel="noopener">Using Vite as a full-chain tool</a
+							>
+							<span class="meta"> · Mar 2022</span>
+						</li>
+					</ul>
+					<p>
+						Recent posts are on the <a href="/blog">blog</a>; 2017 learning notes are kept in
+						<a href="/early-notes">Early notes (2017)</a>.
+					</p>
 					<p>
 						Feel free to reach out if you'd like to collaborate or talk about engineering.
 					</p>
@@ -69,6 +114,26 @@ import { SITE_TITLE, SITE_DESCRIPTION, GITHUB_URL, LINKEDIN_URL, EMAIL } from '.
 
 	.about-content p {
 		margin-bottom: 1.5rem;
+	}
+
+	h2 {
+		font-size: 1.5rem;
+		margin: 2rem 0 0.75rem;
+	}
+
+	.writing-list {
+		padding-left: 1.25rem;
+		margin-bottom: 1.5rem;
+		line-height: 1.6;
+	}
+
+	.writing-list a {
+		color: var(--accent);
+	}
+
+	.meta {
+		color: var(--gray);
+		font-size: 0.9rem;
 	}
 
 	.contact-links {
