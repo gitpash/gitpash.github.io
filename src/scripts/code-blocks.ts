@@ -2,9 +2,6 @@
 document.querySelectorAll<HTMLPreElement>('pre.astro-code').forEach((pre) => {
 	const wrap = document.createElement('div');
 	wrap.className = 'code-block';
-	for (const name of ['--shiki-light-bg', '--shiki-dark-bg']) {
-		wrap.style.setProperty(name, pre.style.getPropertyValue(name));
-	}
 
 	const bar = document.createElement('div');
 	bar.className = 'code-block-bar';

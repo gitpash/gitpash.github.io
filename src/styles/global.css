@@ -5,10 +5,12 @@
 
 :root {
 	/* ---- Light theme: Slate & Sea ---- */
-	--accent: #4e7a87;          /* muted sea teal */
-	--accent-hover: #3d6672;
-	--accent-dark: #2f4a55;     /* deep slate, gradient end */
-	--accent-soft: rgba(78, 122, 135, 0.1);
+	/* Sepia is the only coloured signal: links, hover, primary buttons (see gitpash/design). */
+	--accent: #8a6a3b;
+	--accent-hover: #6e5330;
+	--accent-dark: #2f3a40;     /* deep slate, gradient end */
+	--accent-soft: rgba(138, 106, 59, 0.1);
+	--frame: #000000;           /* 1-bit frames: covers, code blocks */
 
 	--background: #f7f8f8;      /* off-white */
 	--surface: #ffffff;
@@ -21,7 +23,7 @@
 	--text-secondary: #5e6a70;
 	--border: #e3e6e7;
 
-	--glass: rgba(247, 248, 248, 0.92);
+	--glass: rgba(247, 248, 248, 0.97);
 
 	--shadow-sm: 0 1px 2px rgba(27, 31, 35, 0.04);
 	--shadow-md: 0 4px 12px rgba(27, 31, 35, 0.08);
@@ -39,15 +41,17 @@
 
 	--font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 	--font-serif-family: var(--font-serif), Georgia, serif;
+	--font-pixel-family: var(--font-pixel), ui-monospace, monospace;
 	--font-mono-family: var(--font-mono), ui-monospace, 'SF Mono', Menlo, monospace;
 }
 
 [data-theme='dark'] {
 	/* ---- Dark theme: deep slate + lighter sea ---- */
-	--accent: #7fa8b5;
-	--accent-hover: #93b8c3;
-	--accent-dark: #4e7a87;
-	--accent-soft: rgba(127, 168, 181, 0.14);
+	--accent: #c8944a;
+	--accent-hover: #d9a860;
+	--accent-dark: #4a5a63;
+	--accent-soft: rgba(200, 148, 74, 0.14);
+	--frame: #f7f8f8;
 
 	--background: #101316;
 	--surface: #171b1f;
@@ -60,7 +64,7 @@
 	--text-secondary: #8b979d;
 	--border: #242a2f;
 
-	--glass: rgba(16, 19, 22, 0.92);
+	--glass: rgba(16, 19, 22, 0.97);
 
 	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
 	--shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -192,52 +196,61 @@ code {
 	font-variant-ligatures: none;
 }
 
-/* Code blocks (Shiki, dual theme) */
+/* Code blocks: 1-bit frames from the design study. Light page: white field, black frame
+   ("mac"). Dark page: black field, white frame ("dark"). Syntax colours are dropped on
+   purpose, only comments are dimmed. */
 .code-block {
 	position: relative;
 	margin: 0 0 1.75em;
-	border: 1px solid var(--border);
-	border-radius: var(--radius-md);
-	background: var(--shiki-light-bg, var(--surface));
+	border: 3px solid var(--frame);
+	background: #fff;
+	color: #000;
 	overflow: hidden;
+}
+
+[data-theme='dark'] .code-block {
+	background: #000;
+	color: #fff;
 }
 
 .code-block-bar {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 0.35rem 0.5rem 0.35rem 1rem;
-	border-bottom: 1px solid var(--border);
-	font-family: var(--font-mono-family);
-	font-size: 0.72rem;
-	letter-spacing: 0.04em;
-	text-transform: lowercase;
-	color: var(--text-secondary);
+	padding: 0.3rem 0.5rem 0.3rem 1rem;
+	border-bottom: 2px solid var(--frame);
+	font-family: var(--font-pixel-family);
+	font-size: 0.7rem;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
 }
 
 .code-copy {
-	padding: 0.2rem 0.6rem;
-	border: 1px solid var(--border);
-	border-radius: 6px;
+	padding: 0.15rem 0.6rem;
+	border: 2px solid var(--frame);
+	border-radius: 0;
 	background: transparent;
-	color: var(--text-secondary);
+	color: inherit;
 	font: inherit;
-	letter-spacing: 0;
 	cursor: pointer;
-	transition: color var(--transition-fast), border-color var(--transition-fast);
 }
 
 .code-copy:hover,
 .code-copy:focus-visible {
-	color: var(--text-primary);
-	border-color: var(--gray);
+	background: var(--frame);
+	color: #fff;
+}
+
+[data-theme='dark'] .code-copy:hover,
+[data-theme='dark'] .code-copy:focus-visible {
+	color: #000;
 }
 
 pre.astro-code {
 	margin: 0;
 	padding: 0.75rem 1.25rem 1rem;
 	border-radius: 0;
-	background: var(--shiki-light-bg, var(--surface));
+	background: transparent !important;
 	font-family: var(--font-mono-family);
 	font-size: 0.85rem;
 	line-height: 1.7;
@@ -248,17 +261,13 @@ pre.astro-code {
 
 .astro-code,
 .astro-code span {
-	color: var(--shiki-light);
+	color: inherit !important;
 }
 
-[data-theme='dark'] .astro-code,
-[data-theme='dark'] .astro-code span {
-	color: var(--shiki-dark);
-}
-
-[data-theme='dark'] pre.astro-code,
-[data-theme='dark'] .code-block {
-	background: var(--shiki-dark-bg, var(--surface));
+/* github-light / github-dark-dimmed comment colours */
+.astro-code span[style*='--shiki-light:#6A737D' i],
+.astro-code span[style*='--shiki-light:#6a737d' i] {
+	opacity: 0.55;
 }
 
 pre:not(.astro-code) {

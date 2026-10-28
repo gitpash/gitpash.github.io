@@ -36,6 +36,15 @@ export default defineConfig({
 		},
 		{
 			provider: fontProviders.fontsource(),
+			name: 'Silkscreen',
+			cssVariable: '--font-pixel',
+			weights: [400, 700],
+			styles: ['normal'],
+			subsets: ['latin'],
+			fallbacks: ['monospace'],
+		},
+		{
+			provider: fontProviders.fontsource(),
 			name: 'Fira Code',
 			cssVariable: '--font-mono',
 			weights: [400, 500],
