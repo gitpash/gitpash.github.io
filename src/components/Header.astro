@@ -88,10 +88,16 @@ import ThemeToggle from './ThemeToggle.astro';
 		transition: all var(--transition-fast);
 	}
 
-	.internal-links a:hover,
-	.internal-links a.active {
+	.internal-links a:hover {
 		color: var(--text-primary);
 		background: var(--gray-light);
+		text-decoration: none;
+	}
+
+	.internal-links a.active,
+	.internal-links a.active:hover {
+		color: var(--nav-fg);
+		background: var(--nav-bg);
 		text-decoration: none;
 	}
 
