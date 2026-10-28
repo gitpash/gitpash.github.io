@@ -5,7 +5,7 @@ pubDate: '2026-10-28'
 tags: ['ai', 'agents', 'aap']
 ---
 
-Hi, I direct AI agents in a private research prototype. Today I'd like to talk about how I tell them where things are, and leave what the prototype does for another time.
+Hi, I'm Pavel. I maintain [AAP](https://github.com/gitpash/agent-artifact-protocol/tree/v0.2.1-prototype), a small open spec that tells an AI agent where things are in a repository and where it is allowed to write. I tried the idea on real production code. Today I'd like to talk about the core of it, a small map file, and leave the implementation out.
 
 When an agent misbehaves in a repository, the usual fix is to give it more: a longer instruction file, more pasted documents, a bigger context. I think the missing piece is often smaller than that. The agent should be able to *address* what exists (a name and a path) without having to *load* it.
 
@@ -13,11 +13,11 @@ There is no silver bullet here. This is one solution that works for me, and belo
 
 ## The idea
 
-[AAP](https://github.com/gitpash/agent-artifact-protocol/tree/v0.2.1-prototype) is a small open spec I maintain, and this is its core idea. Its SPEC says it makes repository context "addressable without requiring it to be loaded", and that it is not a context engine or an authorization system.
+This is the core idea of AAP. Its SPEC says it makes repository context "addressable without requiring it to be loaded", and that it is not a context engine or an authorization system.
 
 ## Without a map, with a map
 
-Without a map, a new session looks like this:
+Without a map, a new session goes roughly like this (an illustration, not a real log):
 
 ```
 agent: where do decisions go?  -> grep, find docs/adr, docs/plans, docs/architecture...
@@ -70,7 +70,7 @@ The SPEC defines four levels. What matters is the order:
 | L2 | one artifact | durable memory is needed |
 | L3 | code and normal tools | implementation evidence |
 
-The agent starts at L0, a few dozen lines, and goes deeper only when the task needs it. Essays, whole corpora and embeddings stay out of that first read. A linked map is an explicit hop as well and must not be preloaded recursively, so if a task needs the related repository, the agent opens it on purpose.
+The agent starts at L0, one small file, and goes deeper only when the task needs it. Essays, whole corpora and embeddings stay out of that first read. A linked map is an explicit hop as well and must not be preloaded recursively, so if a task needs the related repository, the agent opens it on purpose.
 
 ## An example from my repository
 
