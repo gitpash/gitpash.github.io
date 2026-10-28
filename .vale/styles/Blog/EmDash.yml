@@ -1,0 +1,8 @@
+extends: existence
+message: "Avoid dashes as punctuation (found '%s'). Use a comma, colon, period or parentheses."
+level: error
+nonword: true
+tokens:
+  - '—'
+  - '–'
+  - ' -- '

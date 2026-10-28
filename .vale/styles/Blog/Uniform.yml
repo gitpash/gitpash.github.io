@@ -1,0 +1,18 @@
+extends: script
+message: "Paragraph sentences are all within a few words of each other; vary the rhythm."
+level: warning
+scope: paragraph
+script: |
+  text := import("text")
+  matches := []
+  sents := text.re_split("[.!?]\\s+", scope)
+  if len(sents) >= 4 {
+    mn := 9999
+    mx := 0
+    for s in sents {
+      n := len(text.fields(s))
+      if n < mn { mn = n }
+      if n > mx { mx = n }
+    }
+    if mx - mn <= 4 { matches = append(matches, {begin: 0, end: len(scope)}) }
+  }

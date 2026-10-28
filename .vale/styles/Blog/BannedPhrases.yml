@@ -1,0 +1,25 @@
+extends: existence
+message: "Machine-sounding phrase '%s'. Say it plainly."
+level: error
+ignorecase: true
+tokens:
+  - it's worth noting
+  - it is worth noting
+  - worth mentioning
+  - delve
+  - crucial
+  - robust
+  - seamless(ly)?
+  - in conclusion
+  - in today's
+  - game-chang\w+
+  - leverag(e|es|ed|ing)
+  - unlock(s|ed|ing)?
+  - tapestry
+  - landscape
+  - testament
+  - not just .{1,40}, but
+  - furthermore
+  - moreover
+  - Additionally,
+  - it is important to (note|remember)
