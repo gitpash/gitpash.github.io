@@ -11,11 +11,12 @@ interface Props {
 	title: string;
 	description: string;
 	image?: ImageMetadata;
+	canonicalUrl?: string;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const { title, description, image = FallbackImage, canonicalUrl } = Astro.props;
 
-const { title, description, image = FallbackImage } = Astro.props;
+const canonicalURL = canonicalUrl ?? new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!-- Global Metadata -->

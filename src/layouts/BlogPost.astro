@@ -8,12 +8,12 @@ import Header from '../components/Header.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, canonicalUrl } = Astro.props;
 ---
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={title} description={description} canonicalUrl={canonicalUrl} />
 		<style>
 			main {
 				width: calc(100% - 2em);
@@ -49,6 +49,14 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				margin-bottom: 0.5em;
 				color: var(--gray);
 			}
+			.original-note {
+				margin: 0 0 1em;
+				font-size: 0.95rem;
+				color: var(--gray);
+			}
+			.original-note a {
+				color: var(--accent);
+			}
 			.last-updated-on {
 				font-style: italic;
 			}
@@ -75,6 +83,16 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 							}
 						</div>
 						<h1>{title}</h1>
+						{
+							canonicalUrl && (
+								<p class="original-note">
+									Originally published on the company engineering blog.{' '}
+									<a href={canonicalUrl} rel="canonical noopener" target="_blank">
+										Read the original
+									</a>
+								</p>
+						)
+						}
 						<hr />
 					</div>
 					<slot />
