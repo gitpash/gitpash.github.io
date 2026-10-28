@@ -85,12 +85,12 @@ import ThemeToggle from './ThemeToggle.astro';
 	.internal-links a {
 		padding: 0.35em 0.7em;
 		border-radius: 8px;
-		transition: all var(--transition-fast);
+		transition: color 175ms ease, background-color 175ms ease;
 	}
 
 	.internal-links a:hover {
 		color: var(--text-primary);
-		background: var(--gray-light);
+		background: var(--hover-bg);
 		text-decoration: none;
 	}
 
@@ -119,12 +119,12 @@ import ThemeToggle from './ThemeToggle.astro';
 		width: 32px;
 		height: 32px;
 		border-radius: 8px;
-		transition: all var(--transition-fast);
+		transition: background-color 175ms ease;
 	}
 
 	.social-links a:hover {
 		color: var(--text-primary);
-		background: var(--gray-light);
+		background: var(--hover-bg);
 	}
 
 	@media (max-width: 720px) {

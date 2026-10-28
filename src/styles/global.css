@@ -11,7 +11,7 @@
 	--on-accent: #ffffff;
 	--highlight: #95bccc;       /* soft blue: hover, marks, active fills */
 	--soft: #fcdcdc;            /* soft pink: inline code, selection */
-	--hover-bg: #fcdcdc;        /* link hover pill, current nav item */
+	--hover-bg: color-mix(in srgb, #fcdcdc 40%, var(--background)); /* weaker than the active pink */
 	--hover-fg: #172932;
 	--nav-bg: #fcdcdc;
 	--nav-fg: #172932;
@@ -61,7 +61,7 @@
 	--on-accent: #10202a;
 	--highlight: #2b4c59;
 	--soft: #4a3a3d;
-	--hover-bg: transparent;
+	--hover-bg: color-mix(in srgb, #fcdcdc 11%, var(--background));
 	--hover-fg: #fcdcdc;
 	--nav-bg: #fcdcdc;
 	--nav-fg: #172932;
@@ -170,7 +170,7 @@ a {
 	font-size: 0.95em;
 	color: var(--accent);
 	text-decoration: none;
-	transition: color var(--transition-fast);
+	transition: color 175ms ease, background-color 175ms ease;
 }
 
 a:hover {
@@ -467,6 +467,10 @@ hr {
 
 /* Reduced motion — gentler, non-vestibular equivalent */
 @media (prefers-reduced-motion: reduce) {
+	a {
+		transition: none;
+	}
+
 	* {
 		animation-duration: 0.01ms !important;
 		animation-iteration-count: 1 !important;
