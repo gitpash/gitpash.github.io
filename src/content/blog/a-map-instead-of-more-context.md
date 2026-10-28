@@ -5,9 +5,37 @@ pubDate: '2026-10-28'
 tags: ['ai', 'agents', 'aap']
 ---
 
-When an agent misbehaves in a repository, the usual fix is to give it more: a longer instruction file, more pasted documents, a bigger context. I think the missing piece is often smaller. The agent should be able to *address* what exists (a name and a path) without having to *load* it. [AAP](https://github.com/gitpash/agent-artifact-protocol/tree/v0.2.1-prototype), an open spec I maintain, is built around that idea, and my team of four has used it on production code since September 2026. The maps now exist in about thirty repositories, and all of us have committed to them.
+Nobody on our team set out to design a documentation system. We were adopting an agentic workflow, like everyone around us, and our lead installed Claude Code. It took off. The agents were fast, and the thing we handed them to read turned out to be a zoo.
 
-There is no silver bullet here. This is one solution that works for me, and below I show where it helps and where it doesn't.
+## The zoo
+
+We work in a big domain with a lot of legacy, plenty of implicit dependencies and many repositories we do not own. Business sends tasks that are not clear yet, and before anyone can say what to change, somebody has to know the contracts between the pieces and write them down.
+
+Where did all of that live? In Slack threads. In Confluence. In Jira tickets. In loose files, in somebody's personal notes, in a retro that somebody kept somewhere nobody else looked. A person can ask a colleague where the retro is. An agent starts every session without that colleague.
+
+Around the same time we were moving from Jira to GitHub, so the question got bigger than where to put one file. We had to decide how the team keeps documentation at all.
+
+## First try: spec-kit
+
+We took the most popular option. GitHub was promoting spec-kit, it had a lot of stars, and everyone else seemed to be going that way. I wrote a parser that ported the project documentation from Confluence into a wiki, and a second one that pulled tickets and turned them into docs. Managers then ran Claude Code over the tickets to generate a machine-readable spec for each one, in huge quantities. The agent pulled code from the repositories, documented it and linked the result back to Jira.
+
+Documents certainly appeared. What we ended up with was a monster of Markdown, and it grew with every ticket.
+
+<!-- WIP: stage 2 (the step-by-step workflow) goes here once part 2 of the story arrives -->
+
+## What went wrong
+
+When an agent needed to write a document, it invented a path from habit: `docs/features`, `docs/changes`, `.specify`, `.claude`, `docs/architecture`, or a brand new directory. Every guess produced a duplicate and one more source of truth.
+
+A single change could touch a service, a schema, a consumer and a gateway, spread over repositories with different owners. Nothing told an agent which one to open next.
+
+The usual answer to that is to make the agent read more: every `CLAUDE.md`, every `AGENTS.md`, all the architecture documents, all the past decisions. It does not help much. The cost grows before the task has even started, and somebody has to keep all of it current.
+
+## A map
+
+I think the missing piece is smaller than more context. The agent should be able to *address* what exists (a name and a path) without having to *load* it. In September I wrote a proposal for the team around that idea, and it became [AAP](https://github.com/gitpash/agent-artifact-protocol/tree/v0.2.1-prototype), an open spec I maintain. We started with a pilot in two repositories and moved old documents only when someone touched them. Since then the maps have spread to about thirty repositories, and four of us have committed to them.
+
+There is no silver bullet here. This is one solution that works for us, and below I show where it helps and where it doesn't.
 
 ## The idea
 
