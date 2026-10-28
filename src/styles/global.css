@@ -5,30 +5,35 @@
 
 :root {
 	/* ---- Light theme: Slate & Sea ---- */
-	/* Sepia is the only coloured signal: links, hover, primary buttons (see gitpash/design). */
-	--accent: #8a6a3b;
-	--accent-hover: #6e5330;
-	--accent-dark: #2f3a40;     /* deep slate, gradient end */
-	--accent-soft: rgba(138, 106, 59, 0.1);
-	--frame: #000000;           /* 1-bit frames: covers, code blocks */
+	/* Accent is deep teal; soft blue is the highlight and soft pink the quiet marker. */
+	--accent: #2b4c59;
+	--accent-hover: #1d3640;
+	--on-accent: #ffffff;
+	--highlight: #95bccc;       /* soft blue: hover, marks, active fills */
+	--soft: #fcdcdc;            /* soft pink: inline code, selection */
+	--accent-dark: #172932;     /* deep teal-black, gradient end */
+	--accent-soft: rgba(43, 76, 89, 0.1);
+	--frame: #172932;           /* 1-bit frames: covers, code blocks */
+	--code-bg: #ffffff;
+	--code-fg: #172932;
 
-	--background: #f7f8f8;      /* off-white */
+	--background: #f5f8f9;      /* off-white, cool */
 	--surface: #ffffff;
 	--surface-raised: #ffffff;
-	--gray-light: #eceef0;      /* chips, code bg */
-	--gray: #5e6a70;            /* secondary text */
-	--gray-dark: #1b1f23;       /* headings */
-	--black: #1b1f23;
-	--text-primary: #1b1f23;
-	--text-secondary: #5e6a70;
-	--border: #e3e6e7;
+	--gray-light: #eaf0f3;      /* chips, code bg */
+	--gray: #6a5a5a;            /* secondary text, darkened taupe */
+	--gray-dark: #172932;       /* headings */
+	--black: #172932;
+	--text-primary: #172932;
+	--text-secondary: #6a5a5a;
+	--border: #d9e2e8;
 
-	--glass: rgba(247, 248, 248, 0.97);
+	--glass: rgba(245, 248, 249, 0.97);
 
-	--shadow-sm: 0 1px 2px rgba(27, 31, 35, 0.04);
-	--shadow-md: 0 4px 12px rgba(27, 31, 35, 0.08);
-	--shadow-lg: 0 12px 32px rgba(27, 31, 35, 0.12);
-	--shadow-xl: 0 24px 48px rgba(27, 31, 35, 0.16);
+	--shadow-sm: 0 1px 2px rgba(23, 41, 50, 0.04);
+	--shadow-md: 0 4px 12px rgba(23, 41, 50, 0.08);
+	--shadow-lg: 0 12px 32px rgba(23, 41, 50, 0.12);
+	--shadow-xl: 0 24px 48px rgba(23, 41, 50, 0.16);
 
 	--radius-sm: 8px;
 	--radius-md: 12px;
@@ -46,25 +51,30 @@
 }
 
 [data-theme='dark'] {
-	/* ---- Dark theme: deep slate + lighter sea ---- */
-	--accent: #c8944a;
-	--accent-hover: #d9a860;
-	--accent-dark: #4a5a63;
-	--accent-soft: rgba(200, 148, 74, 0.14);
-	--frame: #f7f8f8;
+	/* ---- Dark theme: deep teal, soft blue accent ---- */
+	--accent: #95bccc;
+	--accent-hover: #beceda;
+	--on-accent: #10202a;
+	--highlight: #2b4c59;
+	--soft: #4a3a3d;
+	--accent-dark: #2b4c59;
+	--accent-soft: rgba(149, 188, 204, 0.14);
+	--frame: #e8eef1;
+	--code-bg: #0e1a1f;
+	--code-fg: #e8eef1;
 
-	--background: #101316;
-	--surface: #171b1f;
-	--surface-raised: #1c2126;
-	--gray-light: #1a1f23;
-	--gray: #8b979d;
-	--gray-dark: #e7e9eb;
-	--black: #e7e9eb;
-	--text-primary: #e7e9eb;
-	--text-secondary: #8b979d;
-	--border: #242a2f;
+	--background: #152228;
+	--surface: #1b2b32;
+	--surface-raised: #20333b;
+	--gray-light: #10191e;
+	--gray: #b9a8a8;
+	--gray-dark: #e8eef1;
+	--black: #e8eef1;
+	--text-primary: #e8eef1;
+	--text-secondary: #b9a8a8;
+	--border: #2c4149;
 
-	--glass: rgba(16, 19, 22, 0.97);
+	--glass: rgba(21, 34, 40, 0.97);
 
 	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
 	--shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -189,7 +199,8 @@ img {
 
 code {
 	padding: 0.12em 0.4em;
-	background: var(--gray-light);
+	background: var(--soft);
+	color: var(--text-primary);
 	border-radius: 5px;
 	font-family: var(--font-mono-family);
 	font-size: 0.85em;
@@ -203,14 +214,9 @@ code {
 	position: relative;
 	margin: 0 0 1.75em;
 	border: 3px solid var(--frame);
-	background: #fff;
-	color: #000;
+	background: var(--code-bg);
+	color: var(--code-fg);
 	overflow: hidden;
-}
-
-[data-theme='dark'] .code-block {
-	background: #000;
-	color: #fff;
 }
 
 .code-block-bar {
@@ -238,12 +244,7 @@ code {
 .code-copy:hover,
 .code-copy:focus-visible {
 	background: var(--frame);
-	color: #fff;
-}
-
-[data-theme='dark'] .code-copy:hover,
-[data-theme='dark'] .code-copy:focus-visible {
-	color: #000;
+	color: var(--code-bg);
 }
 
 pre.astro-code {
@@ -290,6 +291,18 @@ blockquote {
 	margin: 0;
 	font-size: 1.1em;
 	color: var(--text-secondary);
+}
+
+::selection {
+	background: var(--soft);
+	color: var(--text-primary);
+}
+
+mark {
+	background: var(--highlight);
+	color: var(--text-primary);
+	padding: 0 0.2em;
+	border-radius: 3px;
 }
 
 hr {
@@ -346,12 +359,12 @@ hr {
 
 .btn-primary {
 	background: var(--accent);
-	color: #fff;
+	color: var(--on-accent);
 }
 
 .btn-primary:hover {
 	background: var(--accent-hover);
-	color: #fff;
+	color: var(--on-accent);
 	transform: translateY(-1px);
 	text-decoration: none;
 }
@@ -451,15 +464,15 @@ hr {
 
 /* Architecture diagram (inline SVG in posts) */
 :root {
-	--d-org: #8a6a3b;
-	--d-mol: #4e7a87;
-	--d-atom: #5e6a70;
+	--d-org: #8a6c6c;
+	--d-mol: #3f7c94;
+	--d-atom: #4f6470;
 }
 
 [data-theme='dark'] {
-	--d-org: #c8944a;
-	--d-mol: #7fa8b5;
-	--d-atom: #8b979d;
+	--d-org: #d4b6b6;
+	--d-mol: #95bccc;
+	--d-atom: #a9b8c2;
 }
 
 .diagram {
