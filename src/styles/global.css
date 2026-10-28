@@ -448,3 +448,125 @@ hr {
 		scroll-behavior: auto;
 	}
 }
+
+/* Architecture diagram (inline SVG in posts) */
+:root {
+	--d-org: #8a6a3b;
+	--d-mol: #4e7a87;
+	--d-atom: #5e6a70;
+}
+
+[data-theme='dark'] {
+	--d-org: #c8944a;
+	--d-mol: #7fa8b5;
+	--d-atom: #8b979d;
+}
+
+.diagram {
+	margin: 2em 0;
+	font-family: var(--font-family);
+}
+
+.diagram svg {
+	display: block;
+	width: 100%;
+	height: auto;
+	overflow: visible;
+}
+
+.diagram .narrow {
+	display: none;
+}
+
+@media (max-width: 640px) {
+	.diagram .wide {
+		display: none;
+	}
+
+	.diagram .narrow {
+		display: block;
+	}
+}
+
+.diagram figcaption {
+	margin-top: 0.75rem;
+	font-size: 0.9rem;
+	line-height: 1.5;
+	color: var(--text-secondary);
+}
+
+.diagram .d-box {
+	fill: var(--surface);
+	stroke: var(--border);
+	stroke-width: 1.5;
+}
+
+.diagram .d-layer {
+	fill: var(--accent-soft);
+	stroke: var(--accent);
+	stroke-width: 1.5;
+	stroke-dasharray: 6 5;
+}
+
+.diagram .d-api,
+.diagram .d-ui {
+	stroke: var(--text-secondary);
+}
+
+.diagram .d-card {
+	fill: var(--gray-light);
+}
+
+.diagram .d-page {
+	stroke: var(--text-secondary);
+}
+
+.diagram .d-org,
+.diagram .d-mol,
+.diagram .d-atom {
+	stroke-width: 1.75;
+}
+
+.diagram .d-org {
+	fill: color-mix(in srgb, var(--d-org) 16%, var(--surface));
+	stroke: var(--d-org);
+}
+
+.diagram .d-mol {
+	fill: color-mix(in srgb, var(--d-mol) 16%, var(--surface));
+	stroke: var(--d-mol);
+}
+
+.diagram .d-atom {
+	fill: color-mix(in srgb, var(--d-atom) 16%, var(--surface));
+	stroke: var(--d-atom);
+}
+
+.diagram .d-text,
+.diagram .d-title {
+	fill: var(--text-primary);
+	font-family: var(--font-family);
+	font-weight: 500;
+}
+
+.diagram .d-title {
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.diagram .d-note {
+	fill: var(--text-secondary);
+	font-family: var(--font-family);
+}
+
+.diagram .d-arrow,
+.diagram .d-line {
+	fill: none;
+	stroke: var(--text-secondary);
+	stroke-width: 1.5;
+	stroke-linejoin: round;
+}
+
+.diagram .d-head {
+	fill: var(--text-secondary);
+}
