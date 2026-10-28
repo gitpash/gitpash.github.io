@@ -1,6 +1,6 @@
 ---
 title: 'A map instead of more context'
-description: 'An agent working in a repository does not need more context loaded up front. It needs to know where things are and where it is allowed to write.'
+description: 'How we went from a zoo of documents to a monster of Markdown, and why a small map file turned out to help an agent more than extra context.'
 pubDate: '2026-10-28'
 tags: ['ai', 'agents', 'aap']
 ---
