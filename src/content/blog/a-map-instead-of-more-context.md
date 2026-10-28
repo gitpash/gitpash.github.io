@@ -5,15 +5,13 @@ pubDate: '2026-10-28'
 tags: ['ai', 'agents', 'aap']
 ---
 
-Hi, I'm Pavel. I maintain [AAP](https://github.com/gitpash/agent-artifact-protocol/tree/v0.2.1-prototype), a small open spec that tells an AI agent where things are in a repository and where it is allowed to write. I tried the idea on real production code. Today I'd like to talk about the core of it, a small map file, and leave the implementation out.
+When an agent misbehaves in a repository, the usual fix is to give it more: a longer instruction file, more pasted documents, a bigger context. I think the missing piece is often smaller. The agent should be able to *address* what exists (a name and a path) without having to *load* it. [AAP](https://github.com/gitpash/agent-artifact-protocol/tree/v0.2.1-prototype), an open spec I maintain, is built around that idea, and I have tried it on real production code.
 
-When an agent misbehaves in a repository, the usual fix is to give it more: a longer instruction file, more pasted documents, a bigger context. I think the missing piece is often smaller than that. The agent should be able to *address* what exists (a name and a path) without having to *load* it.
-
-There is no silver bullet here. This is one solution that works for me, and below I'll show where it helps and where it doesn't.
+There is no silver bullet here. This is one solution that works for me, and below I show where it helps and where it doesn't.
 
 ## The idea
 
-This is the core idea of AAP. Its SPEC says it makes repository context "addressable without requiring it to be loaded", and that it is not a context engine or an authorization system.
+The SPEC says it makes repository context "addressable without requiring it to be loaded", and that it is not a context engine or an authorization system.
 
 ## Without a map, with a map
 
@@ -102,6 +100,6 @@ Downsides:
 
 ## Where to start
 
-With many repositories, the hops start to matter more. With one, keep it small: a map of five lines and a read-only flag on whatever you stopped touching, then watch whether your sessions start with fewer wrong guesses. I hope you find something useful here. Thanks for reading, and see you in the next post.
+With many repositories, the hops start to matter more. With one, keep it small: a map of five lines and a read-only flag on whatever you stopped touching, then watch whether your sessions start with fewer wrong guesses.
 
 *This post was drafted with an AI assistant and edited by me.*
