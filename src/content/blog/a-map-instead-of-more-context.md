@@ -40,7 +40,7 @@ The principle I wanted was simple: there is a lot of information, sometimes usef
 
 What I ended up with is a small config file that lists the main concerns of the current workspace. It does not describe everything, it is not an index, and it forces nothing to be installed. To connect it to any harness and any model you add one line to your `CLAUDE.md` or its equivalent that says where to read. From there the agent goes deeper only when the task needs it (the file is human-readable too, which helps in review).
 
-I think the missing piece is smaller than more context: the agent should be able to *address* what exists (a name and a path) without having to *load* it. In September I wrote this up as a proposal for the team, and it became [AAP](https://github.com/gitpash/agent-artifact-protocol/tree/v0.2.1-prototype), an open spec I maintain. There is no silver bullet here, of course, so below I show where it helps and where it doesn't.
+I think the missing piece is smaller than more context: the agent should be able to *address* what exists (a name and a path) without having to *load* it. In September I wrote this up as a proposal for the team, and it became [AAP](https://github.com/gitpash/agent-artifact-protocol/tree/v0.3.0), an open spec I maintain. There is no silver bullet here, of course, so below I show where it helps and where it doesn't.
 
 ## What the spec says
 
@@ -93,7 +93,7 @@ Cross-domain contracts are still an open question for us: who owns a contract be
 
 A map is small, so there is nothing to rewrite up front, and old documents are migrated only when somebody touches them. I posted the proposal and the thread stayed quiet, so I made a small demo and showed it to the team. Some people did not get it, some said "cool", and some said they wanted to try it too.
 
-My plan for the people in the third group was simple: everybody already has their own LLM and their own harness, so I would hand them the link to the AAP repository. Look at it, I would say, and discuss it with your LLM and your domain, then decide whether it fits and how much of it you need. I thought that was enough, but it was not: the public repository is hard to understand on a first read, and the questions started. Some looked excessive to me, so I asked Claude to write an `llms.txt`, a page that explains to an agent what the map is, what to open first and what the rules are. People could then ask the agent instead of me. Later I added a small skill that drafts a map, validates it, and leaves the nodes for a human to review before the map is promoted. Both live on our side, in the team repository (the public tag of AAP ships neither).
+My plan for the people in the third group was simple: everybody already has their own LLM and their own harness, so I would hand them the link to the AAP repository. Look at it, I would say, and discuss it with your LLM and your domain, then decide whether it fits and how much of it you need. I thought that was enough, but it was not: the public repository is hard to understand on a first read, and the questions started. Some looked excessive to me, so I asked Claude to write an `llms.txt`, a page that explains to an agent what the map is, what to open first and what the rules are. People could then ask the agent instead of me. Later I added a small skill that drafts a map and marks every guess for a human to review before the map is promoted. Both started in our team repository, and release 0.3.0 of the public repository now ships them as well (`llms.txt` and the `aap-map` skill).
 
 Validation is optional: it is a JSON schema, for the case when you do not want the agent to invent parameters and you want strict following of a pattern. Take the published schema as a base, but a schema of your own for your case is better. The agent then gets a verifiable base for building a complex orientation graph, which it loads into context before it works. There are two parts, a minimal compact core and whatever you decide to extend it with, and how it went in practice is a story for later posts.
 
@@ -103,8 +103,25 @@ Validation is optional: it is a JSON schema, for the case when you do not want t
 - **`access` is a fence for coordination, not security.** An agent that ignores the map can still write anywhere.
 - **The map can drift.** It is text a human maintains, so if I move a directory and forget the map, it becomes a confident lie. My first map also collected changelog comments, which I removed, because a map should say where things live, not narrate history.
 - **I cannot tell you it makes agents better.** I have not run a controlled comparison, and the team has not surveyed how much it helps. What I have is a narrower set of places an agent could plausibly write, and an impression that sessions start with fewer wrong guesses, which is an impression, not a measurement.
-- **It is a young spec.** The version I link is `0.2.1-prototype`, and the SPEC calls the core experimental. The maps now exist in about thirty of our repositories and four of us have committed to them, but beyond our team I have not seen it used by anyone.
+- **It is a young spec.** The version I link is the pre-release `0.3.0`, and the SPEC calls the core experimental. The maps now exist in about thirty of our repositories and four of us have committed to them, but beyond our team I have not seen it used by anyone.
 
 If you have one repository, start small: a map of five lines and a read-only flag on whatever you stopped touching. Then watch whether your sessions start with fewer wrong guesses, and if they do not, shrink the map rather than adding to it, which is also what the spec recommends.
+
+## Try it
+
+The skill inspects a repository, writes a minimal `.aap/map.yaml` and marks its guesses with `# REVIEW:` comments, so you can read the result before anything depends on it. To install it in any agent that supports skills, run this in your project:
+
+```bash
+npx skills add gitpash/agent-artifact-protocol
+```
+
+In Claude Code the plugin route works as well and takes two commands. Run them one after the other, since the second needs the marketplace from the first:
+
+```bash
+/plugin marketplace add gitpash/agent-artifact-protocol
+/plugin install aap@agent-artifact-protocol
+```
+
+Then ask your agent to use the `aap-map` skill to add a map to the repository, and decide from the result whether it earns its place. If it does, a star on [the repository](https://github.com/gitpash/agent-artifact-protocol) is a welcome way to tell me, and an issue is welcome if it does not.
 
 *This post was drafted with an AI assistant and edited by me.*
