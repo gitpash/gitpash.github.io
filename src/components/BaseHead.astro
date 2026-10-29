@@ -13,6 +13,14 @@ interface Props {
 	canonicalUrl?: string;
 }
 
+// Dev only: ?palette=a|b|c|d|e picks a palette variant (c = baseline) and remembers it.
+const devPaletteScript = `try {
+	var q = new URLSearchParams(location.search).get('palette');
+	if (q) localStorage.setItem('palette', q);
+	var p = localStorage.getItem('palette');
+	if (p && p !== 'c') document.documentElement.setAttribute('data-palette', p);
+} catch (e) {}`;
+
 const { title, description, image = '/og.png', canonicalUrl } = Astro.props;
 
 const canonicalURL = canonicalUrl ?? new URL(Astro.url.pathname, Astro.site);
@@ -56,14 +64,6 @@ const canonicalURL = canonicalUrl ?? new URL(Astro.url.pathname, Astro.site);
 
 {
 	import.meta.env.DEV && (
-		<script is:inline>
-			{`// Dev only: ?palette=a|b|c picks a palette variant (c = baseline) and remembers it.
-try {
-	var q = new URLSearchParams(location.search).get('palette');
-	if (q) localStorage.setItem('palette', q);
-	var p = localStorage.getItem('palette');
-	if (p && p !== 'c') document.documentElement.setAttribute('data-palette', p);
-} catch (e) {}`}
-		</script>
+		<script is:inline set:html={devPaletteScript} />
 	)
 }

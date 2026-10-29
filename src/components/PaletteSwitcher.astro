@@ -1,0 +1,74 @@
+---
+// Dev only (rendered under import.meta.env.DEV): a floating A-E switch for the palette variants.
+const variants = ['a', 'b', 'c', 'd', 'e'];
+---
+
+<div class="palette-switcher" role="group" aria-label="Palette variant (dev only)">
+	<span class="label">palette</span>
+	{variants.map((v) => <button type="button" data-palette-pick={v}>{v.toUpperCase()}</button>)}
+</div>
+
+<script>
+	const root = document.documentElement;
+	const buttons = document.querySelectorAll<HTMLButtonElement>('[data-palette-pick]');
+	const show = () => {
+		const current = root.getAttribute('data-palette') || 'c';
+		buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.palettePick === current)));
+	};
+	buttons.forEach((b) =>
+		b.addEventListener('click', () => {
+			const v = b.dataset.palettePick!;
+			if (v === 'c') root.removeAttribute('data-palette');
+			else root.setAttribute('data-palette', v);
+			try {
+				localStorage.setItem('palette', v);
+			} catch {}
+			show();
+		}),
+	);
+	show();
+</script>
+
+<style>
+	.palette-switcher {
+		position: fixed;
+		right: 12px;
+		bottom: 12px;
+		z-index: 1000;
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		padding: 6px 8px;
+		background: var(--surface);
+		border: 1px solid var(--border-strong);
+		border-radius: 10px;
+		box-shadow: var(--shadow-md);
+		font-size: 12px;
+	}
+
+	.label {
+		color: var(--text-muted);
+		margin-right: 4px;
+	}
+
+	button {
+		font: inherit;
+		min-width: 26px;
+		padding: 3px 6px;
+		color: var(--text);
+		background: transparent;
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		cursor: pointer;
+	}
+
+	button:hover {
+		background: var(--hover-bg);
+	}
+
+	button[aria-pressed='true'] {
+		background: var(--accent);
+		color: var(--on-accent);
+		border-color: var(--accent-border);
+	}
+</style>

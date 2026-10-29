@@ -1,6 +1,7 @@
 ---
 import { SITE_TITLE, GITHUB_URL, LINKEDIN_URL } from '../consts';
 import HeaderLink from './HeaderLink.astro';
+import PaletteSwitcher from './PaletteSwitcher.astro';
 import ThemeToggle from './ThemeToggle.astro';
 ---
 
@@ -38,6 +39,7 @@ import ThemeToggle from './ThemeToggle.astro';
 		</div>
 	</nav>
 </header>
+{import.meta.env.DEV && <PaletteSwitcher />}
 <style>
 	header {
 		margin: 0;
