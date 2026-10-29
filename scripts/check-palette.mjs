@@ -53,7 +53,7 @@ const block = (selector) => {
 	return out;
 };
 const base = block(':root');
-const VARIANTS = ['c', 'a', 'b'].filter((v) => v === 'c' || css.includes(`[data-palette='${v}'] {`));
+const VARIANTS = ['c', ...[...css.matchAll(/^\[data-palette='(\w)'\] \{/gm)].map((m) => m[1])];
 // Each variant is the baseline plus its own light overrides; dark adds the baseline dark
 // block, then the variant's light block again (same specificity, later in the file), then its dark block.
 function themes(v) {
@@ -73,6 +73,8 @@ function parse(theme, value, depth = 0) {
 	const v = value.trim();
 	if (depth > 10) throw new Error('loop at ' + v);
 	if (v.startsWith('#')) return hex(v);
+	if (v === 'white') return [255, 255, 255];
+	if (v === 'black') return [0, 0, 0];
 	let m = v.match(/^var\((--[\w-]+)\)$/);
 	if (m) {
 		if (theme[m[1]] === undefined) throw new Error('missing ' + m[1]);
@@ -133,7 +135,7 @@ for (const v of VARIANTS) {
 	}
 }
 if (process.argv.includes('--table')) {
-	console.log('| Pair | Min | C light | C dark | A light | A dark | B light | B dark |\n|---|---|---|---|---|---|---|---|');
+	console.log(`| Pair | Min | ${VARIANTS.flatMap((v) => [v.toUpperCase() + ' light', v.toUpperCase() + ' dark']).join(' | ')} |\n|---|---|${VARIANTS.flatMap(() => ['---', '---']).join('|')}|`);
 	for (const [, what, fg, bg, min] of rows.filter((r) => r[0] === 'c')) {
 		const cells = VARIANTS.flatMap((v) => rows.find((r) => r[0] === v && r[2] === fg && r[3] === bg)[5].map((x) => x.toFixed(2)));
 		console.log(`| ${what} (\`${fg}\` on \`${bg}\`) | ${min} | ${cells.join(' | ')} |`);
