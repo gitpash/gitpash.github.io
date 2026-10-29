@@ -274,7 +274,7 @@ const SHADERS: Record<Family, Shader> = { terrain, stack, rings, blocks, beams, 
 
 // --- rendering ---------------------------------------------------------------
 
-export type Cover = { pixels: Uint8Array; colors: string[] };
+export type Cover = { pixels: Uint8Array; colors: string[]; name: string };
 
 /** Palette indices 0..3 are the tones, 4 is the accent. */
 export function renderCover(slug: string, family: Family = pickFamily(slug)): Cover {
@@ -299,11 +299,14 @@ export function renderCover(slug: string, family: Family = pickFamily(slug)): Co
 			pixels[y * W + x] = Math.floor(level * 4);
 		}
 	}
-	return { pixels, colors: [...palette.tones, palette.accent] };
+	return { pixels, colors: [...palette.tones, palette.accent], name: palette.name };
 }
 
+// The inline SVG paints with `--cover-<palette>-<n>` tokens, so it follows the active palette;
+// the hex value is the fallback. PNG endpoints use the hex values directly.
 export function coverSvg(slug: string, family?: Family): string {
-	const { pixels, colors } = renderCover(slug, family);
+	const { pixels, colors, name } = renderCover(slug, family);
+	const fill = (c: number) => `style="fill:var(--cover-${name}-${c === 4 ? 'accent' : c}, ${colors[c]})"`;
 	const paths: string[][] = colors.map(() => []);
 	for (let y = 0; y < H; y++) {
 		let x = 0;
@@ -315,10 +318,10 @@ export function coverSvg(slug: string, family?: Family): string {
 			x = end;
 		}
 	}
-	const body = paths.map((d, c) => (d.length ? `<path fill="${colors[c]}" d="${d.join('')}"/>` : '')).join('');
+	const body = paths.map((d, c) => (d.length ? `<path ${fill(c)} d="${d.join('')}"/>` : '')).join('');
 	return (
 		`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid slice">` +
-		`<rect width="${W}" height="${H}" fill="${colors[0]}"/>${body}</svg>`
+		`<rect width="${W}" height="${H}" ${fill(0)}/>${body}</svg>`
 	);
 }
 

@@ -11,9 +11,10 @@
 	/* ---- Source colours ---- */
 	--c-blue: #95bccc;
 	--c-pink: #fcdcdc;
-	--c-teal: #2b4c59;
+	--c-deep: #2b4c59;
 	--c-taupe: #988080;
 	--c-mist: #beceda;
+	--c-ink: #172932;            /* darkest shade of the deep colour */
 
 	/* ---- Light theme roles ---- */
 	--bg: #f5f8f9;               /* page: tint of mist */
@@ -29,7 +30,7 @@
 	--accent-soft: var(--c-pink); /* inline code, selection, chips */
 	--on-accent: #172932;        /* text on the pink fill */
 	--accent-border: var(--c-taupe);
-	--accent-strong: var(--c-teal); /* teal: links, small accents on light surfaces */
+	--accent-strong: var(--c-deep); /* teal: links, small accents on light surfaces */
 	--link: var(--accent-strong);
 	--focus: var(--accent-strong);
 	--mark: var(--c-blue);       /* <mark> */
@@ -47,7 +48,12 @@
 	--banner-paper: var(--c-mist);
 	--banner-beam: var(--c-pink);
 	--avatar-bg: var(--c-pink);
-	--avatar-fg: var(--c-teal);
+	--avatar-fg: var(--c-deep);
+
+	/* ---- Cover tones (inline SVG covers; the PNG endpoints use palette.ts) ---- */
+	--cover-slate-0: #0e1a1f; --cover-slate-1: #2b4c59; --cover-slate-2: #95bccc; --cover-slate-3: #f3f8fa; --cover-slate-accent: #fcdcdc;
+	--cover-rose-0: #241b1d; --cover-rose-1: #5f4f50; --cover-rose-2: #988080; --cover-rose-3: #fcefef; --cover-rose-accent: #95bccc;
+	--cover-mist-0: #1a2a32; --cover-mist-1: #586f7d; --cover-mist-2: #beceda; --cover-mist-3: #f4f7f9; --cover-mist-accent: #fcdcdc;
 
 	--shadow-sm: 0 1px 2px rgba(23, 41, 50, 0.04);
 	--shadow-md: 0 4px 12px rgba(23, 41, 50, 0.08);
@@ -87,7 +93,7 @@
 	--accent-strong: var(--c-blue);
 	--link: var(--accent-strong);
 	--focus: var(--accent-strong);
-	--mark: var(--c-teal);
+	--mark: var(--c-deep);
 	--hover-bg: color-mix(in srgb, var(--c-pink) 11%, var(--bg));
 	--hover-text: var(--c-pink);
 	--hero-glow: color-mix(in srgb, var(--c-pink) 9%, var(--surface));
@@ -108,6 +114,175 @@
 	--shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
 	--shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
 	--shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.6);
+}
+
+/* ============ Palette variants (dev switch: the owner picks one, the others get removed) ============ */
+/* C is the baseline above. Each variant redefines every colour role, for light and dark. */
+
+/* ---- Variant a: dusty rose + ink blue (select with <html data-palette="a">) ---- */
+[data-palette='a'] {
+	--c-pink: #e3c6c6;
+	--c-deep: #2a3f54;
+	--c-ink: #1b2a3a;
+	--bg: #f5f7f9;
+	--surface: #ffffff;
+	--surface-muted: #ebeff3;
+	--border: #d8dfe6;
+	--border-strong: var(--c-taupe);
+	--text: var(--c-ink);
+	--text-muted: #66575a;
+	--accent: var(--c-pink);
+	--accent-hover: #d9baba;
+	--accent-soft: var(--c-pink);
+	--on-accent: var(--c-ink);
+	--accent-border: var(--c-taupe);
+	--accent-strong: var(--c-deep);
+	--link: var(--accent-strong);
+	--focus: var(--accent-strong);
+	--mark: var(--c-blue);
+	--hover-bg: color-mix(in srgb, var(--c-pink) 40%, var(--bg));
+	--hover-text: var(--c-ink);
+	--hero-glow: color-mix(in srgb, var(--c-pink) 55%, var(--surface));
+	--star: var(--c-taupe);
+	--frame: var(--c-ink);
+	--code-bg: #ffffff;
+	--code-fg: var(--c-ink);
+	--header-bg: rgba(245, 247, 249, 0.97);
+	--banner-ink: #1b2a3a;
+	--banner-paper: #beceda;
+	--banner-beam: #e3c6c6;
+	--avatar-bg: var(--c-pink);
+	--avatar-fg: var(--c-deep);
+	--cover-slate-0: var(--c-ink);
+	--cover-slate-1: var(--c-deep);
+	--cover-slate-2: var(--c-blue);
+	--cover-slate-3: color-mix(in srgb, var(--c-blue) 14%, white);
+	--cover-slate-accent: var(--c-pink);
+	--cover-rose-0: color-mix(in srgb, var(--c-taupe) 22%, black);
+	--cover-rose-1: color-mix(in srgb, var(--c-taupe) 62%, black);
+	--cover-rose-2: var(--c-taupe);
+	--cover-rose-3: color-mix(in srgb, var(--c-pink) 35%, white);
+	--cover-rose-accent: var(--c-blue);
+	--cover-mist-0: var(--c-ink);
+	--cover-mist-1: color-mix(in srgb, var(--c-mist) 38%, var(--c-ink));
+	--cover-mist-2: var(--c-mist);
+	--cover-mist-3: color-mix(in srgb, var(--c-mist) 16%, white);
+	--cover-mist-accent: var(--c-pink);
+}
+
+[data-palette='a'][data-theme='dark'] {
+	--bg: #141c26;
+	--surface: #1b2634;
+	--surface-muted: #101720;
+	--border: #2b3a4b;
+	--border-strong: #7b6b6d;
+	--text: #e8edf2;
+	--text-muted: #b8a9ab;
+	--accent: var(--c-pink);
+	--accent-hover: #d9baba;
+	--accent-soft: #4a3a3f;
+	--on-accent: #1b2a3a;
+	--accent-border: var(--c-pink);
+	--accent-strong: var(--c-blue);
+	--link: var(--accent-strong);
+	--focus: var(--accent-strong);
+	--mark: var(--c-deep);
+	--hover-bg: color-mix(in srgb, var(--c-pink) 11%, var(--bg));
+	--hover-text: var(--c-pink);
+	--hero-glow: color-mix(in srgb, var(--c-pink) 9%, var(--surface));
+	--star: var(--c-pink);
+	--frame: #e8edf2;
+	--code-bg: #0e141c;
+	--code-fg: #e8edf2;
+	--header-bg: rgba(20, 28, 38, 0.97);
+	--banner-ink: #0e141c;
+	--banner-paper: #95bccc;
+	--banner-beam: #e3c6c6;
+	--avatar-bg: #20303f;
+	--avatar-fg: var(--c-pink);
+}
+
+/* ---- Variant b: dusty rose + plum-brown (select with <html data-palette="b">) ---- */
+[data-palette='b'] {
+	--c-pink: #e4c8c6;
+	--c-deep: #3a2f36;
+	--c-ink: #2a2126;
+	--bg: #f8f5f4;
+	--surface: #ffffff;
+	--surface-muted: #f0eae8;
+	--border: #e2d9d7;
+	--border-strong: var(--c-taupe);
+	--text: var(--c-ink);
+	--text-muted: #6e5c5c;
+	--accent: var(--c-pink);
+	--accent-hover: #dabbb9;
+	--accent-soft: var(--c-pink);
+	--on-accent: var(--c-ink);
+	--accent-border: var(--c-taupe);
+	--accent-strong: var(--c-deep);
+	--link: var(--accent-strong);
+	--focus: var(--accent-strong);
+	--mark: var(--c-blue);
+	--hover-bg: color-mix(in srgb, var(--c-pink) 40%, var(--bg));
+	--hover-text: var(--c-ink);
+	--hero-glow: color-mix(in srgb, var(--c-pink) 55%, var(--surface));
+	--star: var(--c-taupe);
+	--frame: var(--c-ink);
+	--code-bg: #ffffff;
+	--code-fg: var(--c-ink);
+	--header-bg: rgba(248, 245, 244, 0.97);
+	--banner-ink: #2a2126;
+	--banner-paper: #e4c8c6;
+	--banner-beam: #95bccc;
+	--avatar-bg: var(--c-pink);
+	--avatar-fg: var(--c-deep);
+	--cover-slate-0: var(--c-ink);
+	--cover-slate-1: var(--c-deep);
+	--cover-slate-2: var(--c-blue);
+	--cover-slate-3: color-mix(in srgb, var(--c-blue) 14%, white);
+	--cover-slate-accent: var(--c-pink);
+	--cover-rose-0: color-mix(in srgb, var(--c-taupe) 22%, black);
+	--cover-rose-1: color-mix(in srgb, var(--c-taupe) 62%, black);
+	--cover-rose-2: var(--c-taupe);
+	--cover-rose-3: color-mix(in srgb, var(--c-pink) 35%, white);
+	--cover-rose-accent: var(--c-blue);
+	--cover-mist-0: var(--c-ink);
+	--cover-mist-1: color-mix(in srgb, var(--c-mist) 38%, var(--c-ink));
+	--cover-mist-2: var(--c-mist);
+	--cover-mist-3: color-mix(in srgb, var(--c-mist) 16%, white);
+	--cover-mist-accent: var(--c-pink);
+}
+
+[data-palette='b'][data-theme='dark'] {
+	--bg: #1c1619;
+	--surface: #261e22;
+	--surface-muted: #151013;
+	--border: #3a2f34;
+	--border-strong: #7d6b6c;
+	--text: #f0e9e8;
+	--text-muted: #bfaead;
+	--accent: var(--c-pink);
+	--accent-hover: #dabbb9;
+	--accent-soft: #4d3b3d;
+	--on-accent: #2a2126;
+	--accent-border: var(--c-pink);
+	--accent-strong: var(--c-blue);
+	--link: var(--accent-strong);
+	--focus: var(--accent-strong);
+	--mark: #5a4650;
+	--hover-bg: color-mix(in srgb, var(--c-pink) 11%, var(--bg));
+	--hover-text: var(--c-pink);
+	--hero-glow: color-mix(in srgb, var(--c-pink) 9%, var(--surface));
+	--star: var(--c-pink);
+	--frame: #f0e9e8;
+	--code-bg: #120d10;
+	--code-fg: #f0e9e8;
+	--header-bg: rgba(28, 22, 25, 0.97);
+	--banner-ink: #120d10;
+	--banner-paper: #c9adad;
+	--banner-beam: #95bccc;
+	--avatar-bg: #2f2429;
+	--avatar-fg: var(--c-pink);
 }
 
 * {
