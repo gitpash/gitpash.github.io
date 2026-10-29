@@ -46,11 +46,11 @@ Cover tones (`COVER_PALETTES` in `palette.ts`) are shades and tints of the same 
 
 ## Variants under review
 
-Three complete token sets exist while the owner chooses. C is the baseline in \`:root\`; A and B are
-redefinitions of every role for light and dark in \`[data-palette='a']\` / \`[data-palette='b']\`
-(plus their \`[data-theme='dark']\` blocks). Dev only: open any page with \`?palette=a\`, \`?palette=b\`
-or \`?palette=c\` (remembered in localStorage); the banner and the inline covers follow it.
-Once one is chosen, copy its values into \`:root\` / \`[data-theme='dark']\` and delete the others.
+Three complete token sets exist while the owner chooses. C is the baseline in `:root`; A and B are
+redefinitions of every role for light and dark in `[data-palette='a']` / `[data-palette='b']`
+(plus their `[data-theme='dark']` blocks). Dev only: open any page with `?palette=a`, `?palette=b`
+or `?palette=c` (remembered in localStorage); the banner and the inline covers follow it.
+Once one is chosen, copy its values into `:root` / `[data-theme='dark']` and delete the others.
 
 | | Accent (rose) | Deep ink | Darkest ink | Character |
 |---|---|---|---|---|
@@ -60,7 +60,7 @@ Once one is chosen, copy its values into \`:root\` / \`[data-theme='dark']\` and
 
 Shared by all three: blue #95BCCC, mist #BECEDA, taupe #988080.
 
-## Contrast checks (WCAG 2.x, computed by \`npm run check:palette\`)
+## Contrast checks (WCAG 2.x, computed by `npm run check:palette`)
 
 Text pairs need 4.5, graphics and outlines 3.
 
