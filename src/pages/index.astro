@@ -1,5 +1,6 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import Avatar from '../components/Avatar.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import HeroBanner from '../components/HeroBanner.astro';
@@ -34,7 +35,7 @@ try {
 					<p class="eyebrow">Senior product engineer · Frontend core · Tokyo</p>
 					<h1>Pavel Luzanov</h1>
 					<p class="description">
-						I turn product problems into shipped surfaces — admin and creator web/mobile —
+						I turn product problems into shipped surfaces (admin and creator web/mobile)
 						with React, TypeScript, and AI-augmented workflows under clear human review.
 					</p>
 					<div class="cta-buttons">
@@ -46,13 +47,7 @@ try {
 					</div>
 				</div>
 				<div class="hero-side">
-					<img
-						class="avatar"
-						src="https://github.com/gitpash.png?size=160"
-						width="96"
-						height="96"
-						alt="Pavel Luzanov"
-					/>
+					<Avatar seed="gitpash" label="Pavel Luzanov" />
 					{stats && (
 						<div class="stats">
 							<div class="stat">
@@ -101,7 +96,7 @@ try {
 					<p>
 						Senior frontend / product engineer. I map blast radius, modernize UI
 						architecture, and ship cross-surface release trains. Public side project:
-						Agent Artifact Protocol — git-native orientation maps for coding agents.
+						Agent Artifact Protocol: git-native orientation maps for coding agents.
 					</p>
 				</section>
 
@@ -146,7 +141,7 @@ try {
 					<h2>Experience</h2>
 					<div class="timeline">
 						<div class="timeline-item">
-							<div class="timeline-date">2020 — Present</div>
+							<div class="timeline-date">2020 to present</div>
 							<div class="timeline-content">
 								<h3>Senior Frontend / Product Engineer</h3>
 								<p>Cross-surface product delivery, admin ownership, AI-augmented workflows</p>
@@ -160,7 +155,7 @@ try {
 							</div>
 						</div>
 						<div class="timeline-item">
-							<div class="timeline-date">2017 — 2019</div>
+							<div class="timeline-date">2017 to 2019</div>
 							<div class="timeline-content">
 								<h3>Frontend Engineer</h3>
 								<p>Customer-facing web products; foundation years</p>
@@ -193,7 +188,7 @@ try {
 		gap: 3rem;
 		padding: 2.5rem 2.5rem;
 		background:
-			radial-gradient(ellipse 60% 80% at 85% 0%, var(--accent-soft) 0%, transparent 70%),
+			radial-gradient(ellipse 60% 80% at 85% 0%, var(--hero-glow) 0%, transparent 70%),
 			var(--surface);
 		border: 1px solid var(--border);
 		border-radius: var(--radius-lg);
@@ -203,7 +198,7 @@ try {
 	.eyebrow {
 		font-size: 0.85rem;
 		font-weight: 500;
-		color: var(--accent);
+		color: var(--text-muted);
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 		margin-bottom: 0.5rem;
@@ -218,7 +213,7 @@ try {
 		font-size: 1.05rem;
 		max-width: 540px;
 		margin-bottom: 1.5rem;
-		color: var(--text-secondary);
+		color: var(--text-muted);
 		line-height: 1.6;
 	}
 
@@ -236,14 +231,6 @@ try {
 		flex-shrink: 0;
 	}
 
-	.avatar {
-		width: 96px;
-		height: 96px;
-		border-radius: 50%;
-		border: 3px solid var(--surface);
-		box-shadow: var(--shadow-md);
-	}
-
 	.stats {
 		display: flex;
 		gap: 1.25rem;
@@ -258,13 +245,13 @@ try {
 	.stat-num {
 		font-size: 1.35rem;
 		font-weight: 700;
-		color: var(--text-primary);
+		color: var(--text);
 		line-height: 1.2;
 	}
 
 	.stat-label {
 		font-size: 0.75rem;
-		color: var(--text-secondary);
+		color: var(--text-muted);
 	}
 
 	/* Sections */
@@ -318,7 +305,7 @@ try {
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
-		color: var(--text-secondary);
+		color: var(--text-muted);
 		margin-bottom: 0.5rem;
 	}
 
@@ -330,11 +317,11 @@ try {
 
 	.skill-tag {
 		padding: 0.3rem 0.7rem;
-		background: var(--gray-light);
+		background: var(--surface-muted);
 		border: 1px solid var(--border);
 		border-radius: 8px;
 		font-size: 0.85rem;
-		color: var(--text-primary);
+		color: var(--text);
 	}
 
 	/* Timeline */
@@ -370,13 +357,13 @@ try {
 		width: 8px;
 		height: 8px;
 		border-radius: 50%;
-		background: var(--accent);
+		background: var(--link);
 		transform: translateX(-3px);
 	}
 
 	.timeline-date {
 		font-size: 0.82rem;
-		color: var(--accent);
+		color: var(--text-muted);
 		font-weight: 600;
 		margin-bottom: 0.15rem;
 	}
@@ -387,14 +374,14 @@ try {
 	}
 
 	.timeline-content p {
-		color: var(--text-secondary);
+		color: var(--text-muted);
 		font-size: 0.9rem;
 		margin: 0;
 	}
 
 	/* Contact */
 	#contact p {
-		color: var(--text-secondary);
+		color: var(--text-muted);
 		margin-bottom: 1.25rem;
 	}
 

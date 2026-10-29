@@ -1,38 +1,53 @@
 /*
-  Slate & Sea palette — calm, strict, subtle effects.
-  Design tokens follow Apple's WWDC design principles.
+  Palette kit. See docs/palette.md for the role table and the recorded contrast checks.
+
+  Source colours (the only hand-picked hues): blue #95BCCC, pink #FCDCDC, teal #2B4C59,
+  taupe #988080, mist #BECEDA. Everything else is a tint or shade of them. Components use
+  role tokens only (--bg, --text, --accent, --link, ...); raw hex lives in this file and in
+  src/lib/palette.ts (cover generator), and `npm run check:palette` enforces that.
 */
 
 :root {
-	/* ---- Light theme: Slate & Sea ---- */
-	/* Accent is deep teal; soft blue is the highlight and soft pink the quiet marker. */
-	--accent: #2b4c59;
-	--accent-hover: #1d3640;
-	--on-accent: #ffffff;
-	--highlight: #95bccc;       /* soft blue: hover, marks, active fills */
-	--soft: #fcdcdc;            /* soft pink: inline code, selection */
-	--hover-bg: color-mix(in srgb, #fcdcdc 40%, var(--background)); /* weaker than the active pink */
-	--hover-fg: #172932;
-	--nav-bg: #fcdcdc;
-	--nav-fg: #172932;
-	--accent-dark: #172932;     /* deep teal-black, gradient end */
-	--accent-soft: rgba(43, 76, 89, 0.1);
-	--frame: #172932;           /* 1-bit frames: covers, code blocks */
+	/* ---- Source colours ---- */
+	--c-blue: #95bccc;
+	--c-pink: #fcdcdc;
+	--c-teal: #2b4c59;
+	--c-taupe: #988080;
+	--c-mist: #beceda;
+
+	/* ---- Light theme roles ---- */
+	--bg: #f5f8f9;               /* page: tint of mist */
+	--surface: #ffffff;          /* cards, hero */
+	--surface-muted: #eaf0f3;    /* chips, quiet fills: tint of mist */
+	--border: #d9e2e8;
+	--border-strong: var(--c-taupe); /* outline of the pink fill, input-like borders */
+	--text: #172932;             /* shade of teal */
+	--text-muted: #6a5a5a;       /* shade of taupe */
+
+	--accent: var(--c-pink);     /* primary fill, active nav pill */
+	--accent-hover: #f2c6c6;     /* pink, slightly deeper */
+	--accent-soft: var(--c-pink); /* inline code, selection, chips */
+	--on-accent: #172932;        /* text on the pink fill */
+	--accent-border: var(--c-taupe);
+	--accent-strong: var(--c-teal); /* teal: links, small accents on light surfaces */
+	--link: var(--accent-strong);
+	--focus: var(--accent-strong);
+	--mark: var(--c-blue);       /* <mark> */
+	--hover-bg: color-mix(in srgb, var(--c-pink) 40%, var(--bg)); /* weaker than the active pink */
+	--hover-text: #172932;
+	--hero-glow: color-mix(in srgb, var(--c-pink) 55%, var(--surface));
+	--star: var(--c-taupe);
+
+	--frame: #172932;            /* 1-bit frames: covers, code blocks */
 	--code-bg: #ffffff;
 	--code-fg: #172932;
+	--header-bg: rgba(245, 248, 249, 0.97);
 
-	--background: #f5f8f9;      /* off-white, cool */
-	--surface: #ffffff;
-	--surface-raised: #ffffff;
-	--gray-light: #eaf0f3;      /* chips, code bg */
-	--gray: #6a5a5a;            /* secondary text, darkened taupe */
-	--gray-dark: #172932;       /* headings */
-	--black: #172932;
-	--text-primary: #172932;
-	--text-secondary: #6a5a5a;
-	--border: #d9e2e8;
-
-	--glass: rgba(245, 248, 249, 0.97);
+	--banner-ink: #172932;       /* hero banner: two-colour dither */
+	--banner-paper: var(--c-mist);
+	--banner-beam: var(--c-pink);
+	--avatar-bg: var(--c-pink);
+	--avatar-fg: var(--c-teal);
 
 	--shadow-sm: 0 1px 2px rgba(23, 41, 50, 0.04);
 	--shadow-md: 0 4px 12px rgba(23, 41, 50, 0.08);
@@ -55,34 +70,39 @@
 }
 
 [data-theme='dark'] {
-	/* ---- Dark theme: deep teal, soft blue accent ---- */
-	--accent: #95bccc;
-	--accent-hover: #beceda;
-	--on-accent: #10202a;
-	--highlight: #2b4c59;
-	--soft: #4a3a3d;
-	--hover-bg: color-mix(in srgb, #fcdcdc 11%, var(--background));
-	--hover-fg: #fcdcdc;
-	--nav-bg: #fcdcdc;
-	--nav-fg: #172932;
-	--accent-dark: #2b4c59;
-	--accent-soft: rgba(149, 188, 204, 0.14);
+	/* ---- Dark theme roles ---- */
+	--bg: #152228;
+	--surface: #1b2b32;
+	--surface-muted: #10191e;
+	--border: #2c4149;
+	--border-strong: #857373;
+	--text: #e8eef1;
+	--text-muted: #b9a8a8;
+
+	--accent: var(--c-pink);
+	--accent-hover: #f2c6c6;
+	--accent-soft: #4a3a3d;      /* pink, deep: inline code, selection */
+	--on-accent: #172932;
+	--accent-border: var(--c-pink);
+	--accent-strong: var(--c-blue);
+	--link: var(--accent-strong);
+	--focus: var(--accent-strong);
+	--mark: var(--c-teal);
+	--hover-bg: color-mix(in srgb, var(--c-pink) 11%, var(--bg));
+	--hover-text: var(--c-pink);
+	--hero-glow: color-mix(in srgb, var(--c-pink) 9%, var(--surface));
+	--star: var(--c-pink);
+
 	--frame: #e8eef1;
 	--code-bg: #0e1a1f;
 	--code-fg: #e8eef1;
+	--header-bg: rgba(21, 34, 40, 0.97);
 
-	--background: #152228;
-	--surface: #1b2b32;
-	--surface-raised: #20333b;
-	--gray-light: #10191e;
-	--gray: #b9a8a8;
-	--gray-dark: #e8eef1;
-	--black: #e8eef1;
-	--text-primary: #e8eef1;
-	--text-secondary: #b9a8a8;
-	--border: #2c4149;
-
-	--glass: rgba(21, 34, 40, 0.97);
+	--banner-ink: #0e1a1f;
+	--banner-paper: var(--c-blue);
+	--banner-beam: var(--c-pink);
+	--avatar-bg: #20333b;
+	--avatar-fg: var(--c-pink);
 
 	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
 	--shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -103,10 +123,10 @@ body {
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	background: var(--background);
+	background: var(--bg);
 	word-wrap: break-word;
 	overflow-wrap: break-word;
-	color: var(--text-primary);
+	color: var(--text);
 	font-size: 17px;
 	line-height: 1.5;
 	-webkit-font-smoothing: antialiased;
@@ -129,7 +149,7 @@ h4,
 h5,
 h6 {
 	margin: 0 0 0.5rem 0;
-	color: var(--text-primary);
+	color: var(--text);
 	line-height: 1.1;
 	font-weight: 700;
 	letter-spacing: -0.02em;
@@ -168,20 +188,20 @@ b {
 
 a {
 	font-size: 0.95em;
-	color: var(--accent);
+	color: var(--link);
 	text-decoration: none;
 	transition: color 175ms ease, background-color 175ms ease;
 }
 
 a:hover {
-	color: var(--hover-fg);
+	color: var(--hover-text);
 	background: var(--hover-bg);
 	border-radius: 3px;
 	text-decoration: underline;
 }
 
 :focus-visible {
-	outline: 3px solid var(--accent);
+	outline: 3px solid var(--focus);
 	outline-offset: 2px;
 	border-radius: 3px;
 }
@@ -215,8 +235,8 @@ img {
 
 code {
 	padding: 0.12em 0.4em;
-	background: var(--soft);
-	color: var(--text-primary);
+	background: var(--accent-soft);
+	color: var(--text);
 	border-radius: 5px;
 	font-family: var(--font-mono-family);
 	font-size: 0.85em;
@@ -282,15 +302,15 @@ pre.astro-code {
 }
 
 /* github-light / github-dark-dimmed comment colours */
-.astro-code span[style*='--shiki-light:#6A737D' i],
-.astro-code span[style*='--shiki-light:#6a737d' i] {
+.astro-code span[style*='--shiki-light:#6A737D' i], /* lint-colors: allow (Shiki output) */
+.astro-code span[style*='--shiki-light:#6a737d' i] { /* lint-colors: allow */
 	opacity: 0.55;
 }
 
 pre:not(.astro-code) {
 	padding: 1rem 1.25rem;
 	border-radius: var(--radius-md);
-	background: var(--gray-light);
+	background: var(--surface-muted);
 	font-family: var(--font-mono-family);
 	font-size: 0.85rem;
 	line-height: 1.7;
@@ -302,21 +322,21 @@ pre > code {
 }
 
 blockquote {
-	border-left: 3px solid var(--accent);
+	border-left: 3px solid var(--link);
 	padding: 0 0 0 1.25em;
 	margin: 0;
 	font-size: 1.1em;
-	color: var(--text-secondary);
+	color: var(--text-muted);
 }
 
 ::selection {
-	background: var(--soft);
-	color: var(--text-primary);
+	background: var(--accent-soft);
+	color: var(--text);
 }
 
 mark {
-	background: var(--highlight);
-	color: var(--text-primary);
+	background: var(--mark);
+	color: var(--text);
 	padding: 0 0.2em;
 	border-radius: 3px;
 }
@@ -367,15 +387,18 @@ hr {
 	font-weight: 500;
 	font-size: 0.95rem;
 	transition: all var(--transition-fast);
-	border: none;
+	border: 1px solid transparent;
 	cursor: pointer;
 	letter-spacing: -0.01em;
 	line-height: 1.4;
 }
 
+/* Primary: the pink accent fill with dark text, outlined so it holds on the pale page.
+   Secondary: outlined, link-coloured text; hover uses the same weak pink as nav hover. */
 .btn-primary {
 	background: var(--accent);
 	color: var(--on-accent);
+	border: 1px solid var(--accent-border);
 }
 
 .btn-primary:hover {
@@ -387,14 +410,13 @@ hr {
 
 .btn-secondary {
 	background: transparent;
-	color: var(--accent);
-	border: 1px solid var(--border);
+	color: var(--link);
+	border: 1px solid var(--border-strong);
 }
 
 .btn-secondary:hover {
-	background: var(--gray-light);
-	color: var(--text-primary);
-	border-color: var(--gray);
+	background: var(--hover-bg);
+	color: var(--hover-text);
 	transform: translateY(-1px);
 	text-decoration: none;
 }
@@ -416,7 +438,7 @@ hr {
 
 /* Frosted glass layer — content scrolls beneath */
 .glass {
-	background: var(--glass);
+	background: var(--header-bg);
 	backdrop-filter: saturate(180%) blur(20px);
 	-webkit-backdrop-filter: saturate(180%) blur(20px);
 }
@@ -525,7 +547,7 @@ hr {
 	margin-top: 0.75rem;
 	font-size: 0.9rem;
 	line-height: 1.5;
-	color: var(--text-secondary);
+	color: var(--text-muted);
 }
 
 .diagram .d-box {
@@ -535,23 +557,23 @@ hr {
 }
 
 .diagram .d-layer {
-	fill: var(--accent-soft);
-	stroke: var(--accent);
+	fill: var(--surface-muted);
+	stroke: var(--link);
 	stroke-width: 1.5;
 	stroke-dasharray: 6 5;
 }
 
 .diagram .d-api,
 .diagram .d-ui {
-	stroke: var(--text-secondary);
+	stroke: var(--text-muted);
 }
 
 .diagram .d-card {
-	fill: var(--gray-light);
+	fill: var(--surface-muted);
 }
 
 .diagram .d-page {
-	stroke: var(--text-secondary);
+	stroke: var(--text-muted);
 }
 
 .diagram .d-org,
@@ -577,7 +599,7 @@ hr {
 
 .diagram .d-text,
 .diagram .d-title {
-	fill: var(--text-primary);
+	fill: var(--text);
 	font-family: var(--font-family);
 	font-weight: 500;
 }
@@ -588,18 +610,18 @@ hr {
 }
 
 .diagram .d-note {
-	fill: var(--text-secondary);
+	fill: var(--text-muted);
 	font-family: var(--font-family);
 }
 
 .diagram .d-arrow,
 .diagram .d-line {
 	fill: none;
-	stroke: var(--text-secondary);
+	stroke: var(--text-muted);
 	stroke-width: 1.5;
 	stroke-linejoin: round;
 }
 
 .diagram .d-head {
-	fill: var(--text-secondary);
+	fill: var(--text-muted);
 }

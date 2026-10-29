@@ -4,6 +4,8 @@
 // image is scaled up with nearest-neighbour. Everything is seeded from the slug, so
 // a cover never changes and nothing is generated at runtime.
 
+import { COVER_PALETTES } from './palette';
+
 // Families picked from the slug when a post does not name one.
 export const FAMILIES = ['terrain', 'stack', 'rings', 'blocks', 'beams', 'grid'] as const;
 // 'hooks' is the one hand-designed scene and only used when a post asks for it.
@@ -12,12 +14,8 @@ export type Family = (typeof FAMILIES)[number] | 'hooks';
 export const W = 200;
 export const H = 105;
 
-// Four tones from dark to light, plus one accent.
-const PALETTES = [
-	{ name: 'teal', tones: ['#0e1a1f', '#2b4c59', '#95bccc', '#f3f8fa'], accent: '#fcdcdc' },
-	{ name: 'rose', tones: ['#241b1d', '#5f4f50', '#988080', '#fcefef'], accent: '#95bccc' },
-	{ name: 'mist', tones: ['#1a2a32', '#586f7d', '#beceda', '#f4f7f9'], accent: '#fcdcdc' },
-] as const;
+// Four tones from dark to light, plus one accent (see palette.ts).
+const PALETTES = COVER_PALETTES;
 
 // Each family has its own palette and light direction, so two families never look alike
 // even when the seed is similar. `invert` flips dark and light.

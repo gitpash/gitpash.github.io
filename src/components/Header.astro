@@ -57,7 +57,7 @@ import ThemeToggle from './ThemeToggle.astro';
 	h2 a,
 	h2 a.active {
 		text-decoration: none;
-		color: var(--text-primary);
+		color: var(--text);
 	}
 
 	nav {
@@ -71,7 +71,7 @@ import ThemeToggle from './ThemeToggle.astro';
 	}
 
 	nav a {
-		color: var(--text-secondary);
+		color: var(--text-muted);
 		text-decoration: none;
 		font-size: 0.92em;
 		font-weight: 400;
@@ -89,15 +89,15 @@ import ThemeToggle from './ThemeToggle.astro';
 	}
 
 	.internal-links a:hover {
-		color: var(--text-primary);
+		color: var(--text);
 		background: var(--hover-bg);
 		text-decoration: none;
 	}
 
 	.internal-links a.active,
 	.internal-links a.active:hover {
-		color: var(--nav-fg);
-		background: var(--nav-bg);
+		color: var(--on-accent);
+		background: var(--accent);
 		text-decoration: none;
 	}
 
@@ -123,13 +123,36 @@ import ThemeToggle from './ThemeToggle.astro';
 	}
 
 	.social-links a:hover {
-		color: var(--text-primary);
+		color: var(--text);
 		background: var(--hover-bg);
 	}
 
+	/* Narrow screens: the page links move to a second row instead of disappearing. */
 	@media (max-width: 720px) {
+		header {
+			padding: 0 1em;
+		}
+
+		nav {
+			flex-wrap: wrap;
+			height: auto;
+			row-gap: 0;
+			padding: 0.35rem 0 0.45rem;
+		}
+
+		h2 {
+			flex: 1;
+		}
+
 		.internal-links {
-			display: none;
+			order: 3;
+			width: 100%;
+			justify-content: space-between;
+		}
+
+		.internal-links a {
+			flex: 1;
+			text-align: center;
 		}
 	}
 </style>

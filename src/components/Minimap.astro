@@ -77,15 +77,15 @@ const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3)
 		padding: 0.28rem 0.25rem;
 		font-size: 0.8rem;
 		line-height: 1.3;
-		color: var(--text-secondary);
+		color: var(--text-muted);
 		border-radius: 6px;
 	}
 	a:hover {
 		text-decoration: none;
-		color: var(--text-primary);
+		color: var(--text);
 	}
 	a:focus-visible {
-		outline: 2px solid var(--accent);
+		outline: 2px solid var(--focus);
 		outline-offset: 1px;
 	}
 	/* Labels are always laid out and only fade in, so nothing slides or resizes. */
@@ -124,14 +124,14 @@ const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3)
 		width: 0.9rem;
 	}
 	a:hover .tick {
-		background: var(--gray);
+		background: var(--text-muted);
 	}
 	a.active {
-		color: var(--text-primary);
+		color: var(--text);
 		font-weight: 500;
 	}
 	a.active .tick {
-		background: var(--accent);
+		background: var(--link);
 		width: 2rem;
 	}
 	.depth-3 a.active .tick {
