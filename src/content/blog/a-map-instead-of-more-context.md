@@ -124,4 +124,8 @@ In Claude Code the plugin route works as well and takes two commands. Run them o
 
 Then ask your agent to use the `aap-map` skill to add a map to the repository, and decide from the result whether it earns its place. If it does, a star on [the repository](https://github.com/gitpash/agent-artifact-protocol) is a welcome way to tell me, and an issue is welcome if it does not.
 
+## This is only the beginning
+
+This post is a preamble. It covers why the map exists and how to try it, and there is more to tell. I plan to write a series about how this works in practice, with the details I left out here. Follow the blog or the repository to catch the next parts.
+
 *This post was drafted with an AI assistant and edited by me.*
