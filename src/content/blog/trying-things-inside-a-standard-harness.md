@@ -23,7 +23,7 @@ The spec is more modest about the last point than that summary suggests, so it h
 
 ## How the format changed
 
-The demo, the reactions and the pilot are told in the [first post in this series](/blog/a-map-instead-of-more-context/), so I will not repeat them here. What that post leaves out is how the file format settled while we piloted on a few repositories.
+The [first post in this series](/blog/a-map-instead-of-more-context/) tells how the demo was received and where the maps stand today, so I will not repeat that. It leaves out how the file format settled while we piloted on a few repositories.
 
 There was no schema at the start. I sketched a structure and chose which fields would be required, which optional and what the statuses were, and the public history of the repository shows the steps that followed.
 
