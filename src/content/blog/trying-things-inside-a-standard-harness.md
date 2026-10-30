@@ -1,25 +1,33 @@
 ---
 title: 'Trying things inside a standard harness'
-description: 'How AAP started as a way to experiment without breaking our team standard in a meta-repository, how the format changed in public, and how validation reached CI.'
+description: 'Why I needed AAP: my own three-layer context graph, a rigid standard harness and a meta-repository full of lagging worktrees, then how the format settled and reached CI.'
 cover: 'beams'
 pubDate: 2026-10-31
 seoTitle: 'How AAP started: experimenting inside a standard agent harness'
 tags: ['ai', 'agents', 'aap', 'claude-code', 'ci']
 ---
 
-Our company decided to standardise on one agent harness, after a period in which we had tried a set of agents and skills for decomposing a task, estimating its blast radius, implementing it, verifying it and running QA. That was a sensible decision, since a standard is what lets a team share its habits. At the same time I wanted to keep trying other approaches, and I was looking for a way to do that without breaking the convention everybody else relied on.
+Our company decided to standardise on one agent harness, after a period in which we had tried a set of agents and skills for decomposing a task, estimating its blast radius, implementing it, verifying it and running QA. That was a sensible decision, since a standard is what lets a team share its habits. The harness had fixed steps and was wired into our infrastructure, and I wanted to keep trying approaches that did not fit those steps without breaking the convention everybody else relied on.
 
-## The cost of an experiment
+## What I was building
 
-We work in a meta-repository, which means there are many repositories, the context of a task is spread over several of them, and I start work from the root. A task often touched more than one domain, so I split it by domain first. Any experiment with a different skill or a different step then had to live on a feature branch, because the skills were standardised for the whole team.
+Before the harness arrived I had been working on a tool of my own, alone and over several iterations: a context graph for a codebase, in three layers. The first layer is a tree built from types, similar to what an LSP server or an AST gives you, and it works for typed languages, which in our case meant all of them. The second is a semantic layer on top of it that records what is called from where. The third is a documentation graph. I ran a script that turned the documents into a graph of what, where and why, so that I could search for specific traces in them instead of reading them.
 
-In practice that meant a lot of checkouts, and the worktrees fell behind all the time. The meta-repository kept syncing branches so that everyone had a fresh version while work ran in parallel. I regularly forgot to sync mine, and then the branch was behind and things around it had changed. None of it was dramatic, but it was constant overhead, and it made every small experiment more expensive than it needed to be.
+I built it with an existing graph library and exposed it as an MCP server with about thirty tools, which was too many, of course. I kept trying to bring it to a state I could rely on, and I thought it could suit any team or business, with the caveat that it has been tested by one person.
 
-## The idea
+## Where the harness got in the way
 
-When the protocol took shape, I hoped it would help with several things at once. A map in every repository would let us describe the documentation of all modules in the same way, and my own tools could be connected in a clear, documented place. The configuration also allows local overrides, so I could keep my own sets of procedures on the main branch without extra checkouts.
+The standard harness was rigid, and I found its way of searching crude, mostly plain text matching, while my tool understood the structure. What I needed to learn was where the graph earns its place, so I wanted to try it at the blast-radius step, at the verification step, at different thresholds and in different workflows. That meant changing the text and the order of the methods again and again, and every change meant rewriting parts of the harness, adding overrides and encapsulating my code around it. I spent a large part of that time fighting the harness instead of testing the idea.
 
-The spec is more modest about the last point than that summary suggests, so it helps to say exactly what it contains. A gitignored `map.local.yaml` holds machine-local navigation and, by convention, an index of local files. The cookbook describes "stream packs" there, small files that name the procedure for one kind of session, with exactly one opened per session ([SPEC.md, "Overlays"](https://github.com/gitpash/agent-artifact-protocol/blob/v0.3.0/SPEC.md), [cookbook/local-bootstrap.md](https://github.com/gitpash/agent-artifact-protocol/blob/v0.3.0/cookbook/local-bootstrap.md), [cookbook/stream-packs.md](https://github.com/gitpash/agent-artifact-protocol/blob/v0.3.0/cookbook/stream-packs.md)). Overlays never grant write authority, and AAP defines no plugin system of its own, so what the map offers is a clean place to keep such procedures and to choose one per session.
+The meta-repository added a second cost. We have many repositories, the context of one task is spread over several of them, and I start from the root. A task often touched more than one domain, so I split it by domain, and any experiment with a skill had to live on a feature branch because the skills were standardised for the whole team. In practice that meant many checkouts, worktrees that fell behind, and a branch sync in the meta-repository that I regularly forgot. None of it was dramatic, but it was constant overhead, and it made each experiment more expensive than the idea deserved.
+
+## What I wanted instead
+
+I needed a clear, documented way to attach my tool and my own procedures to a standard setup, without forking the setup. When the protocol took shape, it seemed that it would help with several things at once. A map in every repository would describe the documentation of all modules in the same way. My tools could be connected in an understandable place, and local overrides would let me keep my own procedures on the main branch without extra checkouts.
+
+The spec is more modest about the last two points than that summary suggests, so it helps to say exactly what it contains. A gitignored `map.local.yaml` holds machine-local navigation and, by convention, an index of local files. The cookbook describes "stream packs" there, small files that name the procedure for one kind of session, with exactly one opened per session ([SPEC.md, "Overlays"](https://github.com/gitpash/agent-artifact-protocol/blob/v0.3.0/SPEC.md), [cookbook/local-bootstrap.md](https://github.com/gitpash/agent-artifact-protocol/blob/v0.3.0/cookbook/local-bootstrap.md), [cookbook/stream-packs.md](https://github.com/gitpash/agent-artifact-protocol/blob/v0.3.0/cookbook/stream-packs.md)). Overlays never grant write authority, and AAP defines no plugin system of its own. What it offers is a clean place to describe the repositories and to keep and select such procedures. Starting a tool such as a graph server remains the job of the harness.
+
+So the protocol covers one corner of the problem, orientation and the local choice of a procedure, and does not replace the plugin mechanism I was missing. I did not measure whether it made experiments cheaper, and the idea about stream packs is something I believe the spec supports, not something I have shown in daily use.
 
 ## How the format changed
 
