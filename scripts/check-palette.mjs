@@ -53,17 +53,8 @@ const block = (selector) => {
 	return out;
 };
 const base = block(':root');
-const VARIANTS = ['c', ...[...css.matchAll(/^\[data-palette='(\w)'\] \{/gm)].map((m) => m[1])];
-// Each variant is the baseline plus its own light overrides; dark adds the baseline dark
-// block, then the variant's light block again (same specificity, later in the file), then its dark block.
-function themes(v) {
-	const lightV = v === 'c' ? {} : block(`[data-palette='${v}']`);
-	const darkV = v === 'c' ? {} : block(`[data-palette='${v}'][data-theme='dark']`);
-	const light = { ...base, ...lightV };
-	const dark = { ...base, ...block("[data-theme='dark']"), ...lightV, ...darkV };
-	return { light, dark };
-}
-const light = themes('c').light;
+const light = base;
+const dark = { ...base, ...block("[data-theme='dark']") };
 const hex = (h) => {
 	const v = h.slice(1);
 	const f = v.length === 3 ? v.replace(/./g, (c) => c + c) : v;
@@ -124,30 +115,24 @@ const PAIRS = [
 	['--avatar-fg', '--avatar-bg', 3, 'avatar'],
 ];
 const rows = [];
-for (const v of VARIANTS) {
-	const t = themes(v);
-	for (const [fg, bg, min, what] of PAIRS) {
-		const ratios = [ratio(colour(t.light, fg), colour(t.light, bg)), ratio(colour(t.dark, fg), colour(t.dark, bg))];
-		rows.push([v, what, fg, bg, min, ratios]);
-		ratios.forEach((r, i) => {
-			if (r < min) fail(`variant ${v} ${['light', 'dark'][i]} ${fg} on ${bg} = ${r.toFixed(2)} (< ${min}): ${what}`);
-		});
-	}
+for (const [fg, bg, min, what] of PAIRS) {
+	const ratios = [ratio(colour(light, fg), colour(light, bg)), ratio(colour(dark, fg), colour(dark, bg))];
+	rows.push([what, fg, bg, min, ratios]);
+	ratios.forEach((r, i) => {
+		if (r < min) fail(`${['light', 'dark'][i]} ${fg} on ${bg} = ${r.toFixed(2)} (< ${min}): ${what}`);
+	});
 }
 if (process.argv.includes('--table')) {
-	console.log(`| Pair | Min | ${VARIANTS.flatMap((v) => [v.toUpperCase() + ' light', v.toUpperCase() + ' dark']).join(' | ')} |\n|---|---|${VARIANTS.flatMap(() => ['---', '---']).join('|')}|`);
-	for (const [, what, fg, bg, min] of rows.filter((r) => r[0] === 'c')) {
-		const cells = VARIANTS.flatMap((v) => rows.find((r) => r[0] === v && r[2] === fg && r[3] === bg)[5].map((x) => x.toFixed(2)));
-		console.log(`| ${what} (\`${fg}\` on \`${bg}\`) | ${min} | ${cells.join(' | ')} |`);
-	}
+	console.log('| Pair | Min | Light | Dark |\n|---|---|---|---|');
+	for (const [what, fg, bg, min, r] of rows) console.log(`| ${what} (\`${fg}\` on \`${bg}\`) | ${min} | ${r[0].toFixed(2)} | ${r[1].toFixed(2)} |`);
 }
 
 // ---- 3. palette.ts vs the --c-* source colours ----
 const ts = readFileSync(join(root, 'src/lib/palette.ts'), 'utf8');
-for (const name of ['blue', 'pink', 'deep', 'taupe', 'mist']) {
-	const fromTs = ts.match(new RegExp(name + ":\\s*'(#[0-9a-f]{6})'"))?.[1];
+for (const name of ['blue', 'pink', 'deep', 'taupe', 'mist', 'ink']) {
+	const fromTs = ts.match(new RegExp("\\b" + name + ":\\s*'(#[0-9a-f]{6})'"))?.[1];
 	if (fromTs !== light['--c-' + name]) fail(`palette.ts ${name} ${fromTs} != --c-${name} ${light['--c-' + name]}`);
 }
 
-console.log(failed ? 'palette check FAILED' : `palette check ok (${files.length} files, ${PAIRS.length} pairs x 2 themes x ${VARIANTS.length} variants)`);
+console.log(failed ? 'palette check FAILED' : `palette check ok (${files.length} files, ${PAIRS.length} pairs x 2 themes)`);
 process.exit(failed ? 1 : 0);

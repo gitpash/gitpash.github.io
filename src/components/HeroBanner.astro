@@ -460,7 +460,7 @@ startBand();
 new MutationObserver(() => {
   readBandPalette();
   if (bandFrozen) drawBand(bandT);
-}).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-palette'] });
+}).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 startBandTyping('hb-typed');
 </script>
 
