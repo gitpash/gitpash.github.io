@@ -4,6 +4,8 @@ description: 'Why I needed AAP: a big tool I could not measure, a rigid standard
 cover: 'beams'
 pubDate: 2026-10-30
 seoTitle: 'How AAP started: experimenting inside a standard agent harness'
+series: 'aap'
+seriesOrder: 2
 tags: ['ai', 'agents', 'aap', 'claude-code', 'ci']
 ---
 

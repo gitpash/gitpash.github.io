@@ -1,0 +1,122 @@
+---
+import { getCollection } from 'astro:content';
+import { SERIES } from '../lib/series';
+
+interface Props {
+	series?: string;
+	slug: string;
+}
+
+const { series, slug } = Astro.props;
+const info = series ? SERIES[series] : undefined;
+const posts = info
+	? (await getCollection('blog'))
+			.filter((post) => post.data.series === series && post.data.seriesOrder !== undefined)
+			.sort((a, b) => a.data.seriesOrder! - b.data.seriesOrder!)
+	: [];
+const index = posts.findIndex((post) => post.id === slug);
+const prev = index > 0 ? posts[index - 1] : undefined;
+const next = index >= 0 ? posts[index + 1] : undefined;
+---
+
+{
+	info && index >= 0 && (
+		<nav class="series" aria-label={`Series: ${info.title}`}>
+			<p class="series-title">{info.title}</p>
+			<p class="series-desc">{info.description}</p>
+			{posts.length > 1 ? (
+				<ol class="series-list">
+					{posts.map((post) => (
+						<li>
+							{post.id === slug ? (
+								<span aria-current="page">{post.data.title}</span>
+							) : (
+								<a href={`/blog/${post.id}/`}>{post.data.title}</a>
+							)}
+						</li>
+					))}
+				</ol>
+			) : (
+				<p class="series-desc">This is the first post of the series.</p>
+			)}
+			{(prev || next) && (
+				<div class="series-steps">
+					{prev ? <a class="prev" href={`/blog/${prev.id}/`}>Previous: {prev.data.title}</a> : <span />}
+					{next ? <a class="next" href={`/blog/${next.id}/`}>Next: {next.data.title}</a> : <span />}
+				</div>
+			)}
+		</nav>
+	)
+}
+
+<style>
+	.series {
+		margin: 2.5em 0 0;
+		padding: 1em 1.25em;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		font-family: var(--font-family);
+		font-size: 1rem;
+		line-height: 1.5;
+	}
+	.series-title {
+		margin: 0 0 0.25em;
+		font-size: 1.15rem;
+		font-weight: 700;
+	}
+	.series-desc {
+		margin: 0 0 0.75em;
+		color: var(--text-muted);
+	}
+	.series-list {
+		margin: 0 0 0.75em;
+		padding-left: 1.4em;
+	}
+	.series-list li {
+		padding: 0.1em 0;
+	}
+	.series-list a,
+	.series-steps a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		color: var(--link);
+	}
+	.series-list [aria-current] {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		font-weight: 700;
+		color: var(--text);
+	}
+	.series-steps {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.5em 1em;
+		border-top: 1px solid var(--border);
+		padding-top: 0.5em;
+	}
+	.series-steps .next {
+		text-align: right;
+		justify-content: flex-end;
+		grid-column: 2;
+	}
+	.series-steps .prev {
+		grid-column: 1;
+	}
+	@media (max-width: 480px) {
+		.series-steps {
+			grid-template-columns: 1fr;
+		}
+		.series-steps .next,
+		.series-steps .prev {
+			grid-column: 1;
+			text-align: left;
+			justify-content: flex-start;
+		}
+		.series-steps span {
+			display: none;
+		}
+	}
+</style>

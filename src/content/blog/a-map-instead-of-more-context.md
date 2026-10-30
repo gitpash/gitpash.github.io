@@ -4,6 +4,8 @@ description: 'How our documentation piled up during the move to agentic workflow
 cover: 'grid'
 pubDate: 2026-10-30
 seoTitle: 'A map instead of more context: AAP for coding agents'
+series: 'aap'
+seriesOrder: 1
 tags: ['ai', 'agents', 'aap', 'agents-md', 'claude-code', 'skills']
 ---
 
@@ -135,6 +137,6 @@ Then ask your agent to use the `aap-map` skill to add a map to the repository, a
 
 ## This is only the beginning
 
-This post is a preamble. It covers why the map exists and how to try it, and there is more to tell. I plan to write a series about how this works in practice, with the details I left out here. Follow the blog or the repository to catch the next parts.
+This post is a preamble. It covers why the map exists and how to try it, and there is more to tell. I plan to write a series about how this works in practice, with the details I left out here. The box below lists the later posts as they appear, and you can also follow the blog or the repository.
 
 *This post was drafted with an AI assistant and edited by me.*
