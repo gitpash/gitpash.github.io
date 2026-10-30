@@ -43,6 +43,14 @@ What I ended up with is a small config file that lists the main concerns of the 
 
 I think the missing piece is smaller than more context: the agent should be able to *address* what exists (a name and a path) without having to *load* it. In September I wrote this up as a proposal for the team, and it became [AAP](https://github.com/gitpash/agent-artifact-protocol/tree/v0.3.0), an open spec I maintain. There is no silver bullet here, of course, so below I show where it helps and where it doesn't.
 
+## Why I am doing this
+
+None of this started from a wish to chase a trend. The technology came first and grew out of day-to-day work in real repositories, and the proposal and the public repository date from September. The idea of writing about it arrived only at the end of October, once the maps had been working in practice for some weeks.
+
+The goals were modest and practical. An agent should find its bearings without filling the context, and the format should be easy to extend in the way plugins are. It should not depend on any one harness and should leave room to change how a team works with its code later, while giving a team or a large workspace one clear standard.
+
+I should also be honest about the evidence. The same model does not give the same result twice, so claims about agent setups are hard to check, including mine, and I cannot prove that the map helps. I would like to find out, and I welcome disagreement from anyone who has tried something different.
+
 ## What the spec says
 
 The SPEC says it makes repository context "addressable without requiring it to be loaded", and that it is not a context engine or an authorization system. The minimal map is a few lines, as you can see here:
