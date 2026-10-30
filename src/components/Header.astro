@@ -184,9 +184,23 @@ import ThemeToggle from './ThemeToggle.astro';
 			justify-content: space-between;
 		}
 
+		/* Links are inline-flex on narrow screens, so text-align has no effect: centre the label with
+		   justify-content, and keep the horizontal padding so the active pill has room around it. */
 		.internal-links a {
 			flex: 1;
-			text-align: center;
+			justify-content: center;
+			padding: 0.35em 0.5em;
+			/* 4px transparent border + padding-box clip: the pill gets breathing room inside the 44px
+			   row while the tap target stays 44px tall. */
+			border: 4px solid transparent;
+		}
+
+		/* The `background` shorthand in the base hover/active rules resets background-clip. */
+		.internal-links a,
+		.internal-links a:hover,
+		.internal-links a.active,
+		.internal-links a.active:hover {
+			background-clip: padding-box;
 		}
 
 		.nav-right > :global(.theme-toggle) {
