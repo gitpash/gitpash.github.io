@@ -15,11 +15,19 @@ Before the harness arrived I had been working on a tool of my own, alone and ove
 
 I built it with an existing graph library and exposed it as an MCP server with about thirty tools, which was too many, of course. I kept trying to bring it to a state I could rely on, and I thought it could suit any team or business, with the caveat that it has been tested by one person.
 
+## How the meta-repository is organised
+
+It helps to say how we work, because the rest depends on it. Beside the usual `CLAUDE.md`, the root of our meta-repository holds a constitution file in the way spec-kit uses the term. It describes the structure in layers: the top layer describes the contracts, and below it the file says what lies where, meaning services, clients and integrations, the upstream and downstream relations between them and how they are stitched together. Every submodule has the same kind of description of itself, so what we have is a graph of small descriptions and not one large file.
+
+Work goes top-down. A business task arrives, and we first decide which domains it touches and build a shallow map that covers all the contracts involved. Only then do we go deeper, create subtasks and implement them, and that is how we worked before AAP existed.
+
+This is also why a map per repository fits what the team already did. In AAP terms, a map points to the maps of related repositories through `nodes` and `self.parent`, and those hops are explicit and never preloaded ([SPEC.md, "Core model"](https://github.com/gitpash/agent-artifact-protocol/blob/v0.3.0/SPEC.md)). The reading levels, from the map alone through a targeted path and one artifact down to the code, give the same shallow-first order in a form an agent can follow ([SPEC.md, "Progressive disclosure"](https://github.com/gitpash/agent-artifact-protocol/blob/v0.3.0/SPEC.md)).
+
 ## Where the harness got in the way
 
 The standard harness was rigid, and I found its way of searching crude, mostly plain text matching, while my tool understood the structure. What I needed to learn was where the graph earns its place, so I wanted to try it at the blast-radius step, at the verification step, at different thresholds and in different workflows. That meant changing the text and the order of the methods again and again, and every change meant rewriting parts of the harness, adding overrides and encapsulating my code around it. I spent a large part of that time fighting the harness instead of testing the idea.
 
-The meta-repository added a second cost. We have many repositories, the context of one task is spread over several of them, and I start from the root. A task often touched more than one domain, so I split it by domain, and any experiment with a skill had to live on a feature branch because the skills were standardised for the whole team. In practice that meant many checkouts, worktrees that fell behind, and a branch sync in the meta-repository that I regularly forgot. None of it was dramatic, but it was constant overhead, and it made each experiment more expensive than the idea deserved.
+The structure added a second cost. The context of one task is spread over several repositories, I start from the root, and a task often touches more than one domain, so I split it by domain. Any experiment with a skill had to live on a feature branch, because the skills were standardised for the whole team. In practice that meant many checkouts, worktrees that fell behind, and a branch sync in the meta-repository that I regularly forgot. None of it was dramatic, but it was constant overhead, and it made each experiment more expensive than the idea deserved.
 
 ## What I wanted instead
 
