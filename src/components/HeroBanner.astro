@@ -16,7 +16,7 @@
 	rel="stylesheet"
 />
 
-<section class="hero-banner" aria-label="Ночной берег с маяком — анимированная 1-bit сцена">
+<section class="hero-banner" aria-label="Pixel scene of a night shore with a lighthouse beam">
 	<div class="hb-frame">
 		<canvas id="hb-c" width="550" height="150"></canvas>
 		<div class="hb-foot">
@@ -33,7 +33,23 @@ const BAYER = [
   [ 3,11, 1, 9],
   [15, 7,13, 5],
 ];
-const INK = [0, 0, 0], PAPER = [255, 255,255], BEAM_RGB = '200,148,74';
+// Output colours come from the theme tokens (--banner-ink, --banner-paper, --banner-beam),
+// so the banner follows the palette and the light/dark switch.
+let INK = [0, 0, 0], PAPER = [255, 255, 255], BEAM_RGB = '0,0,0';
+const hexRgb = (h) => {
+  const v = h.trim().replace('#', '');
+  const f = v.length === 3 ? v.replace(/./g, (c) => c + c) : v;
+  return [0, 2, 4].map((i) => parseInt(f.slice(i, i + 2), 16));
+};
+function readBandPalette() {
+  const cs = getComputedStyle(document.documentElement);
+  INK = hexRgb(cs.getPropertyValue('--banner-ink'));
+  PAPER = hexRgb(cs.getPropertyValue('--banner-paper'));
+  BEAM_RGB = hexRgb(cs.getPropertyValue('--banner-beam')).join(',');
+}
+readBandPalette();
+// Greys below are brightness inputs for the dither threshold, not output colours.
+const lum = (n, a = 1) => `rgba(${n},${n},${n},${a})`; // lint-colors: allow
 
 function mulberry(seed) {
   return function() {
@@ -54,15 +70,15 @@ const BAND_GUY = { x: 147, y: 95 };          // сюда бьёт луч → о�
 const BAND_EDGE = { x: 110, y: 112 };        // плато с травинками → шевелятся в луче
 const BAND_GAIN = 460;
 
+const g6 = (n) => `rgb(${n},${n},${n})`; // lint-colors: allow
 const BAND_PAL_BASE = {
-  skyTop: '#141414', skyBot: '#6a6a6a',
-  cloud: '#d0d0d0', moon: '#e2e2e2', crater: '#a8a8a8',
-  seaTop: '#4a4a4a', seaBot: '#101010', wave: '#6e6e6e',
-  cliff: '#000000', grass: '#000000', guy: '#000000',
-  rock: '#0d0d0d', towerL: '#ececec', towerD: '#1c1c1c',
-  lantern: '#f2f2f2', roof: '#141414',
+  skyTop: g6(20), skyBot: g6(106),
+  cloud: g6(208), moon: g6(226), crater: g6(168),
+  seaTop: g6(74), seaBot: g6(16), wave: g6(110),
+  cliff: g6(0), grass: g6(0), guy: g6(0),
+  rock: g6(13), towerL: g6(236), towerD: g6(28),
+  lantern: g6(242), roof: g6(20),
 };
-const g6 = (n) => `rgb(${n},${n},${n})`;
 const BAND_PAL_ALB = {
   skyTop: g6(60), skyBot: g6(60),   // небо заметно отзывается на луч — конус читается на лету
   cloud: g6(150), moon: g6(255), crater: g6(180),
@@ -194,11 +210,11 @@ function paintBandGuy(g, pal, s) {
   // контровой по краю касы и скуле
   if (s.typing > 0.02) {
     const gr = g.createRadialGradient(157, 98, 2, 157, 98, 14);
-    gr.addColorStop(0, `rgba(255,255,255,${0.4 * s.typing})`);
-    gr.addColorStop(1, 'rgba(255,255,255,0)');
+    gr.addColorStop(0, lum(255, 0.4 * s.typing));
+    gr.addColorStop(1, lum(255, 0));
     g.fillStyle = gr;
     g.beginPath(); g.arc(157, 98, 14, 0, Math.PI * 2); g.fill();
-    g.strokeStyle = `rgba(255,255,255,${0.95 * s.typing})`;
+    g.strokeStyle = lum(255, 0.95 * s.typing);
     g.lineWidth = 3;
     g.beginPath(); g.moveTo(159, 104); g.lineTo(152, 91.5); g.stroke();    // светящийся экран
     g.lineWidth = 2;
@@ -331,15 +347,16 @@ function drawBand(t) {
 }
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-let bandT = 0, bandLast = -1e9;
+let bandT = 0, bandLast = -1e9, bandFrozen = false;
 function startBand() {
   // проба для скриншотов/OG: ?bandT=<сек> замораживает кадр
   const q = new URLSearchParams(location.search).get('bandT');
   if (q !== null && q !== '') {
     const f = parseFloat(q);
-    if (!isNaN(f)) { bandT = f; drawBand(bandT); return; }
+    if (!isNaN(f)) { bandT = f; bandFrozen = true; drawBand(bandT); return; }
   }
   if (reduceMotion) {
+    bandFrozen = true;
     bandT = BAND_PERIOD * 0.5;                    // статика: луч ровно на чуваке — печатает
     drawBand(bandT);
   } else {
@@ -440,6 +457,10 @@ function startBandTyping(elId) {
 }
 
 startBand();
+new MutationObserver(() => {
+  readBandPalette();
+  if (bandFrozen) drawBand(bandT);
+}).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 startBandTyping('hb-typed');
 </script>
 
@@ -452,7 +473,7 @@ startBandTyping('hb-typed');
 		position: relative;
 		border: 1px solid var(--border);
 		border-radius: var(--radius-lg);
-		background: #000;
+		background: var(--banner-ink);
 		overflow: hidden;
 		box-shadow: var(--shadow-md);
 	}
@@ -481,7 +502,7 @@ startBandTyping('hb-typed');
 		font-size: clamp(11px, 1.3vw, 13px);
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
-		color: #fff;
+		color: var(--banner-paper);
 	}
 
 	.hb-typ {
@@ -492,9 +513,9 @@ startBandTyping('hb-typed');
 		font-size: clamp(11px, 1.3vw, 13px);
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
-		background: #000;
-		color: #fff;
-		border: 2px solid #fff;
+		background: var(--banner-ink);
+		color: var(--banner-paper);
+		border: 2px solid var(--banner-paper);
 		padding: 5px 9px;
 		white-space: nowrap;
 		box-sizing: content-box;
@@ -517,6 +538,24 @@ startBandTyping('hb-typed');
 
 	@keyframes hb-caret-blink {
 		50% { opacity: 0; }
+	}
+
+	/* Narrow screens: the scene is small, so keep only the typing chip and make it compact. */
+	@media (max-width: 520px) {
+		.hb-sig {
+			display: none;
+		}
+
+		.hb-foot {
+			left: 8px;
+			bottom: 8px;
+		}
+
+		.hb-typ {
+			font-size: 8px;
+			padding: 3px 6px;
+			gap: 4px;
+		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {

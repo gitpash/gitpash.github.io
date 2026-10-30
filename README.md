@@ -68,6 +68,9 @@ npm run build
 
 # Preview production build
 npm run preview
+
+# Lint blog prose (needs Vale: brew install vale)
+npm run lint:prose
 ```
 
 ## Deployment

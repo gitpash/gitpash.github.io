@@ -44,7 +44,7 @@ const { name, description, url, language, stars, topics } = Astro.props;
 	.project-card:hover {
 		transform: translateY(-4px);
 		box-shadow: var(--shadow-lg);
-		border-color: var(--accent);
+		border-color: var(--border-strong);
 	}
 
 	.project-header {
@@ -61,7 +61,7 @@ const { name, description, url, language, stars, topics } = Astro.props;
 	}
 
 	.project-header h3 a {
-		color: var(--accent);
+		color: var(--link);
 		text-decoration: none;
 	}
 
@@ -73,21 +73,21 @@ const { name, description, url, language, stars, topics } = Astro.props;
 		display: flex;
 		gap: 0.75rem;
 		font-size: 0.85rem;
-		color: var(--text-secondary);
+		color: var(--text-muted);
 	}
 
 	.language {
 		padding: 0.2rem 0.5rem;
-		background: var(--gray-light);
+		background: var(--surface-muted);
 		border-radius: 4px;
 	}
 
 	.stars {
-		color: #f1e05a;
+		color: var(--star);
 	}
 
 	.project-description {
-		color: var(--text-secondary);
+		color: var(--text-muted);
 		font-size: 0.95rem;
 		line-height: 1.6;
 		margin-bottom: 1rem;
@@ -102,7 +102,7 @@ const { name, description, url, language, stars, topics } = Astro.props;
 	.topic-tag {
 		padding: 0.25rem 0.6rem;
 		background: var(--accent-soft);
-		color: var(--accent);
+		color: var(--link);
 		border-radius: 980px;
 		font-size: 0.8rem;
 	}

@@ -1,0 +1,52 @@
+---
+// A 5x5 mirrored pixel identicon, seeded from the username, drawn with the palette tokens
+// so it follows the theme. It replaces the remote GitHub identicon.
+interface Props {
+	seed: string;
+	size?: number;
+	label?: string;
+}
+const { seed, size = 96, label = seed } = Astro.props;
+
+let h = 2166136261;
+for (const ch of seed) h = Math.imul(h ^ ch.charCodeAt(0), 16777619) >>> 0;
+const next = () => ((h = Math.imul(h ^ (h >>> 15), 2246822519) >>> 0), (h & 0xffff) / 0xffff);
+
+const cells: Array<[number, number]> = [];
+for (let y = 0; y < 5; y++) {
+	for (let x = 0; x < 3; x++) {
+		if (next() > 0.5) {
+			cells.push([x, y]);
+			if (x < 2) cells.push([4 - x, y]);
+		}
+	}
+}
+---
+
+<svg
+	class="avatar"
+	width={size}
+	height={size}
+	viewBox="0 0 7 7"
+	role="img"
+	aria-label={label}
+	shape-rendering="crispEdges"
+>
+	<rect width="7" height="7" class="avatar-bg" />
+	{cells.map(([x, y]) => <rect x={x + 1} y={y + 1} width="1" height="1" class="avatar-fg" />)}
+</svg>
+
+<style>
+	.avatar {
+		border-radius: 50%;
+		border: 3px solid var(--surface);
+		box-shadow: var(--shadow-md);
+		flex-shrink: 0;
+	}
+	.avatar-bg {
+		fill: var(--avatar-bg);
+	}
+	.avatar-fg {
+		fill: var(--avatar-fg);
+	}
+</style>

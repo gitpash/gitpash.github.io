@@ -1,32 +1,76 @@
 /*
-  Slate & Sea palette — calm, strict, subtle effects.
-  Design tokens follow Apple's WWDC design principles.
+  Palette kit. See docs/palette.md for the role table and the recorded contrast checks.
+
+  Source colours (the only hand-picked hues): blue #95BCCC, pink #E3C6C6, deep #3F5468,
+  taupe #988080, mist #BECEDA. Everything else is a tint or shade of them. Components use
+  role tokens only (--bg, --text, --accent, --link, ...); raw hex lives in this file and in
+  src/lib/palette.ts (cover generator), and `npm run check:palette` enforces that.
 */
 
 :root {
-	/* ---- Light theme: Slate & Sea ---- */
-	--accent: #4e7a87;          /* muted sea teal */
-	--accent-hover: #3d6672;
-	--accent-dark: #2f4a55;     /* deep slate, gradient end */
-	--accent-soft: rgba(78, 122, 135, 0.1);
+	/* ---- Source colours ---- */
+	--c-blue: #95bccc;
+	--c-pink: #e3c6c6;
+	--c-deep: #3f5468;
+	--c-taupe: #988080;
+	--c-mist: #beceda;
+	--c-ink: #26323f;            /* darkest shade of the deep colour */
 
-	--background: #f7f8f8;      /* off-white */
-	--surface: #ffffff;
-	--surface-raised: #ffffff;
-	--gray-light: #eceef0;      /* chips, code bg */
-	--gray: #5e6a70;            /* secondary text */
-	--gray-dark: #1b1f23;       /* headings */
-	--black: #1b1f23;
-	--text-primary: #1b1f23;
-	--text-secondary: #5e6a70;
-	--border: #e3e6e7;
+	/* ---- Light theme roles ---- */
+	--bg: #f4f6f8;               /* page: tint of mist */
+	--surface: #ffffff;          /* cards, hero */
+	--surface-muted: #e8edf1;    /* chips, quiet fills: tint of mist */
+	--border: #d3dce4;
+	--border-strong: var(--c-taupe); /* outline of the pink fill, input-like borders */
+	--text: var(--c-ink);             /* shade of the deep blue */
+	--text-muted: #665759;       /* shade of taupe */
 
-	--glass: rgba(247, 248, 248, 0.72);
+	--accent: var(--c-pink);     /* primary fill, active nav pill */
+	--accent-hover: #d8b9b9;     /* pink, slightly deeper */
+	--accent-soft: color-mix(in srgb, var(--c-mist) 65%, white); /* inline code, selection, chips */
+	--on-accent: var(--c-ink);        /* text on the pink fill */
+	--accent-border: var(--c-taupe);
+	--accent-strong: var(--c-deep); /* deep blue: links, small accents on light surfaces */
+	--link: var(--accent-strong);
+	--focus: var(--accent-strong);
+	--mark: var(--c-mist);       /* <mark> */
+	--hover-bg: color-mix(in srgb, var(--c-pink) 40%, var(--bg)); /* weaker than the active pink */
+	--hover-text: var(--c-ink);
+	--hero-glow: color-mix(in srgb, var(--c-mist) 55%, var(--surface));
+	--star: var(--c-taupe);
 
-	--shadow-sm: 0 1px 2px rgba(27, 31, 35, 0.04);
-	--shadow-md: 0 4px 12px rgba(27, 31, 35, 0.08);
-	--shadow-lg: 0 12px 32px rgba(27, 31, 35, 0.12);
-	--shadow-xl: 0 24px 48px rgba(27, 31, 35, 0.16);
+	--frame: var(--c-ink);            /* 1-bit frames: covers, code blocks */
+	--code-bg: #ffffff;
+	--code-fg: var(--c-ink);
+	--header-bg: rgba(244, 246, 248, 0.97);
+
+	--banner-ink: #26323f;       /* hero banner: two-colour dither */
+	--banner-paper: #beceda;
+	--banner-beam: #e3c6c6;
+	--avatar-bg: var(--c-mist);
+	--avatar-fg: var(--c-deep);
+
+	/* ---- Cover tones (inline SVG covers; the PNG endpoints use palette.ts) ---- */
+	--cover-slate-0: var(--c-ink);
+	--cover-slate-1: var(--c-deep);
+	--cover-slate-2: var(--c-blue);
+	--cover-slate-3: color-mix(in srgb, var(--c-blue) 14%, white);
+	--cover-slate-accent: var(--c-pink);
+	--cover-rose-0: color-mix(in srgb, var(--c-taupe) 22%, black);
+	--cover-rose-1: color-mix(in srgb, var(--c-taupe) 62%, black);
+	--cover-rose-2: var(--c-taupe);
+	--cover-rose-3: color-mix(in srgb, var(--c-pink) 35%, white);
+	--cover-rose-accent: var(--c-mist);
+	--cover-mist-0: var(--c-ink);
+	--cover-mist-1: color-mix(in srgb, var(--c-mist) 38%, var(--c-ink));
+	--cover-mist-2: var(--c-mist);
+	--cover-mist-3: color-mix(in srgb, var(--c-mist) 16%, white);
+	--cover-mist-accent: var(--c-pink);
+
+	--shadow-sm: 0 1px 2px rgba(23, 41, 50, 0.04);
+	--shadow-md: 0 4px 12px rgba(23, 41, 50, 0.08);
+	--shadow-lg: 0 12px 32px rgba(23, 41, 50, 0.12);
+	--shadow-xl: 0 24px 48px rgba(23, 41, 50, 0.16);
 
 	--radius-sm: 8px;
 	--radius-md: 12px;
@@ -37,28 +81,46 @@
 	--transition-base: 250ms cubic-bezier(0.25, 0.1, 0.25, 1);
 	--transition-slow: 350ms cubic-bezier(0.25, 0.1, 0.25, 1);
 
-	--font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+	--font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+	--font-serif-family: var(--font-serif), Georgia, serif;
+	--font-pixel-family: var(--font-pixel), ui-monospace, monospace;
+	--font-mono-family: var(--font-mono), ui-monospace, 'SF Mono', Menlo, monospace;
 }
 
 [data-theme='dark'] {
-	/* ---- Dark theme: deep slate + lighter sea ---- */
-	--accent: #7fa8b5;
-	--accent-hover: #93b8c3;
-	--accent-dark: #4e7a87;
-	--accent-soft: rgba(127, 168, 181, 0.14);
+	/* ---- Dark theme roles ---- */
+	--bg: #1b232c;
+	--surface: #232d38;
+	--surface-muted: #151c24;
+	--border: #323f4d;
+	--border-strong: #7c6e70;
+	--text: #e6ebf0;
+	--text-muted: #b9aeb0;
 
-	--background: #101316;
-	--surface: #171b1f;
-	--surface-raised: #1c2126;
-	--gray-light: #1a1f23;
-	--gray: #8b979d;
-	--gray-dark: #e7e9eb;
-	--black: #e7e9eb;
-	--text-primary: #e7e9eb;
-	--text-secondary: #8b979d;
-	--border: #242a2f;
+	--accent: var(--c-pink);
+	--accent-hover: #d8b9b9;
+	--accent-soft: #364250;      /* pink, deep: inline code, selection */
+	--on-accent: #26323f;
+	--accent-border: var(--c-pink);
+	--accent-strong: var(--c-mist);
+	--link: var(--accent-strong);
+	--focus: var(--accent-strong);
+	--mark: var(--c-deep);
+	--hover-bg: color-mix(in srgb, var(--c-pink) 11%, var(--bg));
+	--hover-text: var(--c-pink);
+	--hero-glow: color-mix(in srgb, var(--c-mist) 8%, var(--surface));
+	--star: var(--c-pink);
 
-	--glass: rgba(16, 19, 22, 0.72);
+	--frame: #e6ebf0;
+	--code-bg: #12181f;
+	--code-fg: #e6ebf0;
+	--header-bg: rgba(27, 35, 44, 0.97);
+
+	--banner-ink: #12181f;
+	--banner-paper: #beceda;
+	--banner-beam: #e3c6c6;
+	--avatar-bg: #2b3744;
+	--avatar-fg: var(--c-mist);
 
 	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
 	--shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -79,10 +141,10 @@ body {
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	background: var(--background);
+	background: var(--bg);
 	word-wrap: break-word;
 	overflow-wrap: break-word;
-	color: var(--text-primary);
+	color: var(--text);
 	font-size: 17px;
 	line-height: 1.5;
 	-webkit-font-smoothing: antialiased;
@@ -105,7 +167,7 @@ h4,
 h5,
 h6 {
 	margin: 0 0 0.5rem 0;
-	color: var(--text-primary);
+	color: var(--text);
 	line-height: 1.1;
 	font-weight: 700;
 	letter-spacing: -0.02em;
@@ -117,24 +179,24 @@ h1 {
 }
 
 h2 {
-	font-size: 2rem;
+	font-size: 1.65rem;
 	letter-spacing: -0.02em;
 }
 
 h3 {
-	font-size: 1.5rem;
-}
-
-h4 {
 	font-size: 1.25rem;
 }
 
+h4 {
+	font-size: 1.05rem;
+}
+
 h5 {
-	font-size: 1.1rem;
+	font-size: 1rem;
 }
 
 h6 {
-	font-size: 1rem;
+	font-size: 0.9rem;
 }
 
 strong,
@@ -143,14 +205,23 @@ b {
 }
 
 a {
-	color: var(--accent);
+	font-size: 0.95em;
+	color: var(--link);
 	text-decoration: none;
-	transition: color var(--transition-fast);
+	transition: color 175ms ease, background-color 175ms ease;
 }
 
 a:hover {
-	color: var(--accent-hover);
+	color: var(--hover-text);
+	background: var(--hover-bg);
+	border-radius: 3px;
 	text-decoration: underline;
+}
+
+:focus-visible {
+	outline: 3px solid var(--focus);
+	outline-offset: 2px;
+	border-radius: 3px;
 }
 
 p {
@@ -181,17 +252,86 @@ img {
 }
 
 code {
-	padding: 2px 6px;
-	background: var(--gray-light);
-	border-radius: 4px;
-	font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-	font-size: 0.9em;
+	padding: 0.12em 0.4em;
+	background: var(--accent-soft);
+	color: var(--text);
+	border-radius: 5px;
+	font-family: var(--font-mono-family);
+	font-size: 0.85em;
+	font-variant-ligatures: none;
 }
 
-pre {
-	padding: 1.25em;
+/* Code blocks: 1-bit frames from the design study. Light page: white field, black frame
+   ("mac"). Dark page: black field, white frame ("dark"). Syntax colours are dropped on
+   purpose, only comments are dimmed. */
+.code-block {
+	position: relative;
+	margin: 0 0 1.75em;
+	border: 3px solid var(--frame);
+	background: var(--code-bg);
+	color: var(--code-fg);
+	overflow: hidden;
+}
+
+.code-block-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.3rem 0.5rem 0.3rem 1rem;
+	border-bottom: 2px solid var(--frame);
+	font-family: var(--font-pixel-family);
+	font-size: 0.7rem;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+.code-copy {
+	padding: 0.15rem 0.6rem;
+	border: 2px solid var(--frame);
+	border-radius: 0;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	cursor: pointer;
+}
+
+.code-copy:hover,
+.code-copy:focus-visible {
+	background: var(--frame);
+	color: var(--code-bg);
+}
+
+pre.astro-code {
+	margin: 0;
+	padding: 0.75rem 1.25rem 1rem;
+	border-radius: 0;
+	background: transparent !important;
+	font-family: var(--font-mono-family);
+	font-size: 0.85rem;
+	line-height: 1.7;
+	font-variant-ligatures: contextual;
+	overflow-x: auto;
+	tab-size: 2;
+}
+
+.astro-code,
+.astro-code span {
+	color: inherit !important;
+}
+
+/* github-light / github-dark-dimmed comment colours */
+.astro-code span[style*='--shiki-light:#6A737D' i], /* lint-colors: allow (Shiki output) */
+.astro-code span[style*='--shiki-light:#6a737d' i] { /* lint-colors: allow */
+	opacity: 0.55;
+}
+
+pre:not(.astro-code) {
+	padding: 1rem 1.25rem;
 	border-radius: var(--radius-md);
-	background: var(--gray-light);
+	background: var(--surface-muted);
+	font-family: var(--font-mono-family);
+	font-size: 0.85rem;
+	line-height: 1.7;
 	overflow-x: auto;
 }
 
@@ -200,11 +340,23 @@ pre > code {
 }
 
 blockquote {
-	border-left: 3px solid var(--accent);
+	border-left: 3px solid var(--link);
 	padding: 0 0 0 1.25em;
 	margin: 0;
 	font-size: 1.1em;
-	color: var(--text-secondary);
+	color: var(--text-muted);
+}
+
+::selection {
+	background: var(--accent-soft);
+	color: var(--text);
+}
+
+mark {
+	background: var(--mark);
+	color: var(--text);
+	padding: 0 0.2em;
+	border-radius: 3px;
 }
 
 hr {
@@ -226,7 +378,7 @@ hr {
 	}
 
 	h2 {
-		font-size: 1.75rem;
+		font-size: 1.45rem;
 	}
 }
 
@@ -253,36 +405,43 @@ hr {
 	font-weight: 500;
 	font-size: 0.95rem;
 	transition: all var(--transition-fast);
-	border: none;
+	border: 1px solid transparent;
 	cursor: pointer;
 	letter-spacing: -0.01em;
 	line-height: 1.4;
 }
 
+/* Primary: the pink accent fill with dark text, outlined so it holds on the pale page.
+   Secondary: outlined, link-coloured text; hover uses the same weak pink as nav hover. */
 .btn-primary {
 	background: var(--accent);
-	color: #fff;
+	color: var(--on-accent);
+	border: 1px solid var(--accent-border);
 }
 
 .btn-primary:hover {
 	background: var(--accent-hover);
-	color: #fff;
-	transform: translateY(-1px);
+	color: var(--on-accent);
 	text-decoration: none;
 }
 
 .btn-secondary {
 	background: transparent;
-	color: var(--accent);
-	border: 1px solid var(--border);
+	color: var(--link);
+	border: 1px solid var(--border-strong);
 }
 
 .btn-secondary:hover {
-	background: var(--gray-light);
-	color: var(--text-primary);
-	border-color: var(--gray);
-	transform: translateY(-1px);
+	background: var(--hover-bg);
+	color: var(--hover-text);
 	text-decoration: none;
+}
+
+/* The global `a:hover` squares corners; buttons keep their rounding and grow a little instead. */
+.btn:hover {
+	border-radius: 10px;
+	transform: translateY(-1px) scale(1.04);
+	box-shadow: var(--shadow-md);
 }
 
 /* Card */
@@ -302,7 +461,7 @@ hr {
 
 /* Frosted glass layer — content scrolls beneath */
 .glass {
-	background: var(--glass);
+	background: var(--header-bg);
 	backdrop-filter: saturate(180%) blur(20px);
 	-webkit-backdrop-filter: saturate(180%) blur(20px);
 }
@@ -353,6 +512,14 @@ hr {
 
 /* Reduced motion — gentler, non-vestibular equivalent */
 @media (prefers-reduced-motion: reduce) {
+	a {
+		transition: none;
+	}
+
+	.btn:hover {
+		transform: none;
+	}
+
 	* {
 		animation-duration: 0.01ms !important;
 		animation-iteration-count: 1 !important;
@@ -364,44 +531,124 @@ hr {
 	}
 }
 
-/* Theme toggle */
-.theme-toggle {
-	position: fixed;
-	top: 1rem;
-	right: 1rem;
-	z-index: 1000;
-	background: var(--surface);
-	border: 1px solid var(--border);
-	border-radius: 50%;
-	width: 44px;
-	height: 44px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
-	transition: all var(--transition-fast);
-	box-shadow: var(--shadow-sm);
+/* Architecture diagram (inline SVG in posts) */
+:root {
+	--d-org: #8a6c6c;
+	--d-mol: #3f7c94;
+	--d-atom: #4f6470;
 }
 
-.theme-toggle:hover {
-	transform: scale(1.05);
-	box-shadow: var(--shadow-md);
+[data-theme='dark'] {
+	--d-org: #d4b6b6;
+	--d-mol: #95bccc;
+	--d-atom: #a9b8c2;
 }
 
-.theme-toggle svg {
-	width: 20px;
-	height: 20px;
-	fill: var(--text-primary);
+.diagram {
+	margin: 2em 0;
+	font-family: var(--font-family);
 }
 
-.sun-icon {
-	display: none;
-}
-
-[data-theme='dark'] .sun-icon {
+.diagram svg {
 	display: block;
+	width: 100%;
+	height: auto;
+	overflow: visible;
 }
 
-[data-theme='dark'] .moon-icon {
+.diagram .narrow {
 	display: none;
+}
+
+@media (max-width: 640px) {
+	.diagram .wide {
+		display: none;
+	}
+
+	.diagram .narrow {
+		display: block;
+	}
+}
+
+.diagram figcaption {
+	margin-top: 0.75rem;
+	font-size: 0.9rem;
+	line-height: 1.5;
+	color: var(--text-muted);
+}
+
+.diagram .d-box {
+	fill: var(--surface);
+	stroke: var(--border);
+	stroke-width: 1.5;
+}
+
+.diagram .d-layer {
+	fill: var(--surface-muted);
+	stroke: var(--link);
+	stroke-width: 1.5;
+	stroke-dasharray: 6 5;
+}
+
+.diagram .d-api,
+.diagram .d-ui {
+	stroke: var(--text-muted);
+}
+
+.diagram .d-card {
+	fill: var(--surface-muted);
+}
+
+.diagram .d-page {
+	stroke: var(--text-muted);
+}
+
+.diagram .d-org,
+.diagram .d-mol,
+.diagram .d-atom {
+	stroke-width: 1.75;
+}
+
+.diagram .d-org {
+	fill: color-mix(in srgb, var(--d-org) 16%, var(--surface));
+	stroke: var(--d-org);
+}
+
+.diagram .d-mol {
+	fill: color-mix(in srgb, var(--d-mol) 16%, var(--surface));
+	stroke: var(--d-mol);
+}
+
+.diagram .d-atom {
+	fill: color-mix(in srgb, var(--d-atom) 16%, var(--surface));
+	stroke: var(--d-atom);
+}
+
+.diagram .d-text,
+.diagram .d-title {
+	fill: var(--text);
+	font-family: var(--font-family);
+	font-weight: 500;
+}
+
+.diagram .d-title {
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.diagram .d-note {
+	fill: var(--text-muted);
+	font-family: var(--font-family);
+}
+
+.diagram .d-arrow,
+.diagram .d-line {
+	fill: none;
+	stroke: var(--text-muted);
+	stroke-width: 1.5;
+	stroke-linejoin: round;
+}
+
+.diagram .d-head {
+	fill: var(--text-muted);
 }

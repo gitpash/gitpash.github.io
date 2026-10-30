@@ -1,0 +1,171 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+	headings: MarkdownHeading[];
+}
+
+const items = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+	items.length > 1 && (
+		<nav class="minimap" aria-label="On this page">
+			<ol>
+				{items.map((h, n) => (
+					<li class={`depth-${h.depth}`} style={`--i:${n}`}>
+						<a href={`#${h.slug}`} data-target={h.slug}>
+							<span class="tick" aria-hidden="true" />
+							<span class="label">{h.text}</span>
+						</a>
+					</li>
+				))}
+			</ol>
+		</nav>
+	)
+}
+
+<style>
+	.minimap {
+		position: fixed;
+		top: 7rem;
+		right: 1.5rem;
+		z-index: 5;
+		display: none;
+		width: 3rem;
+	}
+	@media (min-width: 1200px) {
+		.minimap {
+			display: block;
+		}
+	}
+	ol {
+		position: absolute;
+		top: 0;
+		right: 0;
+		margin: 0;
+		padding: 0.6rem 0.5rem;
+		list-style: none;
+		border: 1px solid transparent;
+		border-radius: var(--radius-md);
+		transition: background var(--transition-base), border-color var(--transition-base);
+	}
+	.minimap:focus-within ol {
+		background: var(--surface);
+		border-color: var(--border);
+		box-shadow: var(--shadow-md);
+	}
+	@media (hover: hover) {
+		.minimap:hover ol {
+			background: var(--surface);
+			border-color: var(--border);
+			box-shadow: var(--shadow-md);
+		}
+	}
+	li {
+		margin: 0;
+	}
+	li.depth-3 {
+		padding-right: 0.9rem;
+	}
+	a {
+		display: flex;
+		align-items: center;
+		flex-direction: row-reverse;
+		justify-content: flex-start;
+		gap: 0.75rem;
+		padding: 0.28rem 0.25rem;
+		font-size: 0.8rem;
+		line-height: 1.3;
+		color: var(--text-muted);
+		border-radius: 6px;
+	}
+	a:hover {
+		text-decoration: none;
+		color: var(--text);
+	}
+	a:focus-visible {
+		outline: 2px solid var(--focus);
+		outline-offset: 1px;
+	}
+	/* Labels are always laid out and only fade in, so nothing slides or resizes. */
+	.label {
+		white-space: nowrap;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 180ms ease;
+		transition-delay: calc(var(--i) * 25ms);
+	}
+	.minimap:focus-within .label {
+		opacity: 1;
+		pointer-events: auto;
+	}
+	@media (hover: hover) {
+		.minimap:hover .label {
+			opacity: 1;
+			pointer-events: auto;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.label {
+			transition: none;
+			transition-delay: 0s;
+		}
+	}
+	.tick {
+		flex: none;
+		height: 2px;
+		width: 1.5rem;
+		border-radius: 1px;
+		background: var(--border);
+		transition: background var(--transition-fast), width var(--transition-fast);
+	}
+	.depth-3 .tick {
+		width: 0.9rem;
+	}
+	a:hover .tick {
+		background: var(--text-muted);
+	}
+	a.active {
+		color: var(--text);
+		font-weight: 500;
+	}
+	a.active .tick {
+		background: var(--link);
+		width: 2rem;
+	}
+	.depth-3 a.active .tick {
+		width: 1.3rem;
+	}
+</style>
+
+<script>
+	const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.minimap a'));
+	const byId = new Map(links.map((a) => [a.dataset.target!, a]));
+	const headings = links
+		.map((a) => document.getElementById(a.dataset.target!))
+		.filter((h): h is HTMLElement => !!h);
+
+	let current: HTMLAnchorElement | undefined;
+	function activate(id: string) {
+		const next = byId.get(id);
+		if (!next || next === current) return;
+		current?.classList.remove('active');
+		current?.removeAttribute('aria-current');
+		next.classList.add('active');
+		next.setAttribute('aria-current', 'location');
+		current = next;
+	}
+
+	if (headings.length) {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) activate(entry.target.id);
+				}
+			},
+			{ rootMargin: '0px 0px -70% 0px' },
+		);
+		headings.forEach((h) => observer.observe(h));
+	}
+</script>
