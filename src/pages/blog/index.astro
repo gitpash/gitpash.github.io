@@ -88,14 +88,14 @@ const posts = (await getCollection('blog')).sort(
 	</head>
 	<body>
 		<Header />
-		<main>
+		<main id="main">
 			<h1>Blog</h1>
 			<ul class="post-list">
 				{
-					posts.map((post) => (
+					posts.map((post, i) => (
 						<li>
 							<a href={`/blog/${post.id}/`}>
-								<Cover slug={post.id} family={post.data.cover} />
+								<Cover slug={post.id} family={post.data.cover} priority={i === 0} sizes="(min-width: 601px) 220px, 100vw" />
 								<div>
 								<h2 class="title">{post.data.title}</h2>
 								<p class="date">

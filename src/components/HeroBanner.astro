@@ -9,13 +9,6 @@
  */
 ---
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-	href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"
-	rel="stylesheet"
-/>
-
 <section class="hero-banner" aria-label="Pixel scene of a night shore with a lighthouse beam">
 	<div class="hb-frame">
 		<canvas id="hb-c" width="550" height="150"></canvas>
@@ -507,7 +500,7 @@ startBandTyping('hb-typed');
 	}
 
 	.hb-sig {
-		font-family: 'Silkscreen', monospace;
+		font-family: var(--font-pixel);
 		font-size: clamp(11px, 1.3vw, 13px);
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
@@ -518,7 +511,7 @@ startBandTyping('hb-typed');
 		display: flex;
 		align-items: center;
 		gap: 7px;
-		font-family: 'Silkscreen', monospace;
+		font-family: var(--font-pixel);
 		font-size: clamp(11px, 1.3vw, 13px);
 		letter-spacing: 0.1em;
 		text-transform: uppercase;

@@ -15,6 +15,7 @@ const postsElsewhere = readdirSync('./src/content/blog')
 export default defineConfig({
 	site: 'https://gitpash.github.io',
 	base: '/',
+	build: { inlineStylesheets: 'always' },
 	integrations: [mdx(), sitemap({ filter: (page) => !page.endsWith('/404/') && !postsElsewhere.some((p) => page.endsWith(p)) })],
 	markdown: {
 		shikiConfig: {
@@ -45,7 +46,7 @@ export default defineConfig({
 			provider: fontProviders.fontsource(),
 			name: 'Silkscreen',
 			cssVariable: '--font-pixel',
-			weights: [400, 700],
+			weights: [400],
 			styles: ['normal'],
 			subsets: ['latin'],
 			fallbacks: ['monospace'],
@@ -54,7 +55,7 @@ export default defineConfig({
 			provider: fontProviders.fontsource(),
 			name: 'Fira Code',
 			cssVariable: '--font-mono',
-			weights: [400, 500],
+			weights: [400],
 			styles: ['normal'],
 			subsets: ['latin'],
 			fallbacks: ['ui-monospace', 'monospace'],
