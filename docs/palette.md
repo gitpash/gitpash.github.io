@@ -52,7 +52,7 @@ designer approved.
 | `--star` | var(--c-taupe) | var(--c-pink) |
 
 Values written as `var()` or `color-mix()` resolve to the source colours above. Cover tones
-(`COVER_PALETTES` in `palette.ts`, `--cover-*` in CSS) are shades and tints of the same colours.
+(`COVER_PALETTES` in `palette.ts`; the covers are generated images, not CSS) are shades and tints of the same colours.
 
 ## Contrast checks (WCAG 2.x, computed by `npm run check:palette`)
 

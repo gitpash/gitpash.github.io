@@ -1,16 +1,35 @@
 ---
-import { coverSvg, pickFamily, type Family } from '../lib/cover';
+import { COVER_RATIO, COVER_WIDTHS, pickFamily, type Family } from '../lib/cover';
 
 interface Props {
 	slug: string;
 	family?: Family;
+	// The first image on the page (LCP): load eagerly with high priority. Others are lazy.
+	priority?: boolean;
+	// Value of the `sizes` attribute.
+	sizes?: string;
 }
 
-const { slug, family = pickFamily(slug) } = Astro.props;
-const svg = coverSvg(slug, family);
+const { slug, family = pickFamily(slug), priority = false, sizes = '(min-width: 760px) 720px, 100vw' } = Astro.props;
+const srcset = (ext: string) => COVER_WIDTHS.map((w) => `/img/covers/${slug}-${w}.${ext} ${w}w`).join(', ');
 ---
 
-<div class="cover" role="img" aria-label={`Abstract pixel-art cover (${family})`} set:html={svg} />
+<div class="cover">
+	<picture>
+		<source type="image/webp" srcset={srcset('webp')} sizes={sizes} />
+		<img
+			src={`/img/covers/${slug}-${COVER_WIDTHS[0]}.png`}
+			srcset={srcset('png')}
+			sizes={sizes}
+			width={COVER_RATIO.width}
+			height={COVER_RATIO.height}
+			alt={`Abstract pixel-art cover (${family})`}
+			loading={priority ? 'eager' : 'lazy'}
+			decoding={priority ? 'auto' : 'async'}
+			fetchpriority={priority ? 'high' : 'auto'}
+		/>
+	</picture>
+</div>
 
 <style>
 	.cover {
@@ -20,9 +39,10 @@ const svg = coverSvg(slug, family);
 		aspect-ratio: 240 / 126;
 		overflow: hidden;
 	}
-	.cover :global(svg) {
+	.cover img {
 		display: block;
 		width: 100%;
 		height: 100%;
+		image-rendering: pixelated;
 	}
 </style>

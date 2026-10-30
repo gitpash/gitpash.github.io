@@ -52,6 +52,13 @@
 		transition: all var(--transition-fast);
 	}
 
+	@media (pointer: coarse), (max-width: 720px) {
+		.theme-toggle {
+			width: 44px;
+			height: 44px;
+		}
+	}
+
 	.theme-toggle:hover {
 		background: var(--surface-muted);
 		border-color: var(--border);

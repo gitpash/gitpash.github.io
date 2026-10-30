@@ -1,21 +1,66 @@
 ---
 import type { MarkdownHeading } from 'astro';
-import type { CollectionEntry } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import Cover from '../components/Cover.astro';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import Minimap from '../components/Minimap.astro';
+import { SITE_TITLE, SITE_URL } from '../consts';
 
 type Props = CollectionEntry<'blog'>['data'] & { headings?: MarkdownHeading[]; slug: string };
 
-const { title, description, pubDate, updatedDate, heroImage, canonicalUrl, headings = [], cover, slug } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, canonicalUrl, headings = [], cover, slug, tags, seoTitle } = Astro.props;
+
+const pageUrl = `${SITE_URL}/blog/${slug}/`;
+const imagePath = `/og/posts/${slug}.png`;
+const jsonLd = [
+	{
+		'@type': 'BlogPosting',
+		'@id': `${pageUrl}#post`,
+		headline: title,
+		description,
+		datePublished: pubDate.toISOString(),
+		dateModified: (updatedDate ?? pubDate).toISOString(),
+		author: { '@id': `${SITE_URL}/#person` },
+		publisher: { '@id': `${SITE_URL}/#person` },
+		image: `${SITE_URL}${imagePath}`,
+		mainEntityOfPage: canonicalUrl ?? pageUrl,
+		inLanguage: 'en',
+		keywords: tags.join(', ') || undefined,
+	},
+	{
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{ '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+			{ '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog/` },
+			{ '@type': 'ListItem', position: 3, name: title, item: pageUrl },
+		],
+	},
+];
+
+const others = (await getCollection('blog'))
+	.filter((post) => post.id !== slug)
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
 ---
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} canonicalUrl={canonicalUrl} image={`/covers/${slug}.png`} />
+		<BaseHead
+			title={seoTitle ?? `${title} | ${SITE_TITLE}`}
+			description={description}
+			canonicalUrl={canonicalUrl}
+			image={imagePath}
+			imageAlt={`Social card for the post "${title}"`}
+			type="article"
+			serif
+			publishedTime={pubDate}
+			modifiedTime={updatedDate ?? pubDate}
+			tags={tags}
+			jsonLd={jsonLd}
+		/>
 		<style>
 			main {
 				width: calc(100% - 2em);
@@ -97,6 +142,9 @@ const { title, description, pubDate, updatedDate, heroImage, canonicalUrl, headi
 					font-size: 1.9rem;
 				}
 			}
+			.more ul {
+				padding-left: 1.2em;
+			}
 			.last-updated-on {
 				font-style: italic;
 			}
@@ -106,9 +154,9 @@ const { title, description, pubDate, updatedDate, heroImage, canonicalUrl, headi
 	<body>
 		<Header />
 		<Minimap headings={headings} />
-		<main>
+		<main id="main">
 			<article>
-				<div class="cover-wrap"><Cover slug={slug} family={cover} /></div>
+				<div class="cover-wrap"><Cover slug={slug} family={cover} priority /></div>
 				<div class="prose">
 					<div class="title">
 						<div class="date">
@@ -135,6 +183,23 @@ const { title, description, pubDate, updatedDate, heroImage, canonicalUrl, headi
 						<hr />
 					</div>
 					<slot />
+					{
+						others.length > 0 && (
+							<nav class="more" aria-labelledby="more-posts">
+								<h2 id="more-posts">More from the blog</h2>
+								<ul>
+									{others.map((post) => (
+										<li>
+											<a href={`/blog/${post.id}/`}>{post.data.title}</a>
+										</li>
+									))}
+								</ul>
+								<p>
+									All posts are on the <a href="/blog/">blog</a>, and <a href="/about/">the About page</a> tells who writes them.
+								</p>
+							</nav>
+						)
+					}
 				</div>
 			</article>
 		</main>

@@ -302,30 +302,7 @@ export function renderCover(slug: string, family: Family = pickFamily(slug)): Co
 	return { pixels, colors: [...palette.tones, palette.accent], name: palette.name };
 }
 
-// The inline SVG paints with `--cover-<palette>-<n>` tokens, so it follows the active palette;
-// the hex value is the fallback. PNG endpoints use the hex values directly.
-export function coverSvg(slug: string, family?: Family): string {
-	const { pixels, colors, name } = renderCover(slug, family);
-	const fill = (c: number) => `style="fill:var(--cover-${name}-${c === 4 ? 'accent' : c}, ${colors[c]})"`;
-	const paths: string[][] = colors.map(() => []);
-	for (let y = 0; y < H; y++) {
-		let x = 0;
-		while (x < W) {
-			const c = pixels[y * W + x];
-			let end = x + 1;
-			while (end < W && pixels[y * W + end] === c) end++;
-			if (c !== 0) paths[c].push(`M${x} ${y}h${end - x}v1h-${end - x}z`);
-			x = end;
-		}
-	}
-	const body = paths.map((d, c) => (d.length ? `<path ${fill(c)} d="${d.join('')}"/>` : '')).join('');
-	return (
-		`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid slice">` +
-		`<rect width="${W}" height="${H}" ${fill(0)}/>${body}</svg>`
-	);
-}
-
-export async function coverPng(slug: string, family?: Family): Promise<Buffer> {
+async function coverRaw(slug: string, family?: Family) {
 	const { default: sharp } = await import('sharp');
 	const { pixels, colors } = renderCover(slug, family);
 	const rgb = Buffer.alloc(W * H * 3);
@@ -335,8 +312,23 @@ export async function coverPng(slug: string, family?: Family): Promise<Buffer> {
 		rgb[n * 3 + 1] = parseInt(hex.slice(2, 4), 16);
 		rgb[n * 3 + 2] = parseInt(hex.slice(4, 6), 16);
 	});
-	return sharp(rgb, { raw: { width: W, height: H, channels: 3 } })
-		.resize(1200, 630, { kernel: 'nearest', fit: 'cover' })
-		.png({ palette: true })
-		.toBuffer();
+	return sharp(rgb, { raw: { width: W, height: H, channels: 3 } });
 }
+
+/** Legacy 1200x630 PNG (kept so old shared links keep working). */
+export async function coverPng(slug: string, family?: Family): Promise<Buffer> {
+	return (await coverRaw(slug, family)).resize(1200, 630, { kernel: 'nearest', fit: 'cover' }).png({ palette: true }).toBuffer();
+}
+
+/**
+ * Cover as an image file for <picture>: the 200x105 pixel grid scaled by a whole factor with
+ * nearest-neighbour, so pixels stay crisp. Lossless WebP is the smallest option for this
+ * five-tone dithered art (AVIF measured 2-6x larger); palette PNG is the fallback.
+ */
+export async function coverImage(slug: string, family: Family | undefined, width: number, format: 'webp' | 'png'): Promise<Buffer> {
+	const img = (await coverRaw(slug, family)).resize(width, Math.round((width * H) / W), { kernel: 'nearest' });
+	return format === 'webp' ? img.webp({ lossless: true, effort: 6 }).toBuffer() : img.png({ palette: true, compressionLevel: 9 }).toBuffer();
+}
+
+export const COVER_WIDTHS = [600, 1200] as const;
+export const COVER_RATIO = { width: 1200, height: 630 } as const;

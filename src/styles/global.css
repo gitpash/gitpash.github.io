@@ -50,23 +50,6 @@
 	--avatar-bg: var(--c-mist);
 	--avatar-fg: var(--c-deep);
 
-	/* ---- Cover tones (inline SVG covers; the PNG endpoints use palette.ts) ---- */
-	--cover-slate-0: var(--c-ink);
-	--cover-slate-1: var(--c-deep);
-	--cover-slate-2: var(--c-blue);
-	--cover-slate-3: color-mix(in srgb, var(--c-blue) 14%, white);
-	--cover-slate-accent: var(--c-pink);
-	--cover-rose-0: color-mix(in srgb, var(--c-taupe) 22%, black);
-	--cover-rose-1: color-mix(in srgb, var(--c-taupe) 62%, black);
-	--cover-rose-2: var(--c-taupe);
-	--cover-rose-3: color-mix(in srgb, var(--c-pink) 35%, white);
-	--cover-rose-accent: var(--c-mist);
-	--cover-mist-0: var(--c-ink);
-	--cover-mist-1: color-mix(in srgb, var(--c-mist) 38%, var(--c-ink));
-	--cover-mist-2: var(--c-mist);
-	--cover-mist-3: color-mix(in srgb, var(--c-mist) 16%, white);
-	--cover-mist-accent: var(--c-pink);
-
 	--shadow-sm: 0 1px 2px rgba(23, 41, 50, 0.04);
 	--shadow-md: 0 4px 12px rgba(23, 41, 50, 0.08);
 	--shadow-lg: 0 12px 32px rgba(23, 41, 50, 0.12);
@@ -382,6 +365,23 @@ hr {
 	}
 }
 
+.skip-link {
+	position: absolute;
+	left: 0.75rem;
+	top: -4rem;
+	z-index: 200;
+	padding: 0.6rem 1rem;
+	border-radius: 8px;
+	background: var(--accent);
+	color: var(--on-accent);
+	font-weight: 500;
+	text-decoration: none;
+}
+
+.skip-link:focus {
+	top: 0.75rem;
+}
+
 .sr-only {
 	border: 0;
 	padding: 0;
@@ -651,4 +651,20 @@ hr {
 
 .diagram .d-head {
 	fill: var(--text-muted);
+}
+
+/* Touch targets of at least 44px on phones and other coarse pointers (inline links in
+   running text are exempt). */
+@media (pointer: coarse), (max-width: 720px) {
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 44px;
+	}
+
+	.code-copy {
+		min-width: 44px;
+		min-height: 44px;
+	}
 }

@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import HeroBanner from '../components/HeroBanner.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import { SITE_DESCRIPTION, SITE_TITLE, GITHUB_URL, EMAIL, LINKEDIN_URL } from '../consts';
+import { PAGES, GITHUB_URL, EMAIL, LINKEDIN_URL } from '../consts';
 import { getGitHubRepos, getGitHubStats } from '../utils/github';
 
 let repos = [];
@@ -21,11 +21,11 @@ try {
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead title={PAGES.home.title} description={PAGES.home.description} image="/og.png" imageAlt="Pavel Luzanov, product engineer with a frontend core" />
 	</head>
 	<body>
 		<Header />
-		<main>
+		<main id="main">
 			<!-- 1-bit hero banner: ночной обрыв, странник в касе, маяк с лучом -->
 			<HeroBanner />
 
@@ -275,6 +275,14 @@ try {
 
 	.section-head h2 {
 		margin-bottom: 0;
+	}
+
+	@media (pointer: coarse), (max-width: 720px) {
+		.section-link {
+			display: inline-block;
+			padding-block: 12px;
+			margin-block: -12px;
+		}
 	}
 
 	.section-link {

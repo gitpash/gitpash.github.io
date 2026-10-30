@@ -1,6 +1,7 @@
 ---
 title: 'Building shared-components library with Radix UI'
 description: 'Why headless, accessible primitives suit a multi-team company with different stacks, and what composing them looks like.'
+seoTitle: 'Building a shared components library with Radix UI'
 cover: 'stack'
 pubDate: '2021-12-23'
 canonicalUrl: 'https://medium.com/anymind-group/tech-blog-building-shared-components-library-with-radix-ui-f1435fdc89c8'
