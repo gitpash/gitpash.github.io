@@ -55,6 +55,7 @@ const others = (await getCollection('blog'))
 			image={imagePath}
 			imageAlt={`Social card for the post "${title}"`}
 			type="article"
+			serif
 			publishedTime={pubDate}
 			modifiedTime={updatedDate ?? pubDate}
 			tags={tags}
@@ -153,9 +154,9 @@ const others = (await getCollection('blog'))
 	<body>
 		<Header />
 		<Minimap headings={headings} />
-		<main>
+		<main id="main">
 			<article>
-				<div class="cover-wrap"><Cover slug={slug} family={cover} /></div>
+				<div class="cover-wrap"><Cover slug={slug} family={cover} priority /></div>
 				<div class="prose">
 					<div class="title">
 						<div class="date">

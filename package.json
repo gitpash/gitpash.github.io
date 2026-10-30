@@ -11,7 +11,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "lint:prose": "vale src/content/blog/*.md",
-    "check:palette": "node scripts/check-palette.mjs"
+    "check:palette": "node scripts/check-palette.mjs",
+    "check:perf": "node scripts/check-perf.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.0.2",

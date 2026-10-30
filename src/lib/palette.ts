@@ -11,6 +11,8 @@ export const SOURCE = {
 	ink: '#26323f',
 	// Page background of the light theme (same as --bg); text on dark panels such as social cards.
 	paper: '#f4f6f8',
+	// Page background of the dark theme (same as dark --bg); used for the browser theme-color.
+	night: '#1b232c',
 } as const;
 
 // Cover tones: four steps from dark to light plus one accent, each a shade or tint of a

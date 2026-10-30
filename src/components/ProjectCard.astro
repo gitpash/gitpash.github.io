@@ -60,6 +60,14 @@ const { name, description, url, language, stars, topics } = Astro.props;
 		font-weight: 600;
 	}
 
+	@media (pointer: coarse), (max-width: 720px) {
+		.project-header h3 a {
+			display: inline-block;
+			padding-block: 12px;
+			margin-block: -12px;
+		}
+	}
+
 	.project-header h3 a {
 		color: var(--link);
 		text-decoration: none;

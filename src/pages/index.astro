@@ -25,7 +25,7 @@ try {
 	</head>
 	<body>
 		<Header />
-		<main>
+		<main id="main">
 			<!-- 1-bit hero banner: ночной обрыв, странник в касе, маяк с лучом -->
 			<HeroBanner />
 
@@ -275,6 +275,14 @@ try {
 
 	.section-head h2 {
 		margin-bottom: 0;
+	}
+
+	@media (pointer: coarse), (max-width: 720px) {
+		.section-link {
+			display: inline-block;
+			padding-block: 12px;
+			margin-block: -12px;
+		}
 	}
 
 	.section-link {

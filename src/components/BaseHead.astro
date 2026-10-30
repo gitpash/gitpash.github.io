@@ -2,6 +2,7 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
+import { SOURCE } from '../lib/palette';
 import { SITE_TITLE, SITE_URL, GITHUB_URL, LINKEDIN_URL, SITE_LOCATION } from '../consts';
 import { Font } from 'astro:assets';
 
@@ -17,6 +18,8 @@ interface Props {
 	publishedTime?: Date;
 	modifiedTime?: Date;
 	tags?: string[];
+	// Preload the serif body font (posts only; other pages do not use it).
+	serif?: boolean;
 	// Keep the page out of search results (404).
 	noindex?: boolean;
 	// Extra JSON-LD objects (BlogPosting, BreadcrumbList, ...) added after the sitewide Person.
@@ -34,6 +37,7 @@ const {
 	modifiedTime,
 	tags = [],
 	noindex = false,
+	serif = false,
 	jsonLd = [],
 } = Astro.props;
 
@@ -58,6 +62,9 @@ const graph = JSON.stringify({ '@context': 'https://schema.org', '@graph': [pers
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="color-scheme" content="light dark" />
+<meta name="theme-color" content={SOURCE.paper} media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content={SOURCE.night} media="(prefers-color-scheme: dark)" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" href="/favicon.ico" />
 <link rel="sitemap" href="/sitemap-index.xml" />
@@ -69,8 +76,8 @@ const graph = JSON.stringify({ '@context': 'https://schema.org', '@graph': [pers
 />
 <meta name="generator" content={Astro.generator} />
 
-<Font cssVariable="--font-inter" preload />
-<Font cssVariable="--font-serif" preload />
+<Font cssVariable="--font-inter" preload={[{ weight: 400, style: 'normal' }, { weight: 700, style: 'normal' }]} />
+<Font cssVariable="--font-serif" preload={serif ? [{ weight: 400, style: 'normal' }] : false} />
 <Font cssVariable="--font-mono" />
 <Font cssVariable="--font-pixel" />
 

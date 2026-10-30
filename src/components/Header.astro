@@ -4,6 +4,7 @@ import HeaderLink from './HeaderLink.astro';
 import ThemeToggle from './ThemeToggle.astro';
 ---
 
+<a class="skip-link" href="#main">Skip to content</a>
 <header class="glass">
 	<nav>
 		<h2><a href="/">{SITE_TITLE}</a></h2>
@@ -125,6 +126,25 @@ import ThemeToggle from './ThemeToggle.astro';
 	.social-links a:hover {
 		color: var(--text);
 		background: var(--hover-bg);
+	}
+
+	@media (pointer: coarse), (max-width: 720px) {
+		.internal-links a {
+			display: inline-flex;
+			align-items: center;
+			min-height: 44px;
+		}
+
+		.social-links a {
+			width: 44px;
+			height: 44px;
+		}
+
+		h2 a {
+			display: inline-flex;
+			align-items: center;
+			min-height: 44px;
+		}
 	}
 
 	/* Narrow screens: the page links move to a second row instead of disappearing. */
