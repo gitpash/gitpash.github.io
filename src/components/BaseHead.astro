@@ -2,20 +2,57 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
-import { SITE_TITLE } from '../consts';
+import { SITE_TITLE, SITE_URL, GITHUB_URL, LINKEDIN_URL, SITE_LOCATION } from '../consts';
 import { Font } from 'astro:assets';
 
 interface Props {
 	title: string;
 	description: string;
-	// Path of the Open Graph image, relative to the site root.
+	// Path of the social card, relative to the site root (1200x630 PNG).
 	image?: string;
+	imageAlt?: string;
 	canonicalUrl?: string;
+	// 'article' adds the article:* tags for blog posts.
+	type?: 'website' | 'article';
+	publishedTime?: Date;
+	modifiedTime?: Date;
+	tags?: string[];
+	// Keep the page out of search results (404).
+	noindex?: boolean;
+	// Extra JSON-LD objects (BlogPosting, BreadcrumbList, ...) added after the sitewide Person.
+	jsonLd?: object[];
 }
 
-const { title, description, image = '/og.png', canonicalUrl } = Astro.props;
+const {
+	title,
+	description,
+	image = '/og.png',
+	imageAlt = `${SITE_TITLE}: product engineer with a frontend core`,
+	canonicalUrl,
+	type = 'website',
+	publishedTime,
+	modifiedTime,
+	tags = [],
+	noindex = false,
+	jsonLd = [],
+} = Astro.props;
 
-const canonicalURL = canonicalUrl ?? new URL(Astro.url.pathname, Astro.site);
+const pageURL = new URL(Astro.url.pathname, Astro.site);
+const canonicalURL = canonicalUrl ?? pageURL;
+const imageURL = new URL(image, Astro.site);
+
+const person = {
+	'@type': 'Person',
+	'@id': `${SITE_URL}/#person`,
+	name: SITE_TITLE,
+	url: `${SITE_URL}/`,
+	jobTitle: 'Product engineer',
+	description: 'Product engineer with a frontend core, based in Tokyo, working on delivery and agent workflows.',
+	address: { '@type': 'PostalAddress', addressLocality: SITE_LOCATION.split(',')[0], addressCountry: 'JP' },
+	sameAs: [GITHUB_URL, LINKEDIN_URL.replace(/^http:/, 'https:')],
+};
+const site = { '@type': 'WebSite', '@id': `${SITE_URL}/#website`, url: `${SITE_URL}/`, name: SITE_TITLE, inLanguage: 'en', publisher: { '@id': person['@id'] } };
+const graph = JSON.stringify({ '@context': 'https://schema.org', '@graph': [person, site, ...jsonLd] }).replace(/</g, '\\u003c');
 ---
 
 <!-- Global Metadata -->
@@ -27,7 +64,7 @@ const canonicalURL = canonicalUrl ?? new URL(Astro.url.pathname, Astro.site);
 <link
 	rel="alternate"
 	type="application/rss+xml"
-	title={SITE_TITLE}
+	title={`${SITE_TITLE} (RSS)`}
 	href={new URL('rss.xml', Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />
@@ -37,20 +74,54 @@ const canonicalURL = canonicalUrl ?? new URL(Astro.url.pathname, Astro.site);
 <Font cssVariable="--font-mono" />
 <Font cssVariable="--font-pixel" />
 
-<!-- Canonical URL -->
-<link rel="canonical" href={canonicalURL} />
+<!-- Canonical URL and language -->
+{
+	noindex ? (
+		<meta name="robots" content="noindex,follow" />
+	) : (
+		<>
+			<meta name="robots" content="index,follow,max-image-preview:large" />
+			<link rel="canonical" href={canonicalURL} />
+			{!canonicalUrl && <link rel="alternate" hreflang="en" href={pageURL} />}
+			{!canonicalUrl && <link rel="alternate" hreflang="x-default" href={pageURL} />}
+		</>
+	)
+}
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
 <meta name="description" content={description} />
+<meta name="author" content={SITE_TITLE} />
 
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
+<!-- Open Graph / Facebook / LinkedIn -->
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content={pageURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.site)} />
+<meta property="og:image" content={imageURL} />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={imageAlt} />
+{
+	type === 'article' && (
+		<>
+			{publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
+			{modifiedTime && <meta property="article:modified_time" content={modifiedTime.toISOString()} />}
+			<meta property="article:author" content={`${SITE_URL}/about/`} />
+			{tags.map((tag) => <meta property="article:tag" content={tag} />)}
+		</>
+	)
+}
 
-<!-- Twitter -->
+<!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageURL} />
+<meta name="twitter:image:alt" content={imageAlt} />
 
+<!-- Structured data -->
+<script type="application/ld+json" is:inline set:html={graph} />

@@ -16,6 +16,9 @@ const blog = defineCollection({
 			heroImage: z.optional(image()),
 			// Generative cover family; picked from the slug when omitted.
 			cover: z.enum(['terrain', 'stack', 'rings', 'blocks', 'beams', 'grid', 'hooks']).optional(),
+			tags: z.array(z.string()).default([]),
+			// Longer title for <title>/social cards when the headline is short.
+			seoTitle: z.string().optional(),
 			// Set for articles first published elsewhere; also used as the canonical URL.
 			canonicalUrl: z.string().url().optional(),
 		}),

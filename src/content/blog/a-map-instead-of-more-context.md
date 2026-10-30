@@ -3,7 +3,8 @@ title: 'A map instead of more context'
 description: 'How our documentation piled up during the move to agentic workflows, and why a small map file helps an agent more than loading extra context.'
 cover: 'grid'
 pubDate: 2026-10-30
-tags: ['ai', 'agents', 'aap']
+seoTitle: 'A map instead of more context: AAP for coding agents'
+tags: ['ai', 'agents', 'aap', 'agents-md', 'claude-code', 'skills']
 ---
 
 Our team went through a transition that, I suspect, many others have been through or are still in the middle of. We were adopting an agentic workflow, like everyone around us, and our lead installed Claude Code. It took off almost at once: the agents were fast, and the more interesting question became what we were asking them to read.

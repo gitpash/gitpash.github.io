@@ -2,13 +2,13 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_TITLE, SITE_DESCRIPTION, GITHUB_URL, LINKEDIN_URL, EMAIL } from '../consts';
+import { PAGES, GITHUB_URL, LINKEDIN_URL, EMAIL } from '../consts';
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`CV - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<BaseHead title={PAGES.cv.title} description={PAGES.cv.description} image="/og/cv.png" imageAlt="CV of Pavel Luzanov" />
 	</head>
 	<body>
 		<Header />
