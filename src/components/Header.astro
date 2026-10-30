@@ -147,32 +147,50 @@ import ThemeToggle from './ThemeToggle.astro';
 		}
 	}
 
-	/* Narrow screens: the page links move to a second row instead of disappearing. */
+	/* Narrow screens: two rows of 44px, brand and social links on top, page links and the theme
+	   toggle below. The sticky offset equals the top row, so the header is full-size at the top of
+	   the page, only the bottom row stays pinned once the page is scrolled, and the top row is back
+	   when the reader returns to the top. Pure CSS: the header stays in the flow, so nothing shifts. */
 	@media (max-width: 720px) {
 		header {
+			--header-row: 44px;
 			padding: 0 1em;
+			top: calc(-1 * var(--header-row));
 		}
 
 		nav {
 			flex-wrap: wrap;
 			height: auto;
-			row-gap: 0;
-			padding: 0.35rem 0 0.45rem;
+			gap: 0;
+			padding: 0;
+		}
+
+		.nav-right {
+			display: contents;
 		}
 
 		h2 {
 			flex: 1;
+			order: 1;
+		}
+
+		.social-links {
+			order: 2;
 		}
 
 		.internal-links {
 			order: 3;
-			width: 100%;
+			flex: 1 1 calc(100% - 52px);
 			justify-content: space-between;
 		}
 
 		.internal-links a {
 			flex: 1;
 			text-align: center;
+		}
+
+		.nav-right > :global(.theme-toggle) {
+			order: 4;
 		}
 	}
 </style>
