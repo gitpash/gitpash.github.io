@@ -2,7 +2,7 @@
 title: 'A map instead of more context'
 description: 'How our documentation piled up during the move to agentic workflows, and why a small map file helps an agent more than loading extra context.'
 cover: 'grid'
-pubDate: '2026-10-28'
+pubDate: 2026-10-30
 tags: ['ai', 'agents', 'aap']
 ---
 
