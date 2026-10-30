@@ -21,13 +21,13 @@ When the protocol took shape, I hoped it would help with several things at once.
 
 The spec is more modest about the last point than that summary suggests, so it helps to say exactly what it contains. A gitignored `map.local.yaml` holds machine-local navigation and, by convention, an index of local files. The cookbook describes "stream packs" there, small files that name the procedure for one kind of session, with exactly one opened per session ([SPEC.md, "Overlays"](https://github.com/gitpash/agent-artifact-protocol/blob/v0.3.0/SPEC.md), [cookbook/local-bootstrap.md](https://github.com/gitpash/agent-artifact-protocol/blob/v0.3.0/cookbook/local-bootstrap.md), [cookbook/stream-packs.md](https://github.com/gitpash/agent-artifact-protocol/blob/v0.3.0/cookbook/stream-packs.md)). Overlays never grant write authority, and AAP defines no plugin system of its own, so what the map offers is a clean place to keep such procedures and to choose one per session.
 
-## Demo, lead, pilot
+## From demo to a settled format
 
-I built a small demo and showed it to our lead, who liked it straight away. I then drew a few diagrams and wrote up the theory of how it should work, and we agreed to try it as a pilot on a few repositories before deciding anything else. The [first post in this series](/blog/a-map-instead-of-more-context/) covers how the rollout went from there, so I will not repeat it.
+The demo, the reactions and the pilot are told in the [first post in this series](/blog/a-map-instead-of-more-context/), so I will not repeat them here. What that post leaves out is what happened to the file format while we piloted on a few repositories.
 
 ## How the format changed
 
-There was no schema at the start. I sketched a structure and chose which fields would be required, which optional and what the statuses were, and the public history of the repository shows the steps that followed.
+There was no schema at the start. I sketched a structure and chose which fields would be required, which optional and what the statuses were, and the public history of the repository shows the steps that followed, since the repository was already public while we piloted.
 
 The first public draft, on 8 September, was a version 1 map built on `zones`. Each zone carried a `kind` and a list of roles allowed to write, and the schema required only `version` and `zones`:
 
