@@ -749,7 +749,6 @@ hr {
 .btn-primary:hover {
 	background: var(--accent-hover);
 	color: var(--on-accent);
-	transform: translateY(-1px);
 	text-decoration: none;
 }
 
@@ -762,8 +761,14 @@ hr {
 .btn-secondary:hover {
 	background: var(--hover-bg);
 	color: var(--hover-text);
-	transform: translateY(-1px);
 	text-decoration: none;
+}
+
+/* The global `a:hover` squares corners; buttons keep their rounding and grow a little instead. */
+.btn:hover {
+	border-radius: 10px;
+	transform: translateY(-1px) scale(1.04);
+	box-shadow: var(--shadow-md);
 }
 
 /* Card */
@@ -836,6 +841,10 @@ hr {
 @media (prefers-reduced-motion: reduce) {
 	a {
 		transition: none;
+	}
+
+	.btn:hover {
+		transform: none;
 	}
 
 	* {
