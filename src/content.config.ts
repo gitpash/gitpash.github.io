@@ -21,6 +21,9 @@ const blog = defineCollection({
 			seoTitle: z.string().optional(),
 			// Set for articles first published elsewhere; also used as the canonical URL.
 			canonicalUrl: z.string().url().optional(),
+			// Series slug (see src/lib/series.ts) and position in it; both are needed to join a series.
+			series: z.string().optional(),
+			seriesOrder: z.number().int().positive().optional(),
 		}),
 });
 

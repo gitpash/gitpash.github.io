@@ -6,13 +6,14 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import SeriesNav from '../components/SeriesNav.astro';
 import Minimap from '../components/Minimap.astro';
 import { SITE_TITLE, SITE_URL } from '../consts';
 import { postVersion } from '../lib/version';
 
 type Props = CollectionEntry<'blog'>['data'] & { headings?: MarkdownHeading[]; slug: string };
 
-const { title, description, pubDate, updatedDate, heroImage, canonicalUrl, headings = [], cover, slug, tags, seoTitle } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, canonicalUrl, headings = [], cover, slug, tags, seoTitle, series } = Astro.props;
 
 const pageUrl = `${SITE_URL}/blog/${slug}/`;
 const imagePath = `/og/posts/${slug}.png`;
@@ -219,6 +220,7 @@ const others = all
 						<hr />
 					</div>
 					<slot />
+					<SeriesNav series={series} slug={slug} />
 					{
 						others.length > 0 && (
 							<nav class="more" aria-labelledby="more-posts">
