@@ -8,6 +8,7 @@ import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import Minimap from '../components/Minimap.astro';
 import { SITE_TITLE, SITE_URL } from '../consts';
+import { postVersion } from '../lib/version';
 
 type Props = CollectionEntry<'blog'>['data'] & { headings?: MarkdownHeading[]; slug: string };
 
@@ -40,7 +41,10 @@ const jsonLd = [
 	},
 ];
 
-const others = (await getCollection('blog'))
+const all = await getCollection('blog');
+const current = all.find((post) => post.id === slug);
+const version = current ? postVersion(current) : undefined;
+const others = all
 	.filter((post) => post.id !== slug)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 	.slice(0, 3);
@@ -148,10 +152,42 @@ const others = (await getCollection('blog'))
 			.last-updated-on {
 				font-style: italic;
 			}
+			.update-notice {
+				position: fixed;
+				left: 1em;
+				right: 1em;
+				bottom: 1em;
+				max-width: 28rem;
+				margin: 0 auto;
+				padding: 0.6em 1em;
+				display: flex;
+				gap: 0.75em;
+				align-items: center;
+				justify-content: space-between;
+				background: var(--surface);
+				color: var(--text);
+				border: 1px solid var(--border-strong);
+				border-radius: 8px;
+				font-family: var(--font-family);
+				font-size: 0.95rem;
+			}
+			.update-notice[hidden] {
+				display: none;
+			}
+			.update-notice button {
+				min-height: 44px;
+				padding: 0 1em;
+				background: var(--accent);
+				color: var(--on-accent);
+				border: 0;
+				border-radius: 6px;
+				font: inherit;
+				cursor: pointer;
+			}
 		</style>
 	</head>
 
-	<body>
+	<body data-slug={slug} data-version={version}>
 		<Header />
 		<Minimap headings={headings} />
 		<main id="main">
@@ -204,6 +240,30 @@ const others = (await getCollection('blog'))
 			</article>
 		</main>
 		<Footer />
+		<div id="update-notice" class="update-notice" role="status" hidden>
+			This article was updated. <button type="button" onclick="location.reload()">Reload</button>
+		</div>
+		<script is:inline>
+			// Shows a notice when /version.json reports a newer version of this article.
+			(function () {
+				var d = document.body.dataset, shown;
+				if (!d.version) return;
+				function check() {
+					if (shown || document.hidden) return;
+					fetch('/version.json', { cache: 'no-cache' })
+						.then(function (r) { return r.json(); })
+						.then(function (v) {
+							if (v[d.slug] && v[d.slug] !== d.version) {
+								shown = true;
+								document.getElementById('update-notice').hidden = false;
+							}
+						})
+						.catch(function () {});
+				}
+				document.addEventListener('visibilitychange', check);
+				setInterval(check, 600000);
+			})();
+		</script>
 		<script>
 			import '../scripts/code-blocks.ts';
 		</script>
