@@ -18,7 +18,7 @@ const { name, description, url, language, stars, topics } = Astro.props;
 		</h3>
 		<div class="project-meta">
 			{language && <span class="language">{language}</span>}
-			<span class="stars">★ {stars}</span>
+			<span class="stars"><span class="star" aria-hidden="true">★</span> {stars}<span class="sr-only"> stars</span></span>
 		</div>
 	</div>
 	<p class="project-description">{description || 'No description available'}</p>
@@ -83,6 +83,10 @@ const { name, description, url, language, stars, topics } = Astro.props;
 	}
 
 	.stars {
+		color: var(--text-muted);
+	}
+
+	.star {
 		color: var(--star);
 	}
 

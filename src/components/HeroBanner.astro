@@ -347,7 +347,7 @@ function drawBand(t) {
 }
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-let bandT = 0, bandLast = -1e9, bandFrozen = false;
+let bandT = 0, bandLast = -1e9, bandFrozen = false, bandVisible = true;
 function startBand() {
   // проба для скриншотов/OG: ?bandT=<сек> замораживает кадр
   const q = new URLSearchParams(location.search).get('bandT');
@@ -361,7 +361,7 @@ function startBand() {
     drawBand(bandT);
   } else {
     (function loop(now) {
-      if (now - bandLast >= 33) {                 // ~30 fps
+      if (bandVisible && !document.hidden && now - bandLast >= 33) {   // ~30 fps, only while on screen
         bandLast = now;
         bandT = (now / 1000) % 3600;
         drawBand(bandT);
@@ -456,7 +456,16 @@ function startBandTyping(elId) {
   window.addEventListener('resize', () => fit());   // clamp-шрифт зависит от ширины окна
 }
 
-startBand();
+// The first frame is expensive (geometry for every pixel), so wait until the page has loaded and
+// the main thread is idle; this keeps Total Blocking Time low on slow phones.
+const afterLoad = (fn) => {
+  const go = () => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 1500 }) : setTimeout(fn, 200));
+  if (document.readyState === 'complete') go(); else addEventListener('load', go, { once: true });
+};
+afterLoad(startBand);
+if ('IntersectionObserver' in window) {
+  new IntersectionObserver((e) => { bandVisible = e[0].isIntersecting; }).observe(document.getElementById('hb-c'));
+}
 new MutationObserver(() => {
   readBandPalette();
   if (bandFrozen) drawBand(bandT);
