@@ -2,7 +2,7 @@
 title: 'Trying things inside a standard harness'
 description: 'Why I needed AAP: a big tool I could not measure, a rigid standard harness and a meta-repository full of lagging worktrees, and why that led to a small core, then how the format settled and reached CI.'
 cover: 'beams'
-pubDate: 2026-10-31
+pubDate: 2026-10-30
 seoTitle: 'How AAP started: experimenting inside a standard agent harness'
 tags: ['ai', 'agents', 'aap', 'claude-code', 'ci']
 ---
