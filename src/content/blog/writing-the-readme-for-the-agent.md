@@ -59,6 +59,14 @@ The reviewer's findings were of a different kind, and I could not have found the
 
 Two design choices follow from the same lesson. Anything the skill is unsure of gets a `# REVIEW:` comment on that line and a mention in the report, so the human reads the guesses and not the whole file. The skill also does not interview the user, because a question that can be answered by looking at the repository is a cost the user did not need to pay.
 
+## Why the review is the point
+
+I built the skill because people did not know where to start, and the aim was that nobody has to fuss over the first map. You run the skill in your own domain, the agent drafts the file, and you read it. That human review is part of the design and not a formality. The map is short and readable for both sides. A few colleagues have told me that it is easy to read, which is a remark and not a survey. The person who knows the domain can check in a few minutes whether the agent named the right contracts and neighbouring repositories. This needs doing carefully once, and after that the file mostly sits still.
+
+How much the agent has to figure out depends on how coupled your project is. Most developers already work with some architect-style agent that starts a task in their domain, and that is a natural agent to run the skill with, since it can ask you about a contract it cannot confirm from the code. The skill itself looks, decides and marks its guesses without interviewing you, so the conversation is yours to have.
+
+AAP stays a convention and not a library or a framework, and in practice it works as a router for your agent: it states once where things live, so the agent does not have to rediscover it in every session. It is not a silver bullet. It pays off mostly when a domain has many dependencies, many contracts and a lot of material owned by other people, and for a single small repository it adds little.
+
 ## What is and is not shown here
 
 - **Three runs are three runs.** The agents were Claude subagents on macOS, and other agents, Windows and a repository that already has a map were not tried, as the test notes say.
