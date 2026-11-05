@@ -2,7 +2,7 @@
 title: 'Writing the README for the agent'
 description: 'What I put into llms.txt so an agent can use a spec without being coached, and what three test runs of the aap-map skill on repositories I do not own taught me about writing instructions for agents.'
 cover: 'terrain'
-pubDate: 2026-11-20
+pubDate: 2026-11-05
 seoTitle: 'llms.txt and a tested skill: writing instructions for the agent that reads your spec'
 series: 'aap'
 seriesOrder: 3
